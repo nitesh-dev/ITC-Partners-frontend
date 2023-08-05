@@ -4,12 +4,9 @@ import { tabs } from '~/data/admin'
 <template>
     <div class="panel">
         <Sidebar :active-tab="0" :tab-data="tabs"></Sidebar>
+
     </div>
 </template>
 <style scoped>
-.panel {
-    width: 100%;
-    min-height: 100vh;
-    background-color: var(--color-surface-variant);
-}
+
 </style>

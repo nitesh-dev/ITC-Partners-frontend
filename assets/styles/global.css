@@ -35,6 +35,13 @@ body {
     -webkit-text-size-adjust: 100%;
 }
 
+.panel {
+    width: 100%;
+    min-height: 100vh;
+    background-color: var(--color-surface-variant);
+    margin-left: 300px;
+}
+
 p {
     color: var(--color-on-surface);
     margin: 1em 0;

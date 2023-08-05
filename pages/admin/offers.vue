@@ -7,9 +7,5 @@ import { tabs } from '~/data/admin'
     </div>
 </template>
 <style scoped>
-.panel {
-    width: 100%;
-    min-height: 100vh;
-    background-color: var(--color-surface-variant);
-}
+
 </style>
