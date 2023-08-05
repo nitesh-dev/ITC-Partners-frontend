@@ -101,9 +101,16 @@
 }
 
 .sidebar .item.active {
+    background-color: var(--color-surface-variant) !important;
+    border-color: var(--color-primary) !important;
+    color: var(--color-primary) !important;
+    fill: var(--color-primary) !important;
+}
+
+.sidebar .item:hover{
     background-color: var(--color-surface-variant);
-    border-color: var(--color-primary);
-    color: var(--color-primary);
-    fill: var(--color-primary);
+    border-color: var(--color-secondary);
+    color: var(--color-secondary);
+    fill: var(--color-secondary);
 }
 </style>

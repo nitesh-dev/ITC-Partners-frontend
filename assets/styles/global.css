@@ -13,11 +13,12 @@ body {
     --color-surface: rgb(255, 255, 255);
     --color-surface-variant: #F0F0F6;
     --color-primary: #1665D8;
+    --color-secondary: #d33396;
     --color-on-primary: white;
     --color-error: #F66;
     --color-yellow: #F6AB2F;
     --color-green: #2BC48A;
-    --color-on-surface: #A0A5BB;
+    --color-on-surface: #9aa0b8;
     --color-on-surface-dark: #002761;
 
 
