@@ -22,11 +22,13 @@ const chartOptions = {
     maintainAspectRatio: false,
     scales: {
         x: {
+            display: false,
             grid: {
                 display: false,
             }
         },
         y: {
+            display: false,
             grid: {
                 display: false,
             }
