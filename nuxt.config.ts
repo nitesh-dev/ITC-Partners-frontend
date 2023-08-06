@@ -3,6 +3,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   css: [
     '@/assets/styles/global.css',
+    '@/assets/styles/dashboard.css'
   ],
   app: {
     head: {

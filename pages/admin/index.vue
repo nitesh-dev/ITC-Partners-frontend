@@ -80,8 +80,6 @@ import {earningHistoryRaw, withdrawHistoryRaw, profitHistoryRaw, leadsHistoryRaw
 }
 
 .panel .header {
-    margin: 2rem 0;
-    display: flex;
     justify-content: flex-end;
 }
 
