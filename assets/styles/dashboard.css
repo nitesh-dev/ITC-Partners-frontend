@@ -26,7 +26,6 @@
 /* ---------------------- table ------------------ */
 
 table{
-    overflow: auto;
     width: 100%;
     border-collapse: collapse;
     color: var(--color-on-surface-dark);
@@ -63,4 +62,21 @@ table svg{
     margin: auto 0;
     fill: var(--color-on-surface-dark);
 }
+
+table .menu-button{
+    position: relative;
+}
+
+table svg.danger{
+    fill: var(--color-error);
+}
+
+table svg.normal{
+    fill: var(--color-primary);
+}
+
+table svg{
+    height: 24px;
+}
+
 
