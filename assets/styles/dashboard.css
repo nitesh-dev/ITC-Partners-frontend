@@ -46,6 +46,41 @@
 }
 
 
+
+/* ------------------- reports -------------------*/
+.panel>.reports{
+    margin-top: 2rem;
+    margin-bottom: 3rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+}
+
+.panel>.reports .card{
+    height: 100px;
+    width: 260px;
+    padding: 0 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.panel>.reports p{
+    font-size: var(--small-font);
+    margin: 0;
+    margin-bottom: 0.5em;
+}
+
+.panel>.reports span{
+    font-size: var(--average-2-font);
+    color: var(--color-primary);
+}
+
+
+
+
+
 /* ---------------------- table ------------------ */
 
 table{

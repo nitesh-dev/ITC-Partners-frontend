@@ -207,5 +207,9 @@ function onTabChange(index: number) {
     </div>
 </template>
 <style scoped>
+.panel {
+
+}
+
 
 </style>
