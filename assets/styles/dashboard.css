@@ -22,6 +22,29 @@
     overflow: auto;
 }
 
+.panel .search {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    max-width: 800px;
+    width: 100%;
+    fill: var(--color-on-surface);
+    gap: 1rem;
+}
+
+.panel .search svg {
+    fill: inherit;
+}
+
+.panel .search input {
+    height: 100%;
+    border: none;
+    width: 100%;
+    outline: none;
+    color: var(--color-on-surface-dark);
+}
+
 
 /* ---------------------- table ------------------ */
 
