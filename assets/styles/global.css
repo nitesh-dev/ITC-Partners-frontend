@@ -96,7 +96,7 @@ h5 {
     font-size: var(--medium-font);
 }
 
-button.primary {
+button.primary, button.secondary {
     background: var(--color-primary);
     border-radius: 4px;
     color: var(--color-on-primary);
@@ -109,10 +109,14 @@ button.primary {
     gap: 1rem;
     align-items: center;
     justify-content: center;
-
 }
 
-button.primary svg {
+button.secondary{
+    background: var(--color-secondary);
+    border: 1px solid var(--color-secondary);
+}
+
+button.primary svg, button.secondary svg {
     fill: inherit;
 
 }

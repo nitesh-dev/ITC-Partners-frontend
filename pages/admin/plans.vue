@@ -95,6 +95,7 @@ function onTabChange(index: number) {
 
         <h2>Plans</h2>
         <button class="primary">Add Category</button>
+        <button class="secondary">Add Plan</button>
         <WidgetsTab :active-tab="activeTabIndex" :names="categories.map((item) => item.name)"
             :onChange="event => onTabChange(event)">
         </WidgetsTab>
@@ -125,6 +126,11 @@ function onTabChange(index: number) {
     </div>
 </template>
 <style scoped>
+
+.panel>button{
+    display: inline-flex;
+    margin-right: 0.5rem;
+}
 .plan {
     display: flex;
     flex-wrap: wrap;
