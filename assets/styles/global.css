@@ -67,7 +67,7 @@ h5 {
 p,
 a,
 span,
-li {
+li, input, textarea {
     font-size: var(--medium-font);
     line-height: 1.6;
 }

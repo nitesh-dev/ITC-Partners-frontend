@@ -65,14 +65,11 @@ import {earningHistoryRaw, withdrawHistoryRaw, profitHistoryRaw, leadsHistoryRaw
 
         </div>
 
+        
+
     </div>
 </template>
 <style scoped>
-
-.card{
-    background-color: var(--color-surface);
-    border-radius: var(--normal-radius);
-}
 
 .panel .header {
     justify-content: flex-end;
