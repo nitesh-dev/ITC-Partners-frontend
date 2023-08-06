@@ -41,6 +41,7 @@ table th, table td{
     background-color: white;
     text-align: left;
     padding: 0 1rem;
+    white-space: pre;
 }
 
 table tr.spacer td{
@@ -77,6 +78,24 @@ table svg.normal{
 
 table svg{
     height: 24px;
+}
+
+
+table .chip{
+    padding: 8px 16px;
+    border-radius: 50px;
+    cursor: pointer;
+
+}
+
+table .chip.success{
+    background-color: var(--color-green);
+    color: white;
+}
+
+table .chip.danger{
+    background-color: var(--color-error);
+    color: white;
 }
 
 

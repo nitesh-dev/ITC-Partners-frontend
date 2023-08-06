@@ -160,7 +160,46 @@ function onTabChange(index: number) {
         </div>
 
         <div v-else-if="activeTabIndex == 1" class="tab-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Profile</th>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Address</th>
+                        <th>Referral Code</th>
+                        <th>Pincode</th>
+                        <th>Gender</th>
+                        <th>Joined At</th>
+                        <th>Approve</th>
+                        <th>Reject</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="spacer">
+                        <td></td>
+                    </tr>
+                    <template v-for="item, index in consultants">
+                        <tr v-if="!item.is_approved">
+                            <td><img src="~/public/images/no_image.png"></td>
+                            <td>{{ item.first }} {{ item.last }}</td>
+                            <td>{{ item.phone }}</td>
+                            <td>{{ item.address }}</td>
+                            <td>{{ item.referral_code }}</td>
+                            <td>{{ item.pincode }}</td>
+                            <td>{{ item.gender }}</td>
+                            <td>{{ dateTimeString(item.datetime) }}</td>
+                            <td>
+                               <span class="chip success">Approve</span>
+                            </td>
+                            <td>
+                               <span class="chip danger">Reject</span>
+                            </td>
+                        </tr>
+                    </template>
 
+                </tbody>
+            </table>
         </div>
 
 
@@ -190,5 +229,4 @@ function onTabChange(index: number) {
     outline: none;
     color: var(--color-on-surface-dark);
 }
-
 </style>
