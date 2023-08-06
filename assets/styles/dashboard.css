@@ -1,5 +1,19 @@
+.panel {
+    overflow: auto;
+    padding-left: 3rem;
+    padding-right: 1rem;
+}
+
 .panel .header {
     margin: 2rem 0;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
+    gap: 8px;
 }
+
+
+
+
+
+
+/* ---------------------- table ------------------ */

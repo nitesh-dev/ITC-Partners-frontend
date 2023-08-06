@@ -73,11 +73,6 @@ import {earningHistoryRaw, withdrawHistoryRaw, profitHistoryRaw, leadsHistoryRaw
     background-color: var(--color-surface);
     border-radius: var(--normal-radius);
 }
-.panel {
-    overflow: auto;
-    padding-left: 3rem;
-    padding-right: 1rem;
-}
 
 .panel .header {
     justify-content: flex-end;
