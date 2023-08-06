@@ -1,6 +1,6 @@
 <script setup lang='ts'>
 import { tabs } from '~/data/admin' 
-import {earningHistoryRaw} from '~/data/adminRawData'
+import {earningHistoryRaw, withdrawHistoryRaw, profitHistoryRaw, leadsHistoryRaw} from '~/data/adminRawData'
 </script>
 <template>
     <div class="panel">
@@ -46,23 +46,22 @@ import {earningHistoryRaw} from '~/data/adminRawData'
             <div class="card">
                 <p class="title">Withdraw history</p>
                 <hr>
-                <div class="graph"></div>
+                <LineChart borderColor="#d33396" backgroundColor="#f5e6ef" :myChartData="withdrawHistoryRaw"/>
             </div>
 
             <!-- 3 -->
             <div class="card">
                 <p class="title">Net profit history</p>
                 <hr>
-                <div class="graph"></div>
+                <DoughnutChart  :backgroundColors="['#1665D8','#d33396', '#F6AB2F']" :myChartData="profitHistoryRaw"/>
             </div>
 
             <!-- 4 -->
             <div class="card">
                 <p class="title">Leads history</p>
                 <hr>
-                <div class="graph"></div>
+                <LineChart borderColor="#2BC48A" backgroundColor="#EFFAF1" :myChartData="leadsHistoryRaw"/>
             </div>
-
 
         </div>
 

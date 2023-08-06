@@ -15,10 +15,12 @@ body {
     --color-primary: #1665D8;
     --color-primary-light: #EAEEF5;
     --color-secondary: #d33396;
+    --color-secondary-light: #f5e6ef;
     --color-on-primary: white;
     --color-error: #F66;
     --color-yellow: #F6AB2F;
     --color-green: #2BC48A;
+    --color-green-light: #EFFAF1;
     --color-on-surface: #9aa0b8;
     --color-on-surface-dark: #002761;
 
