@@ -71,10 +71,6 @@ import {earningHistoryRaw, withdrawHistoryRaw, profitHistoryRaw, leadsHistoryRaw
 </template>
 <style scoped>
 
-.panel .header {
-    justify-content: flex-end;
-}
-
 
 
 /* -------------------- statistics --------------- */
