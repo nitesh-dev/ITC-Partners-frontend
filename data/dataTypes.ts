@@ -50,7 +50,8 @@ export interface Lead{
     employer_status: string,
     monthly_income: string,
     consultant_id: string,
-    status: LeadStatus
+    status: LeadStatus,
+    datetime: number
 }
 
 export enum LeadStatus{
