@@ -13,6 +13,7 @@ body {
     --color-surface: rgb(255, 255, 255);
     --color-surface-variant: #F0F0F6;
     --color-primary: #1665D8;
+    --color-primary-light: #EAEEF5;
     --color-secondary: #d33396;
     --color-on-primary: white;
     --color-error: #F66;

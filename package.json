@@ -12,5 +12,9 @@
     "@nuxt/devtools": "latest",
     "@types/node": "^18.17.1",
     "nuxt": "^3.6.5"
+  },
+  "dependencies": {
+    "chart.js": "^4.3.3",
+    "vue-chartjs": "^5.2.0"
   }
 }

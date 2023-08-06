@@ -1,5 +1,6 @@
 <script setup lang='ts'>
 import { tabs } from '~/data/admin' 
+import {earningHistoryRaw} from '~/data/adminRawData'
 </script>
 <template>
     <div class="panel">
@@ -38,7 +39,7 @@ import { tabs } from '~/data/admin'
             <div class="card">
                 <p class="title">Earning history</p>
                 <hr>
-                <div class="graph"></div>
+                <LineChart borderColor="#1665D8" backgroundColor="#EAEEF5" :myChartData="earningHistoryRaw"/>
             </div>
 
             <!-- 2 -->
@@ -138,10 +139,6 @@ import { tabs } from '~/data/admin'
 .panel .statistics hr{
     border: none;
     border-bottom: 2px solid var(--color-surface-variant);
-}
-
-.panel .statistics .graph{
-    min-height: 300px;
 }
 
 
