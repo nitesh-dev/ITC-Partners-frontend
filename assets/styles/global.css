@@ -29,6 +29,9 @@ body {
     --medium-2-font: 18px;
     --small-font: 12px;
 
+    --normal-radius: 8px;
+    --medium-radius: 12px;
+
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -36,7 +39,7 @@ body {
 }
 
 .panel {
-    width: 100%;
+
     min-height: 100vh;
     background-color: var(--color-surface-variant);
     margin-left: 300px;
