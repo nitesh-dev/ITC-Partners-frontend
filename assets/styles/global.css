@@ -46,6 +46,7 @@ body {
     min-height: 100vh;
     background-color: var(--color-surface-variant);
     margin-left: 300px;
+    padding-bottom: 200px;
 }
 
 p {
