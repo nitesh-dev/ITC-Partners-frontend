@@ -146,6 +146,11 @@ table .chip{
 
 }
 
+
+table .chip.normal{
+    background-color: var(--color-primary);
+    color: white;
+}
 table .chip.success{
     background-color: var(--color-green);
     color: white;
