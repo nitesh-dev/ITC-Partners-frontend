@@ -1,12 +1,93 @@
 <script setup lang='ts'>
 
+import { ConsultantAccount } from 'data/dataTypes';
 import { tabs } from '~/data/admin'
+import { dateTimeString } from '~/extra/utils'
 
 
-const consultants = ref(Array<string>())
+const consultants = ref(Array<ConsultantAccount>())
+consultants.value.push({
+    id: 'hsdafjhds',
+    first: 'Nitesh',
+    last: 'Kumar',
+    phone: 45465456456,
+    address: 'India bihar',
+    referral_code: '56456',
+    pincode: '454545',
+    gender: 'Male',
+    is_approved: true,
+    image: '',
+    datetime: 4564654654654,
+    dob: 4546545645
+})
 
-function onTabChange(index: number){
-    alert(index)
+consultants.value.push({
+    id: 'hsdafjhds',
+    first: 'Nitesh',
+    last: 'Kumar',
+    phone: 45465456456,
+    address: 'India bihar',
+    referral_code: '56456',
+    pincode: '454545',
+    gender: 'Male',
+    is_approved: true,
+    image: '',
+    datetime: 4564654654654,
+    dob: 4546545645
+})
+
+
+consultants.value.push({
+    id: 'hsdafjhds',
+    first: 'Nitesh',
+    last: 'Kumar',
+    phone: 45465456456,
+    address: 'India bihar',
+    referral_code: '56456',
+    pincode: '454545',
+    gender: 'Male',
+    is_approved: true,
+    image: '',
+    datetime: 4564654654654,
+    dob: 4546545645
+})
+
+
+consultants.value.push({
+    id: 'hsdafjhds',
+    first: 'Nitesh',
+    last: 'Kumar',
+    phone: 45465456456,
+    address: 'India bihar',
+    referral_code: '56456',
+    pincode: '454545',
+    gender: 'Male',
+    is_approved: false,
+    image: '',
+    datetime: 4564654654654,
+    dob: 4546545645
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const activeTabIndex = ref(0)
+
+function onTabChange(index: number) {
+    // alert(index)
+    activeTabIndex.value = index
 }
 
 
@@ -30,15 +111,58 @@ function onTabChange(index: number){
             <input type="text" placeholder="Search here">
         </div>
 
-        <WidgetsTab :active-tab="0" :names="['Consultants', 'New consultants']" :onChange="event => onTabChange(event)"/>
+        <WidgetsTab :active-tab="activeTabIndex" :names="['Consultants', 'New consultants']"
+            :onChange="event => onTabChange(event)" />
 
-        <!-- <table>
-            <thead>
-                <td>
-                    <td></td>
-                </td>
-            </thead>
-        </table> -->
+        <div v-if="activeTabIndex == 0" class="tab-container">
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Profile</th>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Address</th>
+                        <th>Referral Code</th>
+                        <th>Pincode</th>
+                        <th>Gender</th>
+                        <th>DOB</th>
+                        <th>Joined At</th>
+                        <th>Edit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="spacer">
+                        <td></td>
+                    </tr>
+                    <template v-for="item, index in consultants">
+                        <tr v-if="item.is_approved">
+                            <td><img src="~/public/images/no_image.png"></td>
+                            <td>{{ item.first }} {{ item.last }}</td>
+                            <td>{{ item.phone }}</td>
+                            <td>{{ item.address }}</td>
+                            <td>{{ item.referral_code }}</td>
+                            <td>{{ item.pincode }}</td>
+                            <td>{{ item.gender }}</td>
+                            <td>{{ dateTimeString(item.dob) }}</td>
+                            <td>{{ dateTimeString(item.datetime) }}</td>
+                            <td>
+                                <svg width="24" height="24" fill="none" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M12 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4ZM12 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4ZM10 18a2 2 0 1 0 4 0 2 2 0 0 0-4 0Z" />
+                                </svg>
+                            </td>
+                        </tr>
+                    </template>
+
+                </tbody>
+            </table>
+        </div>
+
+        <div v-else-if="activeTabIndex == 1" class="tab-container">
+
+        </div>
 
 
 
@@ -56,16 +180,15 @@ function onTabChange(index: number){
     gap: 1rem;
 }
 
-.panel .search svg{
+.panel .search svg {
     fill: inherit;
 }
 
-.panel .search input{
+.panel .search input {
     height: 100%;
     border: none;
     width: 100%;
     outline: none;
     color: var(--color-on-surface-dark);
 }
-
 </style>

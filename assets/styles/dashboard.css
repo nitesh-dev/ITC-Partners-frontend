@@ -18,6 +18,49 @@
 
 
 
+.panel .tab-container{
+    overflow: auto;
+}
 
 
 /* ---------------------- table ------------------ */
+
+table{
+    overflow: auto;
+    width: 100%;
+    border-collapse: collapse;
+    color: var(--color-on-surface-dark);
+}
+
+
+table tr{
+    border-bottom: 1px solid var(--color-surface-variant);
+}
+table th, table td{
+    font-weight: normal;
+    height: 60px;
+    background-color: white;
+    text-align: left;
+    padding: 0 1rem;
+}
+
+table tr.spacer td{
+    background-color: transparent;
+    height: 12px;
+}
+
+table img{
+    height: 42px;
+    width: 42px;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+    margin: auto 0;
+}
+
+table svg{
+    display: block;
+    margin: auto 0;
+    fill: var(--color-on-surface-dark);
+}
+
