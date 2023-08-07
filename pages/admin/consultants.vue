@@ -190,10 +190,10 @@ function onTabChange(index: number) {
                             <td>{{ item.gender }}</td>
                             <td>{{ dateTimeString(item.datetime) }}</td>
                             <td>
-                               <span class="chip success">Approve</span>
+                               <button class="success">Accept</button>
                             </td>
                             <td>
-                               <span class="chip danger">Reject</span>
+                               <button class="danger">Reject</button>
                             </td>
                         </tr>
                     </template>
@@ -205,6 +205,9 @@ function onTabChange(index: number) {
 
 
     </div>
+
+    <DialogAccept :is-visible="false" button-name="Accept" title="Request Accept" message="Empty"></DialogAccept>
+    <DialogAccept :is-visible="false" :is-danger="true" button-name="Reject" title="Request Reject" message="Empty"></DialogAccept>
 </template>
 <style scoped>
 .panel {
