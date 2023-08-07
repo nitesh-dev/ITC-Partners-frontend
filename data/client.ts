@@ -8,7 +8,7 @@ tabs.push({
 }) 
 tabs.push({
     name: 'Offers & Plans',
-    url: '/client/offers'
+    url: '/client/plans'
 }) 
 tabs.push({
     name: 'Leads',
