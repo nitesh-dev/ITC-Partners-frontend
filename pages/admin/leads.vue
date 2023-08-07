@@ -140,18 +140,22 @@ function onTabChange(index: number) {
             <div class="card">
                 <p>Approved</p>
                 <span>49</span>
+                <div class="progress success"></div>
             </div>
             <div class="card">
                 <p>Progress</p>
                 <span>5</span>
+                <div class="progress"></div>
             </div>
             <div class="card">
                 <p>Pending</p>
                 <span>3</span>
+                <div class="progress neutral"></div>
             </div>
             <div class="card">
                 <p>Rejects</p>
                 <span>4</span>
+                <div class="progress danger"></div>
             </div>
         </div>
 
@@ -354,4 +358,6 @@ function onTabChange(index: number) {
 
     </div>
 </template>
-<style scoped></style>
+<style scoped>
+
+</style>
