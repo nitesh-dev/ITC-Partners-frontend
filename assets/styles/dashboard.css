@@ -229,6 +229,7 @@ table .chip.danger {
     width: 600px;
     padding: 1.5rem; 
     overflow: auto;
+    max-height: 700px;
 }
 
 .dialog-holder .content{
@@ -261,6 +262,7 @@ table .chip.danger {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 0.5rem;
+    align-items: center;
 }
 
 .dialog .input input, .dialog .input textarea, .dialog .input select{
@@ -270,8 +272,11 @@ table .chip.danger {
     padding: 0.5em 1em;
     border-radius: 4px;
     width: 100%;
-    resize: vertical;
     display: block;
+}
+
+.dialog textarea{
+    resize: vertical;
 }
 
 .dialog .input select{
@@ -282,9 +287,4 @@ table .chip.danger {
     display: block;
     font-size: var(--small-font);
     color: var(--color-on-surface);
-}
-
-
-.dialog .input.image input{
-    resize: none;
 }
