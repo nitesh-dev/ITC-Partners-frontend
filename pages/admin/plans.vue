@@ -112,7 +112,6 @@ function onTabChange(index: number) {
                         <p>{{ plan.description }}</p>
                         <div class="price-container">
                             <div class="container">
-                                <span class="discount">₹{{ plan.price - plan.discount }}</span>
                                 <span class="price">₹{{ plan.price }}</span>
                             </div>
                             <button class="primary">Edit</button>
@@ -171,8 +170,8 @@ function onTabChange(index: number) {
 }
 
 .plan .price {
-    color: var(--color-on-surface);
-    text-decoration: line-through;
+    font-size: 28px;
+    color: var(--color-secondary);
 
 }
 

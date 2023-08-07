@@ -136,12 +136,12 @@ table td {
 
 
 table tbody tr:hover{
-    background-color: var(--color-surface-variant);
+    background-color: #e0e0e0;
 }
 
 table tr.active.primary{
     background-color: var(--color-primary);
-    color: white;
+    color: rgb(255, 237, 237);
 }
 
 table tr.spacer {
@@ -194,6 +194,11 @@ table .chip {
 
 table .chip.normal {
     background-color: var(--color-primary);
+    color: white;
+}
+
+table .chip.neutral {
+    background-color: var(--color-yellow);
     color: white;
 }
 
