@@ -348,6 +348,6 @@ function onTabChange(index: number) {
         </div>
     </div>
 
-    <DialogLeadDetail :is-visible="true" :data="leads[0]" :is-update="false"></DialogLeadDetail>
+    <DialogLeadDetail :is-visible="false" :data="leads[0]" :is-update="false"></DialogLeadDetail>
 </template>
 <style scoped></style>

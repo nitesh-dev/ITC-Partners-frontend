@@ -234,6 +234,7 @@ table .chip.danger {
 .dialog-holder .content{
     min-height: 100px;
     margin: 1rem 0;
+    margin-top: 2rem;
 }
 
 .dialog-holder .dialog .medium{
