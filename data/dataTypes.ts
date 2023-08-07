@@ -15,7 +15,6 @@ export interface AdminAccount{
     address: string,
     pincode: string,
     gender: string,
-    image: string,
     datetime: number,
     dob: number
 }
@@ -24,15 +23,16 @@ export interface ConsultantAccount{
     id: string,
     first: string,
     last: string,
+    email: string,
     phone: number,
     address: string,
     referral_code: string,
+    dob: number,
+    city: string,
     pincode: string,
-    gender: string,
+    gender: Gender,
     is_approved: boolean,
-    image: string,
-    datetime: number,
-    dob: number
+    created_at: number,
 }
 
 
@@ -59,6 +59,12 @@ export enum LeadStatus{
     Progress,
     Approved,
     Rejected
+}
+
+
+export enum Gender{
+    Male,
+    Female
 }
 
 export interface LoanCategory{

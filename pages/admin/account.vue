@@ -3,7 +3,6 @@ import { AdminAccount } from 'data/dataTypes';
 import { tabs } from '~/data/admin'
 import { dateTimeString } from '~/extra/utils'
 
-
 const account = ref<AdminAccount>({
     id: 'sdfsdf',
     first: 'Nitesh',
@@ -12,7 +11,6 @@ const account = ref<AdminAccount>({
     address: 'jksdhfj sdjfksjd fkjksld fklsdjf',
     pincode: '6546545',
     gender: 'Male',
-    image: '',
     datetime: 0,
     dob: 0
 })

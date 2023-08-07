@@ -165,7 +165,7 @@ function onTabChange(index: number) {
 
 
 
-        <!-- Rejected -->
+        <!-- Pending -->
         <div v-if="activeTabIndex == 0" class="tab-container">
 
             <table>
@@ -179,7 +179,7 @@ function onTabChange(index: number) {
                         <th>Gender</th>
                         <th>Submitted At</th>
                         <th>View</th>
-                        <th>Approve</th>
+                        <th>Accept</th>
                         <th>Reject</th>
                     </tr>
                 </thead>
@@ -203,7 +203,7 @@ function onTabChange(index: number) {
                                 </svg>
                             </td>
                             <td>
-                                <button class="success">Approve</button>
+                                <button class="success">Accept</button>
                             </td>
                             <td>
                                 <button class="danger">Reject</button>
@@ -229,6 +229,8 @@ function onTabChange(index: number) {
                         <th>Gender</th>
                         <th>Submitted At</th>
                         <th>View</th>
+                        <th>Pay & Approve</th>
+
                         <th>Reject</th>
                     </tr>
                 </thead>
@@ -250,6 +252,9 @@ function onTabChange(index: number) {
                                     <path
                                         d="M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z" />
                                 </svg>
+                            </td>
+                            <td>
+                               <button class="success">Pay & Approve</button>
                             </td>
                             <td>
                                <button class="danger">Reject</button>

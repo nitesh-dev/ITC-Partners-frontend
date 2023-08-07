@@ -3,82 +3,24 @@
 import { ConsultantAccount } from 'data/dataTypes';
 import { tabs } from '~/data/admin'
 import { dateTimeString } from '~/extra/utils'
+import ApiConsultant from '~/api/ApiConsultant'
 
 
 const consultants = ref(Array<ConsultantAccount>())
-consultants.value.push({
-    id: 'hsdafjhds',
-    first: 'Nitesh',
-    last: 'Kumar',
-    phone: 45465456456,
-    address: 'India bihar',
-    referral_code: '56456',
-    pincode: '454545',
-    gender: 'Male',
-    is_approved: true,
-    image: '',
-    datetime: 4564654654654,
-    dob: 4546545645
+
+onMounted(function(){
+    fetchAllConsultants()
 })
 
-consultants.value.push({
-    id: 'hsdafjhds',
-    first: 'Nitesh',
-    last: 'Kumar',
-    phone: 45465456456,
-    address: 'India bihar',
-    referral_code: '56456',
-    pincode: '454545',
-    gender: 'Male',
-    is_approved: true,
-    image: '',
-    datetime: 4564654654654,
-    dob: 4546545645
-})
-
-
-consultants.value.push({
-    id: 'hsdafjhds',
-    first: 'Nitesh',
-    last: 'Kumar',
-    phone: 45465456456,
-    address: 'India bihar',
-    referral_code: '56456',
-    pincode: '454545',
-    gender: 'Male',
-    is_approved: true,
-    image: '',
-    datetime: 4564654654654,
-    dob: 4546545645
-})
-
-
-consultants.value.push({
-    id: 'hsdafjhds',
-    first: 'Nitesh',
-    last: 'Kumar',
-    phone: 45465456456,
-    address: 'India bihar',
-    referral_code: '56456',
-    pincode: '454545',
-    gender: 'Male',
-    is_approved: false,
-    image: '',
-    datetime: 4564654654654,
-    dob: 4546545645
-})
-
-
-
-
-
-
-
-
-
-
-
-
+async function fetchAllConsultants(){
+    try {
+        const res = await ApiConsultant.getAll()
+        consultants.value = res
+        console.log(res)
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 
 
@@ -119,7 +61,6 @@ function onTabChange(index: number) {
             <table>
                 <thead>
                     <tr>
-                        <th>Profile</th>
                         <th>Name</th>
                         <th>Phone</th>
                         <th>Address</th>
@@ -137,7 +78,6 @@ function onTabChange(index: number) {
                     </tr>
                     <template v-for="item, index in consultants">
                         <tr v-if="item.is_approved">
-                            <td><img src="~/public/images/no_image.png"></td>
                             <td>{{ item.first }} {{ item.last }}</td>
                             <td>{{ item.phone }}</td>
                             <td>{{ item.address }}</td>
@@ -145,7 +85,7 @@ function onTabChange(index: number) {
                             <td>{{ item.pincode }}</td>
                             <td>{{ item.gender }}</td>
                             <td>{{ dateTimeString(item.dob) }}</td>
-                            <td>{{ dateTimeString(item.datetime) }}</td>
+                            <td>{{ dateTimeString(item.created_at) }}</td>
                             <td>
                                 <button class="danger">Remove</button>
                             </td>
@@ -160,7 +100,6 @@ function onTabChange(index: number) {
             <table>
                 <thead>
                     <tr>
-                        <th>Profile</th>
                         <th>Name</th>
                         <th>Phone</th>
                         <th>Address</th>
@@ -178,14 +117,13 @@ function onTabChange(index: number) {
                     </tr>
                     <template v-for="item, index in consultants">
                         <tr v-if="!item.is_approved">
-                            <td><img src="~/public/images/no_image.png"></td>
                             <td>{{ item.first }} {{ item.last }}</td>
                             <td>{{ item.phone }}</td>
                             <td>{{ item.address }}</td>
                             <td>{{ item.referral_code }}</td>
                             <td>{{ item.pincode }}</td>
                             <td>{{ item.gender }}</td>
-                            <td>{{ dateTimeString(item.datetime) }}</td>
+                            <td>{{ dateTimeString(item.created_at) }}</td>
                             <td>
                                <button class="success">Accept</button>
                             </td>
