@@ -82,6 +82,8 @@ commissions.value.push({
             </table>
         </div>
     </div>
+
+    <DialogAddCommission :is-visible="false" :is-update="false" :data="commissions[0]"></DialogAddCommission>
 </template>
 <style scoped>
 .tab-container {

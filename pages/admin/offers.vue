@@ -118,6 +118,6 @@ function onTabChange(index: number) {
         </div>
     </div>
 
-    <DialogAddOffer :is-visible="true" :data="offers[0]" :is-update="false"></DialogAddOffer>
+    <DialogAddOffer :is-visible="false" :data="offers[0]" :is-update="false"></DialogAddOffer>
 </template>
 <style scoped></style>
