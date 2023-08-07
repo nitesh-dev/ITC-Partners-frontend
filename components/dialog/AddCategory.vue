@@ -1,6 +1,5 @@
 <script setup lang='ts'>
 defineProps({
-    message: String,
     isVisible: Boolean
 })
 
@@ -25,7 +24,7 @@ function onAdd() {
             <h4>Add Category</h4>
             <div class="content">
                 <div class="input">
-                    <span>New Category name</span>
+                    <span>Category name</span>
                     <input type="text">
                 </div>
             </div>

@@ -125,7 +125,8 @@ function onTabChange(index: number) {
 
     </div>
 
-    <DialogAddCategory :is-visible="true"></DialogAddCategory>
+    <DialogAddCategory :is-visible="false"></DialogAddCategory>
+    <!-- <DialogAddPlan :is-visible="true" :data="allPlans[0]"></DialogAddPlan> -->
 </template>
 <style scoped>
 

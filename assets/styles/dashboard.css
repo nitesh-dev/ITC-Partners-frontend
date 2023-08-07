@@ -283,3 +283,8 @@ table .chip.danger {
     font-size: var(--small-font);
     color: var(--color-on-surface);
 }
+
+
+.dialog .input.image input{
+    resize: none;
+}
