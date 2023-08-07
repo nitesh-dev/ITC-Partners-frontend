@@ -1,5 +1,7 @@
 <script setup lang='ts'>
 import { Offer } from 'data/dataTypes';
+
+
 defineProps<{
     data: Offer,
     isVisible: Boolean,
@@ -81,6 +83,8 @@ function onAdd() {
             </div>
         </div>
     </div>
+
+    <DialogChooseOffer :is-visible="true"></DialogChooseOffer>
 </template>
 <style scoped>
 
