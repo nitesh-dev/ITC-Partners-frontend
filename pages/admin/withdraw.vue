@@ -110,8 +110,8 @@ function onTabChange(index: number) {
                             <td>₹{{ item.amount }}</td>
                             <td>{{ item.phone }}</td>
                             <td>{{ dateTimeString(item.datetime) }}</td>
-                            <td><span class="chip success">Accept</span></td>
-                            <td><span class="chip danger">Reject</span></td>
+                            <td><button class="success">Accept</button></td>
+                            <td><button class="danger">Reject</button></td>
                         </tr>
                     </template>
 

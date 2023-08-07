@@ -71,7 +71,6 @@ commissions.value.push({
                             </td>
                         </tr>
                     </template>
-
                 </tbody>
             </table>
         </div>
