@@ -135,7 +135,7 @@ function onTabChange(index: number) {
             <Profile name="Nitesh kr" role="Admin" />
         </div>
 
-        <h2>Consultants</h2>
+        <h2>Leads</h2>
         <div class="reports">
             <div class="card">
                 <p>Approved</p>
