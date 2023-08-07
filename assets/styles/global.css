@@ -17,7 +17,7 @@ body {
     --color-secondary: #d33396;
     --color-secondary-light: #f5e6ef;
     --color-on-primary: white;
-    --color-error: #F66;
+    --color-error: rgb(255, 79, 79);
     --color-yellow: #F6AB2F;
     --color-green: #2BC48A;
     --color-green-light: #EFFAF1;
@@ -96,12 +96,9 @@ h5 {
     font-size: var(--medium-font);
 }
 
-button.primary, button.secondary {
-    background: var(--color-primary);
+button {
     border-radius: 4px;
-    color: var(--color-on-primary);
     border: none;
-    border: 1px solid var(--color-primary);
     font-size: var(--medium-font);
     padding: 0.6em 1.2em;
     fill: white;
@@ -111,14 +108,28 @@ button.primary, button.secondary {
     justify-content: center;
 }
 
+button.primary{
+    background: var(--color-primary);
+    border: 1px solid var(--color-primary);
+    fill: white;
+    color: white;
+}
+
 button.secondary{
     background: var(--color-secondary);
     border: 1px solid var(--color-secondary);
+    fill: white;
+    color: white;
 }
 
-button.primary svg, button.secondary svg {
+button.danger{
+    background: var(--color-error);
+    border: 1px solid var(--color-error);
+    fill: white;
+    color: white;
+}
+button svg {
     fill: inherit;
-
 }
 
 a {
@@ -126,14 +137,8 @@ a {
     text-decoration: none;
 }
 
-button.primary-outline {
+button.primary.outline {
     background: transparent;
-    border-radius: 4px;
-    color: var(--color-primary);
-    border: none;
-    border: 1px solid var(--color-primary);
-    font-size: var(--medium-font);
-    padding: 0.6em 1.2em;
     fill: var(--color-primary);
 }
 

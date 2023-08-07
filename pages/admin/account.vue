@@ -3,6 +3,7 @@ import { AdminAccount } from 'data/dataTypes';
 import { tabs } from '~/data/admin'
 import { dateTimeString } from '~/extra/utils'
 
+
 const account = ref<AdminAccount>({
     id: 'sdfsdf',
     first: 'Nitesh',
@@ -74,21 +75,9 @@ const account = ref<AdminAccount>({
             </div>
 
         </div>
-
-
-        <!-- 
-                id: string,
-    first: string,
-    last: string,
-    phone: number,
-    address: string,
-    pincode: string,
-    gender: string,
-    image: string,
-    datetime: number,
-    dob: number
-         -->
     </div>
+
+    <DialogDelete></DialogDelete>
 </template>
 <style scoped>
 .panel>.profile {
