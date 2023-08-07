@@ -84,7 +84,7 @@ function onAdd() {
         </div>
     </div>
 
-    <DialogChooseOffer :is-visible="true"></DialogChooseOffer>
+    <DialogChoosePlan :is-visible="false"></DialogChoosePlan>
 </template>
 <style scoped>
 
