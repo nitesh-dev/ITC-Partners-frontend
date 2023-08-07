@@ -70,6 +70,7 @@ span,
 li,
 input,
 textarea,
+select,
 td,
 th {
     font-size: var(--medium-font);

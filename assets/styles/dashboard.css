@@ -233,6 +233,7 @@ table .chip.danger {
 
 .dialog-holder .content{
     min-height: 100px;
+    margin: 1rem 0;
 }
 
 .dialog-holder .dialog .medium{
@@ -249,4 +250,35 @@ table .chip.danger {
     gap: 0.5rem;
     align-items: center;
     margin-top: auto;
+}
+
+.dialog .input{
+    margin-bottom: 1rem;
+}
+
+.dialog .col-2{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+}
+
+.dialog .input input, .dialog .input textarea, .dialog .input select{
+    border: none;
+    outline: none;
+    background-color: var(--color-surface-variant);
+    padding: 0.5em 1em;
+    border-radius: 4px;
+    width: 100%;
+    resize: vertical;
+    display: block;
+}
+
+.dialog .input select{
+    padding: 0.65em 1em;
+}
+
+.dialog .input span{
+    display: block;
+    font-size: var(--small-font);
+    color: var(--color-on-surface);
 }
