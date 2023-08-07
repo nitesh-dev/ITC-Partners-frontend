@@ -7,7 +7,7 @@ tabs.push({
     url: '/client'
 }) 
 tabs.push({
-    name: 'Offers',
+    name: 'Offers & Plans',
     url: '/client/offers'
 }) 
 tabs.push({
@@ -21,11 +21,11 @@ tabs.push({
 
 tabs.push({
     name: 'Withdraw',
-    url: '/admin/withdraw'
+    url: '/client/withdraw'
 }) 
 tabs.push({
     name: 'Account',
-    url: '/admin/account'
+    url: '/client/account'
 })
 
 

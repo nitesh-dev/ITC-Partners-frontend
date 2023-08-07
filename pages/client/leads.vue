@@ -4,7 +4,7 @@ import {earningHistoryRaw, withdrawHistoryRaw, profitHistoryRaw, leadsHistoryRaw
 </script>
 <template>
     <div class="panel">
-        <Sidebar :active-tab="0" :tab-data="tabs"></Sidebar>
+        <Sidebar :active-tab="3" :tab-data="tabs"></Sidebar>
 
         <!-- header -->
         <div class="header">
@@ -16,11 +16,12 @@ import {earningHistoryRaw, withdrawHistoryRaw, profitHistoryRaw, leadsHistoryRaw
             <div class="card">
                 <p>Total Earning</p>
                 <span>₹100,500</span>
+                <div class="progress secondary"></div>
             </div>
             <div class="card">
                 <p>Total Withdraw</p>
                 <span>₹100,500</span>
-                <div class="progress secondary"></div>
+                <div class="progress neutral"></div>
             </div>
             <div class="card">
                 <p>Total Referrals</p>
