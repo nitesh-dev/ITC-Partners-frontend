@@ -61,7 +61,9 @@ async function updateStatus(leadId: number, status: 'Pending' | 'Progress' | 'Ap
 let selectedLead: null | Lead = null
 const isApproveDialogVisible = ref(false)
 const isRejectDialogVisible = ref(false)
+const isLeadViewDialogVisible = ref(false)
 const isProcessing = ref(false)
+const selectedLeadForView = ref<Lead>()
 
 
 // Accept dialog
@@ -98,7 +100,14 @@ function openRejectDialog(lead: Lead) {
 }
 
 
+function openLeadViewDialog(lead: Lead) {
+    selectedLeadForView.value = lead
+    isLeadViewDialogVisible.value = true
+}
 
+function onLeadViewDialogClose() {
+    isLeadViewDialogVisible.value = false
+}
 
 
 
@@ -203,6 +212,7 @@ function onTabChange(index: number) {
                         <th>City</th>
                         <th>Pincode</th>
                         <th>Gender</th>
+                        <th>Loan type</th>
                         <th>Submitted At</th>
                         <th>View</th>
                         <th>Accept</th>
@@ -221,8 +231,9 @@ function onTabChange(index: number) {
                             <td>{{ item.city }}</td>
                             <td>{{ item.pincode }}</td>
                             <td>{{ item.gender }}</td>
+                            <td>{{ item.loan_name }}</td>
                             <td>{{ dateTimeString(item.created_at) }}</td>
-                            <td>
+                            <td @click="openLeadViewDialog(item)">
                                 <svg class="normal" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                     <path
                                         d="M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z" />
@@ -253,6 +264,7 @@ function onTabChange(index: number) {
                         <th>City</th>
                         <th>Pincode</th>
                         <th>Gender</th>
+                        <th>Loan type</th>
                         <th>Submitted At</th>
                         <th>View</th>
                         <th>Pay & Approve</th>
@@ -272,8 +284,9 @@ function onTabChange(index: number) {
                             <td>{{ item.city }}</td>
                             <td>{{ item.pincode }}</td>
                             <td>{{ item.gender }}</td>
+                            <td>{{ item.loan_name }}</td>
                             <td>{{ dateTimeString(item.created_at) }}</td>
-                            <td>
+                            <td @click="openLeadViewDialog(item)">
                                 <svg class="normal" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                     <path
                                         d="M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z" />
@@ -300,10 +313,12 @@ function onTabChange(index: number) {
                     <tr>
                         <th>Name</th>
                         <th>Phone</th>
-                        <th>Address</th>
                         <th>City</th>
                         <th>Pincode</th>
                         <th>Gender</th>
+                        <th>Loan type</th>
+                        <th>Loan Amount</th>
+                        <th>Loan Commission</th>
                         <th>Submitted At</th>
                         <th>View</th>
 
@@ -317,12 +332,14 @@ function onTabChange(index: number) {
                         <tr v-if="item.status == 'Approved'">
                             <td>{{ item.first }} {{ item.last }}</td>
                             <td>{{ item.phone }}</td>
-                            <td>{{ item.address }}</td>
                             <td>{{ item.city }}</td>
                             <td>{{ item.pincode }}</td>
                             <td>{{ item.gender }}</td>
+                            <td>{{ item.loan_name }}</td>
+                            <td>₹{{ item.loan_amount }}</td>
+                            <td>{{ item.consultant_commission_percentage }}</td>
                             <td>{{ dateTimeString(item.created_at) }}</td>
-                            <td>
+                            <td @click="openLeadViewDialog(item)">
                                 <svg class="normal" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                     <path
                                         d="M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z" />
@@ -364,7 +381,7 @@ function onTabChange(index: number) {
                             <td>{{ item.pincode }}</td>
                             <td>{{ item.gender }}</td>
                             <td>{{ dateTimeString(item.created_at) }}</td>
-                            <td>
+                            <td @click="openLeadViewDialog(item)">
                                 <svg class="normal" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                     <path
                                         d="M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z" />
@@ -380,7 +397,8 @@ function onTabChange(index: number) {
     </div>
 
 
-    <DialogLeadDetail :is-visible="false" :data="leads[0]" :is-update="false"></DialogLeadDetail>
+    <DialogLeadDetail v-if="selectedLeadForView" :onOk="() => onLeadViewDialogClose()" :is-visible="isLeadViewDialogVisible"
+        :data="selectedLeadForView" :is-update="false"></DialogLeadDetail>
 
     <DialogAccept :onCancel="() => onAcceptDialog(false)" :onOk="() => onAcceptDialog(true)"
         :is-visible="isApproveDialogVisible" button-name="Accept" title="Request Accept"

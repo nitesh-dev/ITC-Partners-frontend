@@ -3,8 +3,7 @@ import { Lead, LeadStatus } from '~/data/dataTypes';
 import { dateTimeString, dateTimeToInputFormat } from '~/extra/utils'
 defineProps<{
     isVisible: boolean,
-    data: Lead,
-    isUpdate: boolean
+    data: Lead
 }>()
 
 const emit = defineEmits<{
@@ -27,64 +26,61 @@ function onOk() {
                 <div class="col-2">
                     <div class="input">
                         <span>Name</span>
-                        <input type="text" :value="data.first + ' ' + data.last">
+                        <input type="text" :value="data.first + ' ' + data.last" readonly>
                     </div>
                     <div class="input">
                         <span>Phone</span>
-                        <input type="number" :value="data.phone">
+                        <input type="number" :value="data.phone" readonly>
                     </div>
                 </div>
 
                 <div class="input">
                     <span>Address</span>
-                    <textarea :value="data.address"></textarea>
+                    <textarea :value="data.address" readonly></textarea>
                 </div>
 
 
                 <div class="col-2">
                     <div class="input">
                         <span>DOB</span>
-                        <input type="date" :value="dateTimeToInputFormat(data.dob)">
+                        <input type="date" :value="dateTimeToInputFormat(data.dob)" readonly>
                     </div>
                     <div class="input">
                         <span>City</span>
-                        <input type="text" :value="data.city">
+                        <input type="text" :value="data.city" readonly>
                     </div>
                 </div>
 
                 <div class="col-2">
                     <div class="input">
                         <span>Pincode</span>
-                        <input type="text" :value="data.pincode">
+                        <input type="text" :value="data.pincode" readonly>
                     </div>
                     <div class="input">
                         <span>Gender</span>
-                        <select>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                        </select>
+                        <input type="text" :value="data.gender" readonly>
                     </div>
                 </div>
 
                 <div class="input">
                     <span>Purpose of loan</span>
-                    <textarea :value="data.purpose_of_loan"></textarea>
+                    <textarea :value="data.purpose_of_loan" rows="5" readonly></textarea>
                 </div>
 
                 <div class="col-2">
                     <div class="input">
                         <span>Employer Status</span>
-                        <input type="text" :value="data.employer_status">
+                        <input type="text" :value="data.employer_status" readonly>
                     </div>
                     <div class="input">
                         <span>Monthly Income</span>
-                        <input type="number" :value="data.monthly_income">
+                        <input type="number" :value="data.monthly_income" readonly>
                     </div>
                 </div>
 
             </div>
             <div class="buttons-holder">
-                <button class="primary" @click="onOk()">Ok</button>
+                <button class="primary" @click="onOk()">Close</button>
             </div>
         </div>
     </div>
