@@ -5,22 +5,133 @@ import { tabs } from '~/data/admin'
 import { dateTimeString } from '~/extra/utils'
 import ApiConsultant from '~/api/ApiConsultant'
 
+const token = 'temp'
 
 const consultants = ref(Array<ConsultantAccount>())
 
-onMounted(function(){
+onMounted(function () {
     fetchAllConsultants()
 })
 
-async function fetchAllConsultants(){
+
+
+
+
+
+
+// -------------------- requests --------------------
+async function fetchAllConsultants() {
     try {
-        const res = await ApiConsultant.getAll()
+        const res = await ApiConsultant.getAll(token)
         consultants.value = res
-        console.log(res)
+
     } catch (error) {
         console.log(error)
     }
 }
+
+
+async function approve(consultantId: number) {
+    isProcessing.value = true
+    try {
+        const index = consultants.value.findIndex((v) => v.id == consultantId)
+
+        if (index != -1) {
+
+            const res = await ApiConsultant.updateStatus(token, consultantId, true)
+            consultants.value[index].is_approved = true
+
+        }
+
+    } catch (error) {
+        console.log(error)
+    }
+
+    isProcessing.value = false
+}
+
+
+async function deleteConsultant(consultantId: number) {
+    isProcessing.value = true
+    try {
+        const index = consultants.value.findIndex((v) => v.id == consultantId)
+
+        if (index != -1) {
+            const res = await ApiConsultant.deleteAccount(token, consultantId)
+            consultants.value.splice(index, 1)
+        }
+
+    } catch (error) {
+        console.log(error)
+    }
+
+    isProcessing.value = false
+}
+
+
+
+// ---------------------------- dialogs --------------------
+
+let selectedConsultant: null | ConsultantAccount = null
+const isApproveDialogVisible = ref(false)
+const isRejectDialogVisible = ref(false)
+const isDeleteDialogVisible = ref(false)
+const isProcessing = ref(false)
+
+
+
+// Accept dialog
+function onAcceptDialog(isOk: boolean) {
+
+    isApproveDialogVisible.value = false
+    if (selectedConsultant == null) return
+    if (isOk) {
+        approve(selectedConsultant.id)
+    }
+}
+
+
+function openAcceptDialog(consultant: ConsultantAccount) {
+    selectedConsultant = consultant
+    isApproveDialogVisible.value = true
+}
+
+
+// reject dialog
+
+function onRejectDialog(isOk: boolean) {
+
+    isRejectDialogVisible.value = false
+    if (selectedConsultant == null) return
+    if (isOk) {
+
+        // delete the consultant account on reject
+        deleteConsultant(selectedConsultant.id)
+    }
+}
+
+
+function openRejectDialog(consultant: ConsultantAccount) {
+    selectedConsultant = consultant
+    isRejectDialogVisible.value = true
+}
+
+
+
+// delete dialog 
+function onDeleteAccount(isOk: boolean) {
+    isDeleteDialogVisible.value = false
+    if (selectedConsultant == null) return
+    if (isOk) {
+        deleteConsultant(selectedConsultant.id)
+    }
+}
+
+function openDeleteAccountDialog(consultant: ConsultantAccount) {
+    selectedConsultant = consultant
+    isDeleteDialogVisible.value = true
+}
+
 
 
 
@@ -87,7 +198,7 @@ function onTabChange(index: number) {
                             <td>{{ dateTimeString(item.dob) }}</td>
                             <td>{{ dateTimeString(item.created_at) }}</td>
                             <td>
-                                <button class="danger">Remove</button>
+                                <button @click="openDeleteAccountDialog(item)" class="danger">Remove</button>
                             </td>
                         </tr>
                     </template>
@@ -125,10 +236,10 @@ function onTabChange(index: number) {
                             <td>{{ item.gender }}</td>
                             <td>{{ dateTimeString(item.created_at) }}</td>
                             <td>
-                               <button class="success">Accept</button>
+                                <button class="success" @click="openAcceptDialog(item)">Accept</button>
                             </td>
                             <td>
-                               <button class="danger">Reject</button>
+                                <button class="danger" @click="openRejectDialog(item)">Reject</button>
                             </td>
                         </tr>
                     </template>
@@ -141,13 +252,17 @@ function onTabChange(index: number) {
 
     </div>
 
-    <DialogAccept :is-visible="false" button-name="Accept" title="Request Accept" message="Empty"></DialogAccept>
-    <DialogAccept :is-visible="false" :is-danger="true" button-name="Reject" title="Request Reject" message="Empty"></DialogAccept>
-</template>
-<style scoped>
-.panel {
+    <DialogAccept :onCancel="() => onAcceptDialog(false)" :onOk="() => onAcceptDialog(true)"
+        :is-visible="isApproveDialogVisible" button-name="Accept" title="Request Accept"
+        message="Do you really want to accept this consultant?"></DialogAccept>
+    <DialogAccept :onCancel="() => onRejectDialog(false)" :onOk="() => onRejectDialog(true)"
+        :is-visible="isRejectDialogVisible" :is-danger="true" button-name="Reject" title="Request Reject"
+        message="Do your really want to reject the new consultant?"></DialogAccept>
 
-}
+    <DialogProcess :is-visible="isProcessing" message="processing"></DialogProcess>
 
-
-</style>
+    <DialogDelete :onDelete="() => onDeleteAccount(true)" :onCancel="() => onDeleteAccount(false)"
+        :is-visible="isDeleteDialogVisible"
+    message="Do you really want to remove the consultant account. This action will delete all leads, withdraw and account of the consultant. This action can't be undone.">
+</DialogDelete></template>
+<style scoped>.panel {}</style>

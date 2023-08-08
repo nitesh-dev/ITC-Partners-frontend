@@ -198,3 +198,40 @@ button.primary.outline {
         padding: 0 12px;
     }
 } */
+
+
+
+
+/* ------------------- loader ------------------ */
+
+.loader {
+    margin: auto;
+    border: 2px solid white;
+    border-left-color: transparent;
+    width: 24px;
+    height: 24px;
+    animation: spin89345 1s linear infinite;
+    border-radius: 50%;
+}
+
+
+.loader.primary{
+    border: 2px solid var(--color-primary);
+    border-left-color: transparent;
+}
+
+.loader.danger{
+    border: 2px solid var(--color-error);
+    border-left-color: transparent;
+}
+
+@keyframes spin89345 {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+

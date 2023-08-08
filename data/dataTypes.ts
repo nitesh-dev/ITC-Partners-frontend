@@ -8,7 +8,7 @@ export interface MyChartData {
 }
 
 export interface AdminAccount{
-    id: string,
+    id: number
     first: string,
     last: string,
     phone: number,
@@ -16,11 +16,12 @@ export interface AdminAccount{
     pincode: string,
     gender: string,
     datetime: number,
-    dob: number
+    dob: number,
+    profile_url: string
 }
 
 export interface ConsultantAccount{
-    id: string,
+    id: number
     first: string,
     last: string,
     email: string,
@@ -33,11 +34,12 @@ export interface ConsultantAccount{
     gender: Gender,
     is_approved: boolean,
     created_at: number,
+    profile_url: string
 }
 
 
 export interface Lead{
-    id: string,
+    id: number
     first: string,
     last: string,
     phone: number,
@@ -49,7 +51,7 @@ export interface Lead{
     purpose_of_loan: string,
     employer_status: string,
     monthly_income: string,
-    consultant_id: string,
+    consultant_id: number
     status: LeadStatus,
     datetime: number
 }
@@ -68,13 +70,13 @@ export enum Gender{
 }
 
 export interface LoanCategory{
-    id: string,
+    id: number
     name: string
 }
 
 export interface LoanSubCategory{
-    id: string,
-    category_id: string,
+    id: number
+    category_id: number
     name: string,
     price: number,
     discount: number,
@@ -84,8 +86,8 @@ export interface LoanSubCategory{
 }
 
 export interface Offer{
-    id: string,
-    category_id: string,
+    id: number
+    category_id: number
     name: string,
     price: number,
     discount: number,
@@ -97,15 +99,15 @@ export interface Offer{
 }
 
 export interface Commission{
-    id: string,
+    id: number
     name: string,
     leads_count: number,
     commission_percentage: number
 }
 
 export interface WithdrawHistory{
-    id: string,
-    consultant_id: string,
+    id: number
+    consultant_id: number
     amount: number,
     datetime: number,
     first: string,
