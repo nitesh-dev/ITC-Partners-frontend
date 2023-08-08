@@ -4,8 +4,9 @@ import { ConsultantAccount } from 'data/dataTypes';
 import { tabs } from '~/data/admin'
 import { dateTimeString } from '~/extra/utils'
 import ApiConsultant from '~/api/ApiConsultant'
+import { getToken } from 'data/utils';
 
-const token = 'temp'
+const token = getToken()
 
 const consultants = ref(Array<ConsultantAccount>())
 
