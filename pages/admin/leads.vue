@@ -62,6 +62,7 @@ let selectedLead: null | Lead = null
 const isApproveDialogVisible = ref(false)
 const isRejectDialogVisible = ref(false)
 const isLeadViewDialogVisible = ref(false)
+const isLeadPriceDialogVisible = ref(false)
 const isProcessing = ref(false)
 const selectedLeadForView = ref<Lead>()
 
@@ -107,6 +108,26 @@ function openLeadViewDialog(lead: Lead) {
 
 function onLeadViewDialogClose() {
     isLeadViewDialogVisible.value = false
+}
+
+
+
+// lead price update dialog
+function openLeadPriceUpdateDialog(lead: Lead) {
+    selectedLeadForView.value = lead
+    isLeadPriceDialogVisible.value = true
+}
+
+
+function onLeadPriceDialogClose(isSuccess: boolean) {
+    isLeadPriceDialogVisible.value = false
+    if (isSuccess) {
+        const index = leads.value.findIndex((v) => v.id == selectedLeadForView.value?.id)
+
+        if (index > -1) {
+            leads.value[index].status = 'Approved'
+        }
+    }
 }
 
 
@@ -293,7 +314,7 @@ function onTabChange(index: number) {
                                 </svg>
                             </td>
                             <td>
-                                <button class="success">Pay & Approve</button>
+                                <button @click="openLeadPriceUpdateDialog(item)" class="success">Pay & Approve</button>
                             </td>
                             <td>
                                 <button @click="openRejectDialog(item)" class="danger">Reject</button>
@@ -316,10 +337,10 @@ function onTabChange(index: number) {
                         <th>City</th>
                         <th>Pincode</th>
                         <th>Gender</th>
-                        <th>Loan type</th>
-                        <th>Loan Amount</th>
-                        <th>Loan Commission</th>
-                        <th>Submitted At</th>
+                        <th>Plan type</th>
+                        <th>Plan amount (₹)</th>
+                        <th>Commission (%)</th>
+                        <th>Submitted at</th>
                         <th>View</th>
 
                     </tr>
@@ -337,7 +358,7 @@ function onTabChange(index: number) {
                             <td>{{ item.gender }}</td>
                             <td>{{ item.loan_name }}</td>
                             <td>₹{{ item.loan_amount }}</td>
-                            <td>{{ item.consultant_commission_percentage }}</td>
+                            <td>{{ item.consultant_commission_percentage }}%</td>
                             <td>{{ dateTimeString(item.created_at) }}</td>
                             <td @click="openLeadViewDialog(item)">
                                 <svg class="normal" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -408,5 +429,8 @@ function onTabChange(index: number) {
         message="Do your really want to reject this lead?"></DialogAccept>
 
     <DialogProcess :is-visible="isProcessing" message="processing"></DialogProcess>
+
+    <DialogLeadPrice v-if="selectedLeadForView" :is-visible="isLeadPriceDialogVisible" :data="selectedLeadForView"
+        :onSubmit="event => onLeadPriceDialogClose(event)"></DialogLeadPrice>
 </template>
 <style scoped></style>
