@@ -233,8 +233,8 @@ function onTabChange(index: number) {
                         <th>City</th>
                         <th>Pincode</th>
                         <th>Gender</th>
-                        <th>Loan type</th>
-                        <th>Submitted At</th>
+                        <th>Plan type</th>
+                        <th>Submitted at</th>
                         <th>View</th>
                         <th>Accept</th>
                         <th>Reject</th>

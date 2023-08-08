@@ -1,80 +1,76 @@
 <script setup lang='ts'>
+import ApiCategory from '~/api/ApiCategory';
 import { LoanCategory, LoanSubCategory } from 'data/dataTypes';
+import { getToken } from '~/data/utils';
 import { tabs } from '~/data/admin'
 
+let token = 'null'
+
 const categories = ref(Array<LoanCategory>())
-categories.value.push({
-    id: '1',
-    name: ' Insurance'
+
+
+onMounted(function () {
+    token = getToken()
+    loadData()
 })
 
-categories.value.push({
-    id: '2',
-    name: ' Loans'
-})
 
-categories.value.push({
-    id: '3',
-    name: ' Credit Cards'
-})
+
+
+// -------------------- request ---------------------
+async function loadData() {
+    const res = await loadCategory()
+    if(res) loadPlans()
+}
+
+async function loadCategory() {
+    try {
+        const res = await ApiCategory.getAll(token)
+        categories.value = res
+        return true
+    } catch (error) {
+        console.log(error)
+        return false
+    }
+}
+
+async function loadPlans() {
+    try {
+       
+        // loading plans
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+
+
+// ----------------------- dialog ------------------
+
+const isAddCategoryDialogVisible = ref(false)
+
+
+
+
+// Accept dialog
+function openAddCategoryDialog() {
+    isAddCategoryDialogVisible.value = true
+}
+
+
+function onAddCategoryClose(isSuccess: boolean){
+    isAddCategoryDialogVisible.value = false
+    if(isSuccess) loadCategory()
+}
+
+
+
+
 
 
 const allPlans = ref(Array<LoanSubCategory>())
-allPlans.value.push({
-    id: '1',
-    category_id: '1',
-    name: 'sdasdf',
-    price: 4555,
-    discount: 0,
-    description: 'jksdhf sdjfhjksdahf hsdfjkha sdfhjksdhf jshdfjkhsadfjkhsd dfjkfhsajkdfhjksad hfjkadshfjhd d',
-    image: '',
-    datetime: 0
-})
-
-allPlans.value.push({
-    id: '2',
-    category_id: '2',
-    name: 'sdfas dsfaddf',
-    price: 4555,
-    discount: 0,
-    description: 'jksdhf sdjfhjksdahf hsdfjkha sdfhjksdhf jshdfjkhsadfjkhsd dfjkfhsajkdfhjksad hfjkadshfjhd d',
-    image: '',
-    datetime: 0
-})
-
-allPlans.value.push({
-    id: '3',
-    category_id: '3',
-    name: 'sdfa dafadf sdf',
-    price: 4555,
-    discount: 0,
-    description: 'jksdhf sdjfhjksdahf hsdfjkha sdfhjksdhf jshdfjkhsadfjkhsd dfjkfhsajkdfhjksad hfjkadshfjhd d',
-    image: '',
-    datetime: 0
-})
-
-allPlans.value.push({
-    id: '4',
-    category_id: '1',
-    name: 'sdfa d dsfadfafadf sdf',
-    price: 4555,
-    discount: 0,
-    description: 'jksdhf sdjfhjksdahf hsdfjkha sdfhjksdhf jshdfjkhsadfjkhsd dfjkfhsajkdfhjksad hfjkadshfjhd d',
-    image: '',
-    datetime: 0
-})
-
-allPlans.value.push({
-    id: '5',
-    category_id: '3',
-    name: 'sdfa dafadsfsdaf df sdf',
-    price: 4555,
-    discount: 0,
-    description: 'jksdhf sdjfhjksdahf hsdfjkha sdfhjksdhf jshdfjkhsadfjkhsd dfjkfhsajkdfhjksad hfjkadshfjhd d',
-    image: '',
-    datetime: 0
-})
-
 
 const activeTabIndex = ref(0)
 
@@ -94,7 +90,7 @@ function onTabChange(index: number) {
         </div>
 
         <h2>Plans</h2>
-        <button class="primary">Add Category</button>
+        <button class="primary" @click="openAddCategoryDialog()">Add Category</button>
         <button class="secondary">Add Plan</button>
         <WidgetsTab :active-tab="activeTabIndex" :names="categories.map((item) => item.name)"
             :onChange="event => onTabChange(event)">
@@ -124,59 +120,12 @@ function onTabChange(index: number) {
 
     </div>
 
-    <DialogAddCategory :is-visible="false"></DialogAddCategory>
+    <DialogAddCategory :is-visible="isAddCategoryDialogVisible" :onClose="onAddCategoryClose"></DialogAddCategory>
     <DialogAddPlan :is-visible="false" :data="allPlans[0]"></DialogAddPlan>
 </template>
 <style scoped>
-
-.panel>button{
+.panel>button {
     display: inline-flex;
     margin-right: 0.5rem;
-}
-.plan {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-}
-
-.plan .card {
-    width: 400px;
-    min-height: 200px;
-    padding: 1rem;
-}
-
-.plan .card .title {
-    display: flex;
-    gap: 1rem;
-}
-
-.plan .card img {
-    width: 80px;
-    height: 80px;
-    border-radius: var(--normal-radius);
-    object-fit: cover;
-}
-
-.plan .price-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.plan .price-container .container {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.5rem;
-}
-
-.plan .price {
-    font-size: 28px;
-    color: var(--color-secondary);
-
-}
-
-.plan .discount {
-    font-size: 28px;
-    color: var(--color-on-surface-dark);
 }
 </style>

@@ -74,7 +74,8 @@ export enum Gender{
 
 export interface LoanCategory{
     id: number
-    name: string
+    name: string,
+    create_at: number
 }
 
 export interface LoanSubCategory{
