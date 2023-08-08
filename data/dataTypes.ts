@@ -39,21 +39,24 @@ export interface ConsultantAccount{
 
 
 export interface Lead{
-    id: number
-    first: string,
-    last: string,
-    phone: number,
-    address: string,
-    dob: number,
-    city: string,
-    pincode: string,
-    gender: string,
-    purpose_of_loan: string,
-    employer_status: string,
-    monthly_income: string,
-    consultant_id: number
-    status: LeadStatus,
-    datetime: number
+    id: number;
+    first: string;
+    last: string;
+    phone: string;
+    address: string;
+    dob: number;
+    city: string;
+    pincode: string;
+    gender: "Male"|"Female";
+    loan_amount: number;
+    loan_name: string;
+    purpose_of_loan: string;
+    employer_status: string;
+    monthly_income: number;
+    consultant_commission_percentage: number;
+    consultant_id: number;
+    status: 'Pending'| 'Progress'| 'Approved'| 'Rejected';
+    created_at: number;
 }
 
 export enum LeadStatus{

@@ -4,7 +4,7 @@ import { ConsultantAccount } from 'data/dataTypes';
 import { tabs } from '~/data/admin'
 import { dateTimeString } from '~/extra/utils'
 import ApiConsultant from '~/api/ApiConsultant'
-import { getToken } from 'data/utils';
+import { getToken } from '~/data/utils';
 
 const token = getToken()
 
@@ -264,6 +264,7 @@ function onTabChange(index: number) {
 
     <DialogDelete :onDelete="() => onDeleteAccount(true)" :onCancel="() => onDeleteAccount(false)"
         :is-visible="isDeleteDialogVisible"
-    message="Do you really want to remove the consultant account. This action will delete all leads, withdraw and account of the consultant. This action can't be undone.">
-</DialogDelete></template>
+        message="Do you really want to remove the consultant account. This action will delete all leads, withdraw and account of the consultant. This action can't be undone.">
+    </DialogDelete>
+</template>
 <style scoped>.panel {}</style>
