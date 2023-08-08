@@ -82,11 +82,9 @@ export interface LoanSubCategory{
     id: number
     category_id: number
     name: string,
-    price: number,
-    discount: number,
     description: string,
-    image: string,
-    datetime: number
+    image_url: string,
+    created_at: number
 }
 
 export interface Offer{

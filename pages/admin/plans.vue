@@ -3,10 +3,12 @@ import ApiCategory from '~/api/ApiCategory';
 import { LoanCategory, LoanSubCategory } from 'data/dataTypes';
 import { getToken } from '~/data/utils';
 import { tabs } from '~/data/admin'
+import ApiPlan from '~/api/ApiPlan';
 
 let token = 'null'
 
 const categories = ref(Array<LoanCategory>())
+const allPlans = ref(Array<LoanSubCategory>())
 
 
 onMounted(function () {
@@ -20,7 +22,7 @@ onMounted(function () {
 // -------------------- request ---------------------
 async function loadData() {
     const res = await loadCategory()
-    if(res) loadPlans()
+    if (res) loadPlans()
 }
 
 async function loadCategory() {
@@ -36,8 +38,10 @@ async function loadCategory() {
 
 async function loadPlans() {
     try {
-       
+
         // loading plans
+        const res = await ApiPlan.getAll(token)
+        allPlans.value = res
 
     } catch (error) {
         console.log(error)
@@ -50,27 +54,80 @@ async function loadPlans() {
 // ----------------------- dialog ------------------
 
 const isAddCategoryDialogVisible = ref(false)
+const isAddPlanDialogVisible = ref(false)
+const isDeleteDialogVisible = ref(false)
+const isProcessing = ref(false)
+const deleteDialogMessage = ref('')
+let selectedPlanToDelete: LoanSubCategory | null = null
 
 
 
 
-// Accept dialog
+
 function openAddCategoryDialog() {
     isAddCategoryDialogVisible.value = true
 }
 
 
-function onAddCategoryClose(isSuccess: boolean){
+function onAddCategoryClose(isSuccess: boolean) {
     isAddCategoryDialogVisible.value = false
-    if(isSuccess) loadCategory()
+    if (isSuccess) loadCategory()
 }
 
 
 
 
 
+// plan delete dialog
+function openPlanDeleteDialog(planId: number) {
 
-const allPlans = ref(Array<LoanSubCategory>())
+    // finding plan
+    const plan = allPlans.value.find((item) => item.id == planId)
+    if (plan == undefined) return
+    selectedPlanToDelete = plan
+
+    deleteDialogMessage.value = 'Do you really want to delete *' + plan.name + ' Plan* ?. This action can\'t be undone.'
+    isDeleteDialogVisible.value = true
+
+}
+
+async function onPlanDelete(isDelete: boolean) {
+    isDeleteDialogVisible.value = false
+    
+    if (isDelete && selectedPlanToDelete) {
+        const index = allPlans.value.findIndex((item) => item.id == selectedPlanToDelete!!.id)
+        if(index == -1) return
+
+        isProcessing.value = true
+        try {
+            const res = ApiPlan.deletePlan(token, selectedPlanToDelete.id)
+
+            // remove the plan from list
+            allPlans.value.splice(index, 1)
+        } catch (error) {
+            console.log(error)
+        }
+        isProcessing.value = false
+    }
+
+}
+
+
+// add plan dialog
+
+function openAddPlanDialog(){
+    isAddPlanDialogVisible.value = true
+}
+
+function onAddPlanDialogClose(isSuccess: boolean){
+    if(isSuccess) loadPlans()
+    isAddPlanDialogVisible.value = false
+}
+
+
+
+
+
 
 const activeTabIndex = ref(0)
 
@@ -91,7 +148,7 @@ function onTabChange(index: number) {
 
         <h2>Plans</h2>
         <button class="primary" @click="openAddCategoryDialog()">Add Category</button>
-        <button class="secondary">Add Plan</button>
+        <button class="secondary" @click="openAddPlanDialog()">Add Plan</button>
         <WidgetsTab :active-tab="activeTabIndex" :names="categories.map((item) => item.name)"
             :onChange="event => onTabChange(event)">
         </WidgetsTab>
@@ -100,19 +157,9 @@ function onTabChange(index: number) {
             <div v-if="activeTabIndex == index" class="tab-container plan">
 
                 <template v-for="plan, index in allPlans">
-                    <div class="card" v-if="plan.category_id == category.id">
-                        <div class="title">
-                            <img src="~/public/images/no_image.png">
-                            <h3>{{ plan.name }}</h3>
-                        </div>
-                        <p>{{ plan.description }}</p>
-                        <div class="price-container">
-                            <div class="container">
-                                <span class="price">₹{{ plan.price }}</span>
-                            </div>
-                            <button class="primary">Edit</button>
-                        </div>
-                    </div>
+                    <PlanCard v-if="plan.category_id == category.id" :plan="plan" :is-admin="true"
+                        :onDelete="openPlanDeleteDialog">
+                    </PlanCard>
                 </template>
             </div>
         </template>
@@ -121,11 +168,23 @@ function onTabChange(index: number) {
     </div>
 
     <DialogAddCategory :is-visible="isAddCategoryDialogVisible" :onClose="onAddCategoryClose"></DialogAddCategory>
-    <DialogAddPlan :is-visible="false" :data="allPlans[0]"></DialogAddPlan>
+    <DialogAddPlan v-if="categories[activeTabIndex] != undefined"  :onClose="onAddPlanDialogClose" :is-visible="isAddPlanDialogVisible" :category-id="categories[activeTabIndex].id"></DialogAddPlan>
+
+    <DialogProcess :is-visible="isProcessing" message="processing"></DialogProcess>
+
+    <DialogDelete :onDelete="() => onPlanDelete(true)" :onCancel="() => onPlanDelete(false)"
+        :is-visible="isDeleteDialogVisible" :message="deleteDialogMessage">
+    </DialogDelete>
 </template>
 <style scoped>
 .panel>button {
     display: inline-flex;
     margin-right: 0.5rem;
+}
+
+.tab-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 </style>

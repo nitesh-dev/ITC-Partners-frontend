@@ -1,59 +1,71 @@
 <script setup lang='ts'>
-import { LoanSubCategory } from 'data/dataTypes';
-defineProps<{
-    data: LoanSubCategory,
+import { getToken } from '~/data/utils';
+import ApiPlan from '~/api/ApiPlan';
+
+
+const prop = defineProps<{
+    categoryId: number,
     isVisible: Boolean
 }>()
 
 const emit = defineEmits<{
-    (event: 'cancel'): void
-    (event: 'add'): void
+    (event: 'close', isSuccess: boolean): void
 }>()
 
-function onCancel() {
-    emit('cancel')
+const name = ref('')
+const description = ref('')
+
+
+async function submitPlan() {
+    isProcessing.value = true
+    try {
+        const res = await ApiPlan.createPlan(getToken(), prop.categoryId, name.value, description.value)
+        emit('close', true)
+    } catch (error) {
+        console.log(error)
+    }
+    isProcessing.value = false
 }
 
-function onAdd() {
-    emit('add')
-}
+
+const isProcessing = ref(false)
+
 
 
 </script>
 <template>
     <div v-if="isVisible" class="dialog-holder">
         <div class="dialog card">
-            <h4>Add Plan</h4>
+            <form @submit.prevent="submitPlan()">
+                <h4>Add Plan</h4>
 
-            <div class="content">
-                
-                <div class="input image">
-                    <span>Plan image</span>
-                    <input type="file">
-                </div>
+                <div class="content">
 
-                <div class="col-2">
-                    <div class="input">
-                        <span>Plan name</span>
-                        <input type="text">
+                    <div class="col-2">
+                        <div class="input">
+                            <span>Plan name</span>
+                            <input type="text" v-model="name" required>
+                        </div>
+
+                        <div class="input image">
+                            <span>Plan image</span>
+                            <input type="file">
+                        </div>
                     </div>
 
                     <div class="input">
-                        <span>Price (₹)</span>
-                        <input type="number" value="100">
+                        <span>Plan description</span>
+                        <textarea rows="6" v-model="description" required></textarea>
                     </div>
                 </div>
-
-                <div class="input">
-                    <span>Plan description</span>
-                    <textarea></textarea>
+                <div class="buttons-holder">
+                    <button class="primary outline" type="button" @click="$emit('close', false)">Cancel</button>
+                    <button class="success" type="submit">Add</button>
                 </div>
-            </div>
-            <div class="buttons-holder">
-                <button class="primary outline" @click="onCancel()">Cancel</button>
-                <button class="success" @click="onAdd()">Add</button>
-            </div>
+            </form>
         </div>
+
+        <DialogProcess :is-visible="isProcessing" message="processing"></DialogProcess>
     </div>
 </template>
 <style scoped></style>

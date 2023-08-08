@@ -1,26 +1,39 @@
 <script setup lang='ts'>
+import { LoanSubCategory } from 'data/dataTypes';
+
+defineProps<{
+    plan: LoanSubCategory,
+    isAdmin: boolean
+}>()
+
+const emit = defineEmits<{
+  (event: 'delete', id: number): void
+  (event: 'apply', id: number): void
+}>()
+
+
 </script>
 <template>
     <div class="plan card">
-        <p class="banner">Mega offer 30% off</p>
+        <!-- <p class="banner">Mega offer 30% off</p> -->
         <img src="../public/images/finance_loan.jpg">
 
         <div class="content">
-            <h2>Loan finance</h2>
-            <p>Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries</p>
+            <h2>{{ plan.name }}</h2>
+            <p>{{ plan.description }}</p>
 
-            <div class="pricing">
-                <span class="discount">₹10,000</span>
-                <span class="price">₹15,000</span>
-            </div>
-
-            <button class="primary">Apply now</button>
+            <button v-if="isAdmin" class="danger" @click="emit('delete', plan.id)">Delete</button>
+            <button v-else class="primary" @click="emit('apply', plan.id)">Apply now</button>
         </div>
-
-        
     </div>
 </template>
 <style scoped>
+
+.col-2{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+}
 .plan {
     width: 300px;
     min-height: 400px;
@@ -67,25 +80,6 @@
     opacity: 0.8;
 }
 
-
-.pricing {
-    margin: 2rem 0;
-    display: flex;
-    align-items: flex-start;
-    gap: 0.5rem;
-    justify-content: center;
-}
-
-.pricing .discount {
-    font-size: var(--average-2-font);
-    color: var(--color-on-surface-dark);
-    font-weight: bold;
-}
-
-.pricing .price {
-    text-decoration: line-through;
-    color: var(--color-on-surface);
-}
 
 .plan button {
     display: block;

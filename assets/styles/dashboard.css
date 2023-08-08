@@ -259,6 +259,11 @@ table .chip.danger {
     margin-top: 2rem;
 }
 
+.dialog-holder .content p{
+    color: var(--color-on-surface-dark);
+    opacity: 0.8;
+}
+
 
 .dialog-holder .dialog .small{
     width: 300px !important;

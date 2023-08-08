@@ -3,20 +3,6 @@ import { LoanCategory } from 'data/dataTypes';
 import { tabs } from '~/data/client'
 
 const categories = ref(Array<LoanCategory>())
-categories.value.push({
-    id: '1',
-    name: ' Insurance'
-})
-
-categories.value.push({
-    id: '2',
-    name: ' Loans'
-})
-
-categories.value.push({
-    id: '3',
-    name: ' Credit Cards'
-})
 
 
 const activeTabIndex = ref(0)
