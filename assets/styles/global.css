@@ -108,7 +108,11 @@ button {
     align-items: center;
     justify-content: center;
     height: 45px;
-    transform: all 200ms;
+    transition: all 200ms;
+}
+
+button:hover{
+    scale: 1.1;
 }
 
 
