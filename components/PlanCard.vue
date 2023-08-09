@@ -43,6 +43,8 @@ const emit = defineEmits<{
 .plan .content{
     display: grid;
     grid-template-rows: max-content 1fr;
+    padding: 1rem;
+    width: 100%;
 }
 
 .plan .banner {
@@ -66,9 +68,6 @@ const emit = defineEmits<{
     border-radius: var(--medium-radius) var(--medium-radius) 0 0;
 }
 
-.plan .content {
-    padding: 1rem;
-}
 
 .plan h2 {
     margin-top: 0;
