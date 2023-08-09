@@ -30,20 +30,24 @@ onMounted(function () {
   document.body.appendChild(script);
 })
 
+
+
 </script>
 <template>
   <div class="login">
-    <div class="login-dialog">
-      <h2>Sign Up or Log In</h2>
-      <hr>
-      <div id="buttonDiv"></div>
-
+    <div>
+      <h1>Welcome to ITC Partner</h1>
+      <div class="login-dialog">
+        <h2>Sign Up or Log In</h2>
+        <hr>
+        <div id="buttonDiv"></div>
+      </div>
     </div>
   </div>
 </template>
 <style scoped>
-button{
-  width: 100%;
-  background-color: aqua;
+#buttonDiv {
+  margin-top: 60px;
+  scale: 1.5;
 }
 </style>

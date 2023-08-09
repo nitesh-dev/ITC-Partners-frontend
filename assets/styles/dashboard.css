@@ -336,6 +336,7 @@ table .chip.danger {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
 }
 
 .login-dialog{
@@ -356,4 +357,9 @@ table .chip.danger {
     width: 100%;
     border: none;
     border-bottom: 1px solid var(--color-surface-variant);
+}
+
+.login h1{
+    color: white;
+    margin-bottom: 4rem;
 }
