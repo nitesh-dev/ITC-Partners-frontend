@@ -18,27 +18,19 @@ namespace ApiConsultant {
             data: account,
             referralCode: referralCode
         }
-        const result = await Api.post<{jwtToken:string}>('consultants/signUp', '', data) 
+        const result = await Api.post<{ jwtToken: string }>('consultants/signUp', '', data)
         console.log(result)
-     
+
         return result
     }
     export async function signIn(googleToken: string) {
         let data = {
             googleToken
         }
-        const result = await Api.post<{jwtToken:string}>('consultants/signIn', '', data) 
+        const result = await Api.post<{ jwtToken: string }>('consultants/signIn', '', data)
         console.log(result)
-        
-        return result
-    }
 
-    export function createAccount(token: string, account: ConsultantAccount) {
-        let data = {
-            token: token,
-            data: account
-        }
-        return Api.post('account', '', data)
+        return result
     }
 
     export function getAll(token: string) {

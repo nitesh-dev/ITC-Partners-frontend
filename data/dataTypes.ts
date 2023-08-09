@@ -11,11 +11,13 @@ export interface AdminAccount{
     id: number
     first: string,
     last: string,
-    phone: number,
+    email: string,
+    phone: string,
+    city: string,
     address: string,
     pincode: string,
-    gender: string,
-    datetime: number,
+    gender: 'Male' | 'Female',
+    created_at: number,
     dob: number,
     profile_url: string
 }
@@ -25,7 +27,7 @@ export interface ConsultantAccount{
     first: string,
     last: string,
     email: string,
-    phone: number,
+    phone: string,
     address: string,
     referral_code: string,
     dob: number,
