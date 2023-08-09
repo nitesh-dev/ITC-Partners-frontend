@@ -1,18 +1,42 @@
 <script setup lang='ts'>
 import { LoanCategory, LoanSubCategory } from 'data/dataTypes';
-import { getToken } from '~/data/utils';
 import { tabs } from '~/data/client'
 import ApiCategory from '~/api/ApiCategory';
 import ApiPlan from '~/api/ApiPlan';
+import { getToken } from '~/extra/utils';
+import ApiConsultant from '~/api/ApiConsultant';
 
 const categories = ref(Array<LoanCategory>())
 const allPlans = ref(Array<LoanSubCategory>())
 
-let token = 'null'
-onMounted(function () {
-    token = getToken()
-    loadData()
+
+let token: string | null = null
+
+const profile = ref({
+    image: '',
+    name: ''
 })
+
+onMounted(() => {
+    token = getToken()
+    if (!token) {
+        //redirect to login
+        window.location.href = '/'
+    } else {
+        getProfileDetail(token)
+        loadData()
+    }
+})
+
+async function getProfileDetail(token: string) {
+    try {
+        const res = await ApiConsultant.get(token)
+        profile.value.image = res.profile_url
+        profile.value.name = res.first + ' ' + res.last
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 
 
@@ -25,7 +49,7 @@ async function loadData() {
 
 async function loadCategory() {
     try {
-        const res = await ApiCategory.getAll(token)
+        const res = await ApiCategory.getAll(token!!)
         categories.value = res
         return true
     } catch (error) {
@@ -36,9 +60,8 @@ async function loadCategory() {
 
 async function loadPlans() {
     try {
-
         // loading plans
-        const res = await ApiPlan.getAll(token)
+        const res = await ApiPlan.getAll(token!!)
         allPlans.value = res
 
     } catch (error) {
@@ -53,12 +76,12 @@ async function loadPlans() {
 const isLeadSubmitVisible = ref(false)
 const selectedPlanName = ref('')
 
-function onApply(planName: string){
+function onApply(planName: string) {
     selectedPlanName.value = planName
     isLeadSubmitVisible.value = true
 }
 
-function onClose(isSuccess: boolean){
+function onClose(isSuccess: boolean) {
     isLeadSubmitVisible.value = false
 }
 
@@ -82,7 +105,7 @@ function onTabChange(index: number) {
 
         <!-- header -->
         <div class="header">
-            <Profile name="Nitesh kr" role="Consultant" />
+            <Profile :image="profile.image" :name="profile.name" role="Consultant" />
         </div>
 
         <h2>Offers & Plans</h2>
@@ -105,10 +128,9 @@ function onTabChange(index: number) {
     <DialogSubmitLead :onClose="onClose" :is-visible="isLeadSubmitVisible" :plan-name="selectedPlanName"></DialogSubmitLead>
 </template>
 <style scoped>
-.tab-container{
+.tab-container {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
 }
-
 </style>

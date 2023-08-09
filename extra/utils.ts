@@ -69,3 +69,9 @@ export function dateTimeToInputFormat(milliseconds: number){
     return dateTimeString
 
 }
+
+
+
+export function getToken(){
+    return localStorage.getItem('jwtToken')
+}

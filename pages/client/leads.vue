@@ -1,17 +1,38 @@
 <script setup lang='ts'>
-import { getToken } from '~/data/utils';
 import { tabs } from '~/data/client'
 import ApiLead from '~/api/ApiLead';
 import { Lead } from 'data/dataTypes';
-import { dateTimeString } from '~/extra/utils'
+import { dateTimeString, getToken } from '~/extra/utils'
+import ApiConsultant from '~/api/ApiConsultant';
 
 const leads = ref(Array<Lead>())
-
-let token = 'null'
-onMounted(function () {
-    token = getToken()
-    fetchAllLeads()
+const profile = ref({
+    image: '',
+    name: ''
 })
+
+onMounted(function () {
+    const token = getToken()
+    if (!token) {
+        //redirect to login
+        window.location.href = '/'
+    } else {
+        getProfileDetail(token)
+        fetchAllLeads()
+    }
+
+})
+
+
+async function getProfileDetail(token: string) {
+    try {
+        const res = await ApiConsultant.get(token)
+        profile.value.image = res.profile_url
+        profile.value.name = res.first + ' ' + res.last
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 
 
@@ -19,8 +40,9 @@ onMounted(function () {
 
 // -------------------- requests --------------------
 async function fetchAllLeads() {
+    const token = getToken()
     try {
-        const res = await ApiLead.getAll(token)
+        const res = await ApiLead.getAll(token!!)
         leads.value = res
     } catch (error) {
         console.log(error)
@@ -61,23 +83,23 @@ function onLeadViewDialogClose() {
 
 function calculateLeadsCountPercentage(name: string) {
 
-let count = 0
-leads.value.forEach(lead => {
-    if (lead.status == name) count++
-});
+    let count = 0
+    leads.value.forEach(lead => {
+        if (lead.status == name) count++
+    });
 
-// calculate percentage
-return Math.round(count / leads.value.length * 100)
+    // calculate percentage
+    return Math.round(count / leads.value.length * 100)
 }
 
 function calculateLeadsCount(name: string) {
 
-let count = 0
-leads.value.forEach(lead => {
-    if (lead.status == name) count++
-});
+    let count = 0
+    leads.value.forEach(lead => {
+        if (lead.status == name) count++
+    });
 
-return count
+    return count
 }
 
 
@@ -103,7 +125,7 @@ function onTabChange(index: number) {
 
         <!-- header -->
         <div class="header">
-            <Profile name="Nitesh kr" role="Consultant" />
+            <Profile :image="profile.image" :name="profile.name" role="Consultant" />
         </div>
 
         <h2>Leads</h2>

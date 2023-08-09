@@ -2,18 +2,41 @@
 import { WithdrawHistory } from '~/data/dataTypes';
 import { tabs } from '~/data/client'
 
-import { dateTimeString } from '~/extra/utils'
-import { getToken } from '~/data/utils';
+import { dateTimeString, getToken } from '~/extra/utils'
+
 import ApiWithdraw from '~/api/ApiWithdraw';
+import ApiConsultant from '~/api/ApiConsultant';
 
 const withdrawHistory = ref(Array<WithdrawHistory>())
 
-let token = 'null'
-onMounted(function () {
-    token = getToken()
-    loadHistory()
+let token: string | null = null
 
+const profile = ref({
+    image: '',
+    name: ''
 })
+
+onMounted(() => {
+    token = getToken()
+    if (!token) {
+        //redirect to login
+        window.location.href = '/'
+    } else {
+        getProfileDetail(token)
+        loadHistory()
+    }
+})
+
+async function getProfileDetail(token: string) {
+    try {
+        const res = await ApiConsultant.get(token)
+        profile.value.image = res.profile_url
+        profile.value.name = res.first + ' ' + res.last
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 
 
 
@@ -22,7 +45,7 @@ onMounted(function () {
 
 async function loadHistory() {
     try {
-        const res = await ApiWithdraw.getAll(token)
+        const res = await ApiWithdraw.getAll(token!!)
         withdrawHistory.value = res
 
     } catch (error) {
@@ -84,7 +107,7 @@ function onTabChange(index: number) {
 
         <!-- header -->
         <div class="header">
-            <Profile name="Nitesh kr" role="Consultant" />
+            <Profile :image="profile.image" :name="profile.name" role="Consultant" />
         </div>
 
         <h2>Withdraw</h2>

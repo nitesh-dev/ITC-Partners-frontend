@@ -2,7 +2,7 @@
 import { tabs } from '~/data/client'
 import { earningHistoryRaw, withdrawHistoryRaw, profitHistoryRaw, leadsHistoryRaw } from '~/data/adminRawData'
 import ApiConsultant from '~/api/ApiConsultant';
-import { getToken } from '~/data/utils';
+import { getToken } from '~/extra/utils';
 
 
 const profile = ref({

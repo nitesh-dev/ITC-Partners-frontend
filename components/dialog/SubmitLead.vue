@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import { getToken } from '~/data/utils';
+import { getToken } from '~/extra/utils';
 import ApiLead from '~/api/ApiLead';
 import { Lead } from '~/data/dataTypes';
 
@@ -45,7 +45,7 @@ async function onSubmit() {
     isProcessing.value = true
     try {
         lead.value.dob = dobNumber.getTime()
-        const res = await ApiLead.createLead(getToken(), lead.value)
+        const res = await ApiLead.createLead(getToken()!!, lead.value)
         alert('Lead successfully submitted')
 
         lead.value = {
