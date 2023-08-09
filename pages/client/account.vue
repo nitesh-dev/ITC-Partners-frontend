@@ -14,7 +14,7 @@ onMounted(() => {
     token = getToken()
     if (!token) {
         //redirect to login
-        window.location.href = '/'
+        navigateTo('/')
     } else {
         getProfileDetail(token)
     }
@@ -26,7 +26,7 @@ async function getProfileDetail(token: string) {
         profile.value.image = res.profile_url
         profile.value.name = res.first + ' ' + res.last
     } catch (error) {
-        window.location.href = '/'
+        navigateTo('/')
     }
 }
 

@@ -21,7 +21,7 @@ onMounted(() => {
     token = getToken()
     if (!token) {
         //redirect to login
-        window.location.href = '/'
+        navigateTo('/')
     } else {
         getProfileDetail(token)
         loadData()
@@ -35,7 +35,7 @@ async function getProfileDetail(token: string) {
         profile.value.name = res.first + ' ' + res.last
     } catch (error) {
         console.log(error)
-        window.location.href = '/'
+        navigateTo('/')
     }
 }
 
@@ -55,7 +55,7 @@ async function loadCategory() {
         return true
     } catch (error) {
         console.log(error)
-        window.location.href = '/'
+        navigateTo('/')
         return false
     }
 }
@@ -68,7 +68,7 @@ async function loadPlans() {
 
     } catch (error) {
         console.log(error)
-        window.location.href = '/'
+        navigateTo('/')
     }
 }
 

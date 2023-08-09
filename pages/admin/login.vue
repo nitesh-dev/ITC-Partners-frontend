@@ -26,7 +26,7 @@ async function isAccountExist() {
 
       const res = await ApiAdmin.signIn(catchGoogleToken)
       localStorage.setItem('jwtToken', res.jwtToken)
-      window.location.href = '/admin/login'
+      navigateTo('/admin')
 
     } else {
       // do sign up process
@@ -65,7 +65,7 @@ async function onSubmit() {
   try {
     const res = await ApiAdmin.signUp(catchGoogleToken, account.value)
     localStorage.setItem('jwtToken', res.jwtToken)
-    window.location.href = '/admin/login'
+    navigateTo('/admin')
 
   } catch (error) {
     console.log(error)
@@ -82,10 +82,10 @@ const account = ref<AdminAccount>({
   first: '',
   last: '',
   email: '',
-  phone: '',
+  phone: 0,
   city: '',
   address: '',
-  pincode: '',
+  pincode: 0,
   gender: 'Male',
   created_at: 0,
   dob: 0,

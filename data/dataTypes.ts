@@ -12,10 +12,10 @@ export interface AdminAccount{
     first: string,
     last: string,
     email: string,
-    phone: string,
+    phone: number,
     city: string,
     address: string,
-    pincode: string,
+    pincode: number,
     gender: 'Male' | 'Female',
     created_at: number,
     dob: number,
@@ -27,12 +27,12 @@ export interface ConsultantAccount{
     first: string,
     last: string,
     email: string,
-    phone: string,
+    phone: number,
     address: string,
     referral_code: string,
     dob: number,
     city: string,
-    pincode: string,
+    pincode: number,
     gender: 'Male' | 'Female',
     is_approved: boolean,
     created_at: number,
@@ -44,11 +44,11 @@ export interface Lead{
     id: number;
     first: string;
     last: string;
-    phone: string;
+    phone: number;
     address: string;
     dob: number;
     city: string;
-    pincode: string;
+    pincode: number;
     gender: "Male"|"Female";
     loan_amount: number;
     loan_name: string;

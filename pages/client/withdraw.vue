@@ -20,7 +20,7 @@ onMounted(() => {
     token = getToken()
     if (!token) {
         //redirect to login
-        window.location.href = '/'
+        navigateTo('/')
     } else {
         getProfileDetail(token)
         loadHistory()
@@ -34,7 +34,7 @@ async function getProfileDetail(token: string) {
         profile.value.name = res.first + ' ' + res.last
     } catch (error) {
         console.log(error)
-        window.location.href = '/'
+        navigateTo('/')
     }
 }
 
@@ -51,7 +51,7 @@ async function loadHistory() {
 
     } catch (error) {
         console.log(error)
-        window.location.href = '/'
+        navigateTo('/')
     }
 }
 

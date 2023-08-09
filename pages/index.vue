@@ -26,7 +26,7 @@ async function isAccountExist(googleToken: string) {
 
       const res = await ApiConsultant.signIn(catchGoogleToken)
       localStorage.setItem('jwtToken', res.jwtToken)
-      window.location.href = './client'
+      navigateTo('/client')
 
     } else {
       // do sign up process
@@ -65,7 +65,7 @@ async function onSubmit() {
   try {
     const res = await ApiConsultant.signUp(catchGoogleToken, account.value, referralCode.value)
     localStorage.setItem('jwtToken', res.jwtToken)
-    window.location.href = './client'
+    navigateTo('/client')
 
   } catch (error) {
     console.log(error)
@@ -89,7 +89,7 @@ const account = ref<ConsultantAccount>({
   referral_code: '',
   dob: 0,
   city: '',
-  pincode: '',
+  pincode: 0,
   gender: 'Male',
   is_approved: false,
   created_at: 0,
