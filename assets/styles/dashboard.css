@@ -319,3 +319,41 @@ table .chip.danger {
     font-size: var(--small-font);
     color: var(--color-on-surface);
 }
+
+
+
+
+
+
+
+
+/* ------------------- login ----------------- */
+
+.login{
+    width: 100%;
+    height: 100vh;
+    background-image: linear-gradient(#42c2aa, #1a1b56);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-dialog{
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    width: 100%;
+    align-items: center;
+    background-color: white;
+    min-height: 300px;
+    border-radius: var(--normal-radius);
+    outline: 12px solid rgba(255, 255, 255, 0.178);
+    padding: 1rem;
+}
+
+.login hr{
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid var(--color-surface-variant);
+}

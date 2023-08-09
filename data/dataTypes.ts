@@ -104,7 +104,8 @@ export interface Commission{
     id: number
     name: string,
     leads_count: number,
-    commission_percentage: number
+    commission_percentage: number,
+    created_at: number
 }
 
 export interface WithdrawHistory{
