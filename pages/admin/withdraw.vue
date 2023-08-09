@@ -1,64 +1,133 @@
 <script setup lang='ts'>
-import { WithdrawHistory, WithdrawStatus } from '~/data/dataTypes';
+import { WithdrawHistory } from '~/data/dataTypes';
 import { tabs } from '~/data/admin'
 
 import { dateTimeString } from '~/extra/utils'
+import { getToken } from '~/data/utils';
+import ApiWithdraw from '~/api/ApiWithdraw';
 
 const withdrawHistory = ref(Array<WithdrawHistory>())
-withdrawHistory.value.push({
-    id: 'dsfadf',
-    consultant_id: '45ds4d',
-    amount: 1000,
-    datetime: 0,
-    first: 'Nitesh',
-    last: 'Kumar',
-    phone: 54564564,
-    status: WithdrawStatus.Progress
+
+let token = 'null'
+onMounted(function () {
+    token = getToken()
+    loadHistory()
+
 })
 
-withdrawHistory.value.push({
-    id: 'dsfadf',
-    consultant_id: '45ds4d',
-    amount: 1000,
-    datetime: 0,
-    first: 'Nitesh',
-    last: 'Kumar',
-    phone: 54564564,
-    status: WithdrawStatus.Progress
-})
 
-withdrawHistory.value.push({
-    id: 'dsfadf',
-    consultant_id: '45ds4d',
-    amount: 1000,
-    datetime: 0,
-    first: 'Nitesh',
-    last: 'Kumar',
-    phone: 54564564,
-    status: WithdrawStatus.Progress
-})
 
-withdrawHistory.value.push({
-    id: 'dsfadf',
-    consultant_id: '45ds4d',
-    amount: 1000,
-    datetime: 0,
-    first: 'Nitesh',
-    last: 'Kumar',
-    phone: 54564564,
-    status: WithdrawStatus.Accepted
-})
 
-withdrawHistory.value.push({
-    id: 'dsfadf',
-    consultant_id: '45ds4d',
-    amount: 105500,
-    datetime: 0,
-    first: 'Niddtesh',
-    last: 'Kumar',
-    phone: 54564564,
-    status: WithdrawStatus.Rejected
-})
+// -------------------- request ---------------------
+
+async function loadHistory() {
+    try {
+        const res = await ApiWithdraw.getAll(token)
+        withdrawHistory.value = res
+
+    } catch (error) {
+        alert(error)
+    }
+}
+
+
+
+async function approveAndReject(id: number, status: 'Accepted' | 'Rejected') {
+    isProcessing.value = true
+    try {
+        const index = withdrawHistory.value.findIndex((v) => v.id == id)
+
+        if (index != -1) {
+            const res = await ApiWithdraw.updateStatus(token, id, status)
+            withdrawHistory.value[index].status = status
+        }
+
+    } catch (error) {
+        alert(error)
+    }
+
+    isProcessing.value = false
+}
+
+
+
+
+
+
+
+// ---------------------------- dialogs --------------------
+
+let selectedWithdraw: null | WithdrawHistory = null
+const isApproveDialogVisible = ref(false)
+const isRejectDialogVisible = ref(false)
+const dialogMessage = ref('')
+const isProcessing = ref(false)
+
+
+// Accept dialog
+function onAcceptDialog(isOk: boolean) {
+
+    isApproveDialogVisible.value = false
+    if (selectedWithdraw == null) return
+    if (isOk) {
+        approveAndReject(selectedWithdraw.id, 'Accepted')
+    }
+}
+
+
+function openAcceptDialog(withdraw: WithdrawHistory) {
+    selectedWithdraw = withdraw
+    dialogMessage.value = 'Have you paid the requested amount to ' + withdraw.first + '?. Note: do this only when you have paid!'
+    isApproveDialogVisible.value = true
+}
+
+
+// reject dialog
+function onRejectDialog(isOk: boolean) {
+    isRejectDialogVisible.value = false
+    if (selectedWithdraw == null) return
+    if (isOk) {
+        approveAndReject(selectedWithdraw.id, 'Rejected')
+    }
+}
+
+
+function openRejectDialog(withdraw: WithdrawHistory) {
+    selectedWithdraw = withdraw
+    dialogMessage.value = 'Do you really want to reject the request amount of ' + withdraw.first + '?.'
+    isRejectDialogVisible.value = true
+}
+
+
+
+
+
+
+// ------------ extra ----------------
+
+function calculateWithdrawCountPercentage(name: string) {
+
+    let count = 0
+    withdrawHistory.value.forEach(item => {
+        if (item.status == name) count++
+    });
+
+    // calculate percentage
+    return Math.round(count / withdrawHistory.value.length * 100)
+}
+
+function calculateWithdrawCount(name: string) {
+
+    let count = 0
+    withdrawHistory.value.forEach(item => {
+        if (item.status == name) count++
+    });
+
+    return count
+}
+
+
+
 
 
 const activeTabIndex = ref(0)
@@ -80,6 +149,27 @@ function onTabChange(index: number) {
         </div>
 
         <h2>Withdraw Requests</h2>
+
+        <div class="reports">
+            <div class="card">
+                <p>Progress</p>
+                <span>{{ calculateWithdrawCount('Progress') }}</span>
+                <div class="progress" :style="{ 'width': calculateWithdrawCountPercentage('Progress') + '%' }"></div>
+            </div>
+
+            <div class="card">
+                <p>Approved</p>
+                <span>{{ calculateWithdrawCount('Accepted') }}</span>
+                <div class="progress success" :style="{ 'width': calculateWithdrawCountPercentage('Accepted') + '%' }"></div>
+            </div>
+
+            <div class="card">
+                <p>Rejects</p>
+                <span>{{ calculateWithdrawCount('Rejected') }}</span>
+                <div class="progress danger" :style="{ 'width': calculateWithdrawCountPercentage('Rejected') + '%' }"></div>
+            </div>
+        </div>
+
         <WidgetsTab :active-tab="activeTabIndex" :names="['Progress', 'Accepted', 'Rejected']"
             :onChange="event => onTabChange(event)">
         </WidgetsTab>
@@ -105,13 +195,13 @@ function onTabChange(index: number) {
                     <template v-for="item, index in withdrawHistory">
 
                         <!-- TODO add condition to check offer expiry -->
-                        <tr v-if="item.status == WithdrawStatus.Progress">
+                        <tr v-if="item.status == 'Progress'">
                             <td>{{ item.first }} {{ item.last }}</td>
                             <td>₹{{ item.amount }}</td>
                             <td>{{ item.phone }}</td>
-                            <td>{{ dateTimeString(item.datetime) }}</td>
-                            <td><button class="success">Accept</button></td>
-                            <td><button class="danger">Reject</button></td>
+                            <td>{{ dateTimeString(item.created_at) }}</td>
+                            <td><button @click="openAcceptDialog(item)" class="success">Pay & Accept</button></td>
+                            <td><button @click="openRejectDialog(item)" class="danger">Reject</button></td>
                         </tr>
                     </template>
 
@@ -138,11 +228,11 @@ function onTabChange(index: number) {
                     <template v-for="item, index in withdrawHistory">
 
                         <!-- TODO add condition to check offer expiry -->
-                        <tr v-if="item.status == WithdrawStatus.Accepted">
+                        <tr v-if="item.status == 'Accepted'">
                             <td>{{ item.first }} {{ item.last }}</td>
                             <td>₹{{ item.amount }}</td>
                             <td>{{ item.phone }}</td>
-                            <td>{{ dateTimeString(item.datetime) }}</td>
+                            <td>{{ dateTimeString(item.created_at) }}</td>
                         </tr>
                     </template>
 
@@ -168,12 +258,11 @@ function onTabChange(index: number) {
                     </tr>
                     <template v-for="item, index in withdrawHistory">
 
-                        <!-- TODO add condition to check offer expiry -->
-                        <tr v-if="item.status == WithdrawStatus.Rejected">
+                        <tr v-if="item.status == 'Rejected'">
                             <td>{{ item.first }} {{ item.last }}</td>
                             <td>₹{{ item.amount }}</td>
                             <td>{{ item.phone }}</td>
-                            <td>{{ dateTimeString(item.datetime) }}</td>
+                            <td>{{ dateTimeString(item.created_at) }}</td>
                         </tr>
                     </template>
 
@@ -182,6 +271,14 @@ function onTabChange(index: number) {
         </div>
 
     </div>
+
+    <DialogAccept :onCancel="() => onAcceptDialog(false)" :onOk="() => onAcceptDialog(true)"
+        :is-visible="isApproveDialogVisible" button-name="Pay & Accept" title="Request Accept" :message="dialogMessage">
+    </DialogAccept>
+
+    <DialogAccept :onCancel="() => onRejectDialog(false)" :onOk="() => onRejectDialog(true)"
+        :is-visible="isRejectDialogVisible" :is-danger="true" button-name="Reject" title="Request Reject"
+        :message="dialogMessage"></DialogAccept>
 </template>
 <style scoped>
 a {}

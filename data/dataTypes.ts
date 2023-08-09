@@ -110,17 +110,12 @@ export interface Commission{
 
 export interface WithdrawHistory{
     id: number
-    consultant_id: number
+    consultant_id: number,
     amount: number,
-    datetime: number,
     first: string,
     last: string,
     phone: number,
-    status: WithdrawStatus,
+    status: 'Progress' | 'Accepted' | 'Rejected',
+    created_at: number
 }
 
-export enum WithdrawStatus{
-    Progress,
-    Accepted,
-    Rejected
-}
