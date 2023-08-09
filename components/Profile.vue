@@ -1,12 +1,13 @@
 <script setup lang='ts'>
 defineProps<{
     name: string,
-    role: string
+    role: string,
+    image: string
 }>()
 </script>
 <template>
     <div class="profile">
-        <img src="../public/images/no_image.png">
+        <img :src="image">
         <div>
             <h4>{{ name }}</h4>
             <span>{{ role }}</span>

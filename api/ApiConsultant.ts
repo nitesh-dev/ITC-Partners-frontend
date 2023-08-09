@@ -47,6 +47,12 @@ namespace ApiConsultant {
         return Api.get<ConsultantAccount[]>('consultants', '', myHeaders)
     }
 
+    export function get(token: string) {
+        var myHeaders = new Headers();
+        myHeaders.append("x-access-token", token);
+        return Api.get<ConsultantAccount>('consultants/me', '', myHeaders)
+    }
+
     export function updateStatus(token: string, id: number, isApproved: boolean) {
         let updateData = {
             token: token,

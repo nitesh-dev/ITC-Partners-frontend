@@ -1,6 +1,36 @@
 <script setup lang='ts'>
-import { tabs } from '~/data/client' 
-import {earningHistoryRaw, withdrawHistoryRaw, profitHistoryRaw, leadsHistoryRaw} from '~/data/adminRawData'
+import { tabs } from '~/data/client'
+import { earningHistoryRaw, withdrawHistoryRaw, profitHistoryRaw, leadsHistoryRaw } from '~/data/adminRawData'
+import ApiConsultant from '~/api/ApiConsultant';
+import { getToken } from '~/data/utils';
+
+
+const profile = ref({
+    image: '',
+    name: ''
+})
+
+onMounted(() => {
+    const token = getToken()
+    if (!token) {
+        //redirect to login
+        window.location.href = '/'
+    } else {
+        getProfileDetail(token)
+    }
+})
+
+async function getProfileDetail(token: string) {
+    try {
+        const res = await ApiConsultant.get(token)
+        profile.value.image = res.profile_url
+        profile.value.name = res.first + ' ' + res.last
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
 </script>
 <template>
     <div class="panel">
@@ -8,7 +38,7 @@ import {earningHistoryRaw, withdrawHistoryRaw, profitHistoryRaw, leadsHistoryRaw
 
         <!-- header -->
         <div class="header">
-            <Profile name="Nitesh kr" role="Consultant" />
+            <Profile :image="profile.image" :name="profile.name" role="Consultant" />
         </div>
 
         <h2>Dashboard</h2>
@@ -40,54 +70,48 @@ import {earningHistoryRaw, withdrawHistoryRaw, profitHistoryRaw, leadsHistoryRaw
             <div class="card">
                 <p class="title">Earning history</p>
                 <hr>
-                <LineChart borderColor="#1665D8" backgroundColor="#EAEEF5" :myChartData="earningHistoryRaw"/>
+                <LineChart borderColor="#1665D8" backgroundColor="#EAEEF5" :myChartData="earningHistoryRaw" />
             </div>
 
             <!-- 2 -->
             <div class="card">
                 <p class="title">Withdraw history</p>
                 <hr>
-                <LineChart borderColor="#d33396" backgroundColor="#f5e6ef" :myChartData="withdrawHistoryRaw"/>
+                <LineChart borderColor="#d33396" backgroundColor="#f5e6ef" :myChartData="withdrawHistoryRaw" />
             </div>
 
             <!-- 3 -->
             <div class="card">
                 <p class="title">Leads history</p>
                 <hr>
-                <LineChart borderColor="#2BC48A" backgroundColor="#EFFAF1" :myChartData="leadsHistoryRaw"/>
+                <LineChart borderColor="#2BC48A" backgroundColor="#EFFAF1" :myChartData="leadsHistoryRaw" />
             </div>
 
         </div>
 
-        
+
 
     </div>
 </template>
 <style scoped>
-
-
-
 /* -------------------- statistics --------------- */
 
-.panel .statistics{
+.panel .statistics {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
 }
 
-.panel .statistics .title{
+.panel .statistics .title {
     margin: 1em;
 }
 
-.panel .statistics .card{
+.panel .statistics .card {
     width: 500px;
 }
 
-.panel .statistics hr{
+.panel .statistics hr {
     border: none;
     border-bottom: 2px solid var(--color-surface-variant);
 }
-
-
-
 </style>
