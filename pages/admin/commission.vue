@@ -1,30 +1,118 @@
 <script setup lang='ts'>
 import { Commission } from 'data/dataTypes';
+import { getToken } from '~/data/utils';
 import { tabs } from '~/data/admin'
 
 import { dateTimeString } from '~/extra/utils'
+import ApiCommission from '~/api/ApiCommission';
 
 const commissions = ref(Array<Commission>())
-commissions.value.push({
-    id: '1',
-    name: 'Bronze',
-    leads_count: 10,
-    commission_percentage: 2
+
+let token = 'null'
+onMounted(function () {
+    token = getToken()
+    loadCommission()
+
 })
 
-commissions.value.push({
-    id: '2',
-    name: 'Silver',
-    leads_count: 20,
-    commission_percentage: 3
-})
 
-commissions.value.push({
-    id: '3',
-    name: 'Gold',
-    leads_count: 40,
-    commission_percentage: 4
-})
+
+
+// -------------------- request ---------------------
+
+async function loadCommission() {
+    try {
+        const res = await ApiCommission.getAll(token)
+        commissions.value = res
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+
+
+
+
+// ----------------------- dialog ------------------
+
+const isCommissionDialogVisible = ref(false)
+const isDialogModeCreate = ref(true)
+const isDeleteDialogVisible = ref(false)
+const isProcessing = ref(false)
+const deleteDialogMessage = ref('')
+
+const selectedCommission = ref<Commission | null>(null)
+
+
+
+
+function openCommissionDialog(isCreate: boolean, selectedComm: Commission | null = null) {
+    if (selectedComm == null) {
+        selectedCommission.value = {
+            id: 0,
+            name: '',
+            leads_count: 0,
+            commission_percentage: 0,
+            created_at: 0
+        }
+    } else {
+        selectedCommission.value = {
+            id: selectedComm.id,
+            name: selectedComm.name,
+            leads_count: selectedComm.leads_count,
+            commission_percentage: selectedComm.commission_percentage,
+            created_at: 0
+        }
+    }
+    isDialogModeCreate.value = isCreate
+    isCommissionDialogVisible.value = true
+}
+
+
+function onCommissionDialogClose(isSuccess: boolean) {
+    isCommissionDialogVisible.value = false
+    if (isSuccess) loadCommission()
+}
+
+
+
+let selectedCommissionToDelete: Commission | null = null
+
+// delete dialog
+function openCommissionDeleteDialog(id: number) {
+
+    // finding plan
+    const commission = commissions.value.find((item) => item.id == id)
+    if (commission == undefined) return
+    selectedCommissionToDelete = commission
+
+    deleteDialogMessage.value = 'Do you really want to delete *' + commission.name + ' Commission* ?. This action can\'t be undone.'
+    isDeleteDialogVisible.value = true
+
+}
+
+async function onCommissionDelete(isDelete: boolean) {
+    isDeleteDialogVisible.value = false
+
+    if (isDelete && selectedCommissionToDelete) {
+        const index = commissions.value.findIndex((item) => item.id == selectedCommissionToDelete!!.id)
+        if (index == -1) return
+
+        isProcessing.value = true
+        try {
+            const res = ApiCommission.deletePlan(token, selectedCommissionToDelete.id)
+
+            // remove the item from list
+            commissions.value.splice(index, 1)
+        } catch (error) {
+            console.log(error)
+        }
+        isProcessing.value = false
+    }
+
+}
 
 
 
@@ -39,7 +127,7 @@ commissions.value.push({
         </div>
 
         <h2>Commissions</h2>
-        <button class="primary">Add Commission</button>
+        <button class="primary" @click="openCommissionDialog(true)">Add Commission</button>
         <div class="tab-container">
 
             <table>
@@ -58,16 +146,15 @@ commissions.value.push({
                     </tr>
                     <template v-for="item, index in commissions">
 
-                        <!-- TODO add condition to check offer expiry -->
                         <tr>
                             <td><span class="chip pink">{{ item.name }}</span></td>
                             <td>{{ item.leads_count }}</td>
                             <td>{{ item.commission_percentage }}%</td>
                             <td>
-                                <button class="primary">Edit</button>
+                                <button class="primary" @click="openCommissionDialog(false, item)">Edit</button>
                             </td>
                             <td>
-                                <button class="danger">Delete</button>
+                                <button @click="openCommissionDeleteDialog(item.id)" class="danger">Delete</button>
                             </td>
                         </tr>
                     </template>
@@ -76,7 +163,13 @@ commissions.value.push({
         </div>
     </div>
 
-    <DialogAddCommission :is-visible="false" :is-update="false" :data="commissions[0]"></DialogAddCommission>
+    <DialogAddCommission :onClose="onCommissionDialogClose" :is-visible="isCommissionDialogVisible"
+        :data="selectedCommission!!" :is-create="isDialogModeCreate">
+    </DialogAddCommission>
+
+    <DialogDelete :onDelete="() => onCommissionDelete(true)" :onCancel="() => onCommissionDelete(false)"
+        :is-visible="isDeleteDialogVisible" :message="deleteDialogMessage">
+    </DialogDelete>
 </template>
 <style scoped>
 .tab-container {

@@ -5,12 +5,12 @@ import { getToken } from '~/data/utils';
 import { tabs } from '~/data/admin'
 import ApiPlan from '~/api/ApiPlan';
 
-let token = 'null'
+
 
 const categories = ref(Array<LoanCategory>())
 const allPlans = ref(Array<LoanSubCategory>())
 
-
+let token = 'null'
 onMounted(function () {
     token = getToken()
     loadData()
