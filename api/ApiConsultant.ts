@@ -5,8 +5,35 @@ import Api from "./Api";
 
 namespace ApiConsultant {
 
+    export async function isAccountExist(googleToken: string) {
+        let data = {
+            googleToken
+        }
+        const result = await Api.post('consultants/exists', '', data) as any
+        return result.isExist as boolean
+    }
+    export async function signUp(googleToken: string, account: Partial<ConsultantAccount>, referralCode: string) {
+        let data = {
+            googleToken,
+            data: account,
+            referralCode: referralCode
+        }
+        const result = await Api.post<{jwtToken:string}>('consultants/signUp', '', data) 
+        console.log(result)
+     
+        return result
+    }
+    export async function signIn(googleToken: string) {
+        let data = {
+            googleToken
+        }
+        const result = await Api.post<{jwtToken:string}>('consultants/signIn', '', data) 
+        console.log(result)
+        
+        return result
+    }
 
-    export function createAccount(token: string, account: ConsultantAccount){
+    export function createAccount(token: string, account: ConsultantAccount) {
         let data = {
             token: token,
             data: account
@@ -38,4 +65,4 @@ namespace ApiConsultant {
 
 }
 
-export default ApiConsultant;
+export default ApiConsultant

@@ -31,7 +31,7 @@ export interface ConsultantAccount{
     dob: number,
     city: string,
     pincode: string,
-    gender: Gender,
+    gender: 'Male' | 'Female',
     is_approved: boolean,
     created_at: number,
     profile_url: string
@@ -59,18 +59,6 @@ export interface Lead{
     created_at: number;
 }
 
-export enum LeadStatus{
-    Pending,
-    Progress,
-    Approved,
-    Rejected
-}
-
-
-export enum Gender{
-    Male,
-    Female
-}
 
 export interface LoanCategory{
     id: number

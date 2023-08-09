@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import { Lead, LeadStatus } from '~/data/dataTypes';
+import { Lead } from '~/data/dataTypes';
 import { dateTimeString, dateTimeToInputFormat } from '~/extra/utils'
 defineProps<{
     isVisible: boolean,
