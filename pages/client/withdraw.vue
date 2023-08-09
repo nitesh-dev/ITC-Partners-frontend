@@ -1,6 +1,6 @@
 <script setup lang='ts'>
 import { WithdrawHistory } from '~/data/dataTypes';
-import { tabs } from '~/data/admin'
+import { tabs } from '~/data/client'
 
 import { dateTimeString } from '~/extra/utils'
 import { getToken } from '~/data/utils';
