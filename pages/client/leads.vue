@@ -31,6 +31,7 @@ async function getProfileDetail(token: string) {
         profile.value.name = res.first + ' ' + res.last
     } catch (error) {
         console.log(error)
+        window.location.href = '/'
     }
 }
 
@@ -46,7 +47,7 @@ async function fetchAllLeads() {
         leads.value = res
     } catch (error) {
         console.log(error)
-        alert('Something went wrong')
+        window.location.href = '/'
     }
 }
 
