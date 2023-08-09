@@ -29,11 +29,6 @@ const emit = defineEmits<{
 </template>
 <style scoped>
 
-.col-2{
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
-}
 .plan {
     width: 300px;
     min-height: 400px;
@@ -41,6 +36,13 @@ const emit = defineEmits<{
     overflow: auto;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
     margin-bottom: 1rem;
+    display: grid;
+    grid-template-rows: max-content 1fr;
+}
+
+.plan .content{
+    display: grid;
+    grid-template-rows: max-content 1fr;
 }
 
 .plan .banner {
