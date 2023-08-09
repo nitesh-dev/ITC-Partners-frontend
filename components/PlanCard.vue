@@ -8,7 +8,7 @@ defineProps<{
 
 const emit = defineEmits<{
   (event: 'delete', id: number): void
-  (event: 'apply', id: number): void
+  (event: 'apply', planName: string): void
 }>()
 
 
@@ -23,7 +23,7 @@ const emit = defineEmits<{
             <p>{{ plan.description }}</p>
 
             <button v-if="isAdmin" class="danger" @click="emit('delete', plan.id)">Delete</button>
-            <button v-else class="primary" @click="emit('apply', plan.id)">Apply now</button>
+            <button v-else class="primary" @click="emit('apply', plan.name)">Apply now</button>
         </div>
     </div>
 </template>

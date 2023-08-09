@@ -1,5 +1,87 @@
 <script setup lang='ts'>
-import { tabs } from '~/data/client' 
+import { getToken } from '~/data/utils';
+import { tabs } from '~/data/client'
+import ApiLead from '~/api/ApiLead';
+import { Lead } from 'data/dataTypes';
+import { dateTimeString } from '~/extra/utils'
+
+const leads = ref(Array<Lead>())
+
+let token = 'null'
+onMounted(function () {
+    token = getToken()
+    fetchAllLeads()
+})
+
+
+
+
+
+// -------------------- requests --------------------
+async function fetchAllLeads() {
+    try {
+        const res = await ApiLead.getAll(token)
+        leads.value = res
+    } catch (error) {
+        console.log(error)
+        alert('Something went wrong')
+    }
+}
+
+
+
+
+
+
+
+
+
+// -------------- dialog
+const isLeadViewDialogVisible = ref(false)
+const selectedLeadForView = ref<Lead>()
+
+function openLeadViewDialog(lead: Lead) {
+    selectedLeadForView.value = lead
+    isLeadViewDialogVisible.value = true
+}
+
+function onLeadViewDialogClose() {
+    isLeadViewDialogVisible.value = false
+}
+
+
+
+
+
+
+
+
+
+// ------------ extra ----------------
+
+function calculateLeadsCountPercentage(name: string) {
+
+let count = 0
+leads.value.forEach(lead => {
+    if (lead.status == name) count++
+});
+
+// calculate percentage
+return Math.round(count / leads.value.length * 100)
+}
+
+function calculateLeadsCount(name: string) {
+
+let count = 0
+leads.value.forEach(lead => {
+    if (lead.status == name) count++
+});
+
+return count
+}
+
+
+
 
 
 
@@ -28,37 +110,212 @@ function onTabChange(index: number) {
         <div class="reports">
             <div class="card">
                 <p>Approved</p>
-                <span>49</span>
-                <div class="progress success"></div>
+                <span>{{ calculateLeadsCount('Approved') }}</span>
+                <div class="progress success" :style="{ 'width': calculateLeadsCountPercentage('Approved') + '%' }"></div>
             </div>
             <div class="card">
                 <p>Progress</p>
-                <span>5</span>
-                <div class="progress"></div>
+                <span>{{ calculateLeadsCount('Progress') }}</span>
+                <div class="progress" :style="{ 'width': calculateLeadsCountPercentage('Progress') + '%' }"></div>
             </div>
             <div class="card">
                 <p>Pending</p>
-                <span>3</span>
-                <div class="progress neutral"></div>
+                <span>{{ calculateLeadsCount('Pending') }}</span>
+                <div class="progress neutral" :style="{ 'width': calculateLeadsCountPercentage('Pending') + '%' }"></div>
             </div>
             <div class="card">
                 <p>Rejects</p>
-                <span>4</span>
-                <div class="progress danger"></div>
+                <span>{{ calculateLeadsCount('Rejected') }}</span>
+                <div class="progress danger" :style="{ 'width': calculateLeadsCountPercentage('Rejected') + '%' }"></div>
             </div>
         </div>
 
 
         <WidgetsTab :active-tab="activeTabIndex" :names="['Pending', 'Progress', 'Approved', 'Rejected']"
-            :onChange="event => onTabChange(event)" />
+            :onChange="event => onTabChange(event)">
+        </WidgetsTab>
 
+        <!-- Pending -->
+        <div v-if="activeTabIndex == 0" class="tab-container">
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Address</th>
+                        <th>City</th>
+                        <th>Pincode</th>
+                        <th>Gender</th>
+                        <th>Plan type</th>
+                        <th>Submitted at</th>
+                        <th>View</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="spacer">
+                        <td></td>
+                    </tr>
+                    <template v-for="item, index in leads">
+                        <tr v-if="item.status == 'Pending'">
+                            <td>{{ item.first }} {{ item.last }}</td>
+                            <td>{{ item.phone }}</td>
+                            <td>{{ item.address }}</td>
+                            <td>{{ item.city }}</td>
+                            <td>{{ item.pincode }}</td>
+                            <td>{{ item.gender }}</td>
+                            <td>{{ item.loan_name }}</td>
+                            <td>{{ dateTimeString(item.created_at) }}</td>
+                            <td @click="openLeadViewDialog(item)">
+                                <svg class="normal" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                    <path
+                                        d="M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z" />
+                                </svg>
+                            </td>
+                        </tr>
+                    </template>
+
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Progress -->
+        <div v-if="activeTabIndex == 1" class="tab-container">
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Address</th>
+                        <th>City</th>
+                        <th>Pincode</th>
+                        <th>Gender</th>
+                        <th>Plan type</th>
+                        <th>Submitted At</th>
+                        <th>View</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="spacer">
+                        <td></td>
+                    </tr>
+                    <template v-for="item, index in leads">
+                        <tr v-if="item.status == 'Progress'">
+                            <td>{{ item.first }} {{ item.last }}</td>
+                            <td>{{ item.phone }}</td>
+                            <td>{{ item.address }}</td>
+                            <td>{{ item.city }}</td>
+                            <td>{{ item.pincode }}</td>
+                            <td>{{ item.gender }}</td>
+                            <td>{{ item.loan_name }}</td>
+                            <td>{{ dateTimeString(item.created_at) }}</td>
+                            <td @click="openLeadViewDialog(item)">
+                                <svg class="normal" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                    <path
+                                        d="M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z" />
+                                </svg>
+                            </td>
+                        </tr>
+                    </template>
+
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Approved -->
+        <div v-if="activeTabIndex == 2" class="tab-container">
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>City</th>
+                        <th>Pincode</th>
+                        <th>Gender</th>
+                        <th>Plan type</th>
+                        <th>Plan amount (₹)</th>
+                        <th>Commission (%)</th>
+                        <th>Submitted at</th>
+                        <th>View</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="spacer">
+                        <td></td>
+                    </tr>
+                    <template v-for="item, index in leads">
+                        <tr v-if="item.status == 'Approved'">
+                            <td>{{ item.first }} {{ item.last }}</td>
+                            <td>{{ item.phone }}</td>
+                            <td>{{ item.city }}</td>
+                            <td>{{ item.pincode }}</td>
+                            <td>{{ item.gender }}</td>
+                            <td>{{ item.loan_name }}</td>
+                            <td>₹{{ item.loan_amount }}</td>
+                            <td>{{ item.consultant_commission_percentage }}%</td>
+                            <td>{{ dateTimeString(item.created_at) }}</td>
+                            <td @click="openLeadViewDialog(item)">
+                                <svg class="normal" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                    <path
+                                        d="M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z" />
+                                </svg>
+                            </td>
+                        </tr>
+                    </template>
+
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Rejected -->
+        <div v-if="activeTabIndex == 3" class="tab-container">
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Address</th>
+                        <th>City</th>
+                        <th>Pincode</th>
+                        <th>Gender</th>
+                        <th>Submitted At</th>
+                        <th>View</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="spacer">
+                        <td></td>
+                    </tr>
+                    <template v-for="item, index in leads">
+                        <tr v-if="item.status == 'Rejected'">
+                            <td>{{ item.first }} {{ item.last }}</td>
+                            <td>{{ item.phone }}</td>
+                            <td>{{ item.address }}</td>
+                            <td>{{ item.city }}</td>
+                            <td>{{ item.pincode }}</td>
+                            <td>{{ item.gender }}</td>
+                            <td>{{ dateTimeString(item.created_at) }}</td>
+                            <td @click="openLeadViewDialog(item)">
+                                <svg class="normal" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                    <path
+                                        d="M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z" />
+                                </svg>
+                            </td>
+
+                        </tr>
+                    </template>
+
+                </tbody>
+            </table>
+        </div>
 
     </div>
+
+    <DialogLeadDetail v-if="selectedLeadForView" :onOk="() => onLeadViewDialogClose()" :is-visible="isLeadViewDialogVisible"
+        :data="selectedLeadForView" :is-update="false"></DialogLeadDetail>
 </template>
-<style scoped>
-
-
-
-
-
-</style>
+<style scoped></style>

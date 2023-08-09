@@ -1,8 +1,70 @@
 <script setup lang='ts'>
-import { LoanCategory } from 'data/dataTypes';
+import { LoanCategory, LoanSubCategory } from 'data/dataTypes';
+import { getToken } from '~/data/utils';
 import { tabs } from '~/data/client'
+import ApiCategory from '~/api/ApiCategory';
+import ApiPlan from '~/api/ApiPlan';
 
 const categories = ref(Array<LoanCategory>())
+const allPlans = ref(Array<LoanSubCategory>())
+
+let token = 'null'
+onMounted(function () {
+    token = getToken()
+    loadData()
+})
+
+
+
+
+// -------------------- request ---------------------
+async function loadData() {
+    const res = await loadCategory()
+    if (res) loadPlans()
+}
+
+async function loadCategory() {
+    try {
+        const res = await ApiCategory.getAll(token)
+        categories.value = res
+        return true
+    } catch (error) {
+        console.log(error)
+        return false
+    }
+}
+
+async function loadPlans() {
+    try {
+
+        // loading plans
+        const res = await ApiPlan.getAll(token)
+        allPlans.value = res
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+
+//  ------------------- dialog -----------------
+
+const isLeadSubmitVisible = ref(false)
+const selectedPlanName = ref('')
+
+function onApply(planName: string){
+    selectedPlanName.value = planName
+    isLeadSubmitVisible.value = true
+}
+
+function onClose(isSuccess: boolean){
+    isLeadSubmitVisible.value = false
+}
+
+
+
+
 
 
 const activeTabIndex = ref(0)
@@ -28,25 +90,19 @@ function onTabChange(index: number) {
             :onChange="event => onTabChange(event)">
         </WidgetsTab>
 
-        <!-- 1 -->
-        <div v-if="activeTabIndex == 0" class="tab-container">
-            <PlanCard v-for="item in 6"></PlanCard>
-        </div>
+        <template v-for="category, index in categories">
+            <div v-if="activeTabIndex == index" class="tab-container plan">
 
-        <!-- 1 -->
-        <div v-if="activeTabIndex == 1" class="tab-container">
-            <PlanCard v-for="item in 4"></PlanCard>
-        </div>
-
-        <!-- 1 -->
-        <div v-if="activeTabIndex == 2" class="tab-container">
-            <PlanCard v-for="item in 3"></PlanCard>
-        </div>
-
-
-
+                <template v-for="plan, index in allPlans">
+                    <PlanCard :onApply="onApply" v-if="plan.category_id == category.id" :plan="plan" :is-admin="false">
+                    </PlanCard>
+                </template>
+            </div>
+        </template>
 
     </div>
+
+    <DialogSubmitLead :onClose="onClose" :is-visible="isLeadSubmitVisible" :plan-name="selectedPlanName"></DialogSubmitLead>
 </template>
 <style scoped>
 .tab-container{

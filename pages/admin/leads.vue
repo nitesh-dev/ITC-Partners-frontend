@@ -23,12 +23,10 @@ onMounted(function () {
 async function fetchAllLeads() {
     try {
         const res = await ApiLead.getAll(token)
-
         leads.value = res
-        console.log(leads.value)
-
     } catch (error) {
         console.log(error)
+        alert('Something went wrong')
     }
 }
 

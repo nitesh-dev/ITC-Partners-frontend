@@ -4,7 +4,7 @@ import {earningHistoryRaw, withdrawHistoryRaw, profitHistoryRaw, leadsHistoryRaw
 </script>
 <template>
     <div class="panel">
-        <Sidebar :active-tab="0" :tab-data="tabs"></Sidebar>
+        <Sidebar :active-tab="3" :tab-data="tabs"></Sidebar>
 
         <!-- header -->
         <div class="header">

@@ -265,11 +265,11 @@ table .chip.danger {
 }
 
 
-.dialog-holder .dialog .small{
+.dialog-holder .dialog.small{
     width: 300px !important;
 }
 
-.dialog-holder .dialog .medium{
+.dialog-holder .dialog.medium{
     width: 800px;
 }
 
@@ -296,6 +296,13 @@ table .chip.danger {
     align-items: center;
 }
 
+.dialog .col-3{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.5rem;
+    align-items: center;
+}
+
 .dialog .input input, .dialog .input textarea, .dialog .input select{
     border: none;
     outline: none;
@@ -317,7 +324,7 @@ table .chip.danger {
 .dialog .input span{
     display: block;
     font-size: var(--small-font);
-    color: var(--color-on-surface);
+    color: var(--color-on-surface-dark);
 }
 
 

@@ -4,44 +4,6 @@ import { tabs } from '~/data/admin'
 import { dateTimeString } from '~/extra/utils'
 
 const offers = ref(Array<Offer>())
-offers.value.push({
-    id: '1',
-    category_id: '2',
-    name: 'sdfsadf',
-    price: 54545,
-    discount: 500,
-    description: 'jkjkdlfj sdfjklasdjfksa dfjksaldfkljasdfkl jsdfjasdf',
-    image: '',
-    start_datetime: 0,
-    end_datetime: 0,
-    label: 'Mega offer'
-})
-
-offers.value.push({
-    id: '1',
-    category_id: '2',
-    name: 'sdfsadf',
-    price: 54545,
-    discount: 500,
-    description: 'jkjkdlfj sdfjklasdjfksa dfjksaldfkljasdfkl jsdfjasdf',
-    image: '',
-    start_datetime: 0,
-    end_datetime: 0,
-    label: 'Mega offer'
-})
-
-offers.value.push({
-    id: '1',
-    category_id: '2',
-    name: 'sdfsadf',
-    price: 54545,
-    discount: 500,
-    description: 'jkjkdlfj sdfjklasdjfksa dfjksaldfkljasdfkl jsdfjasdf',
-    image: '',
-    start_datetime: 0,
-    end_datetime: 0,
-    label: 'Mega offer'
-})
 
 
 const activeTabIndex = ref(0)

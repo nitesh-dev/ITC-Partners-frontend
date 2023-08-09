@@ -7,7 +7,7 @@ import { stat } from "fs";
 namespace ApiLead {
 
 
-    export function createAccount(token: string, lead: Lead){
+    export function createLead(token: string, lead: Lead){
         let data = {
             token: token,
             data: lead
