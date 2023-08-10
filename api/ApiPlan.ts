@@ -3,13 +3,19 @@ import Api from "./Api";
 
 namespace ApiPlan {
 
-    export function createPlan(token: string, categoryId: number, name: string, description: string){
+    export function createPlan(token: string, categoryId: number, name: string, description: string, image: File){
         let data = {
             token: token,
-            data: {category_id: categoryId, name: name, description: description}
+            data: {category_id: categoryId, name: name, description: description},
+            image: image
+            
         }
-        return Api.post('plan', '', data)
+
+        console.log(image)
+        return Api.post('profile', '', data)
     }
+
+    
 
     export function updatePlan(token: string, id: number, name: string, description: string){
         let data = {

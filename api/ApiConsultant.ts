@@ -53,6 +53,15 @@ namespace ApiConsultant {
         return Api.put<any>(`consultants/${id}`, '', updateData)
     }
 
+    export function update(token: string, data: any) {
+        let updateData = {
+            token: token,
+            data: data
+        }
+        return Api.put<any>(`consultants/me`, '', updateData)
+    }
+
+
     export function deleteAccount(token: string, id: number) {
         var myHeaders = new Headers();
         myHeaders.append("x-access-token", token);

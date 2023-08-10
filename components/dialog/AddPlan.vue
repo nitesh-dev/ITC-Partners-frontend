@@ -14,15 +14,20 @@ const emit = defineEmits<{
 
 const name = ref('')
 const description = ref('')
+const file = ref<HTMLInputElement>()
 
 
 async function submitPlan() {
     isProcessing.value = true
     try {
-        const res = await ApiPlan.createPlan(getToken()!!, prop.categoryId, name.value, description.value)
+        const image = file.value!!.files!![0]
+        console.log(image)
+
+        const res = await ApiPlan.createPlan(getToken()!!, prop.categoryId, name.value, description.value, image)
         emit('close', true)
     } catch (error) {
         console.log(error)
+        alert('Something went wrong')
     }
     isProcessing.value = false
 }
@@ -36,7 +41,7 @@ const isProcessing = ref(false)
 <template>
     <div v-if="isVisible" class="dialog-holder">
         <div class="dialog card">
-            <form @submit.prevent="submitPlan()">
+            <form  @submit.prevent="submitPlan()" enctype="multipart/form-data">
                 <h4>Add Plan</h4>
 
                 <div class="content">
@@ -49,7 +54,7 @@ const isProcessing = ref(false)
 
                         <div class="input image">
                             <span>Plan image</span>
-                            <input type="file">
+                            <input type="file" ref="file" required>
                         </div>
                     </div>
 

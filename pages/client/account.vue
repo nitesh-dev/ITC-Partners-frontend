@@ -46,6 +46,51 @@ const account = ref<ConsultantAccount>({
     created_at: 0,
     profile_url: ''
 })
+
+
+const updatable = ref({
+    first: '',
+    last: '',
+    phone: 0,
+    address: '',
+    dob: 0,
+    city: '',
+    pincode: 0,
+    gender: 'Male'
+})
+
+
+
+
+
+
+
+// add plan dialog
+const isProfileDialogVisible = ref(false)
+
+function openProfileDialog() {
+    isProfileDialogVisible.value = true
+    updatable.value = {
+        first: account.value.first,
+        last: account.value.last,
+        phone: account.value.phone,
+        address: account.value.address,
+        dob: account.value.dob,
+        city: account.value.city,
+        pincode: account.value.pincode,
+        gender: account.value.gender
+    }
+}
+
+function onProfileDialogClose(isSuccess: boolean) {
+    if (isSuccess) getProfileDetail(token!!)
+    isProfileDialogVisible.value = false
+}
+
+
+
+
+
 </script>
 <template>
     <div class="panel">
@@ -63,7 +108,7 @@ const account = ref<ConsultantAccount>({
 
 
             <h2>Account</h2>
-            <button class="primary">Edit Profile</button>
+            <button class="primary" @click="openProfileDialog()">Edit Profile</button>
 
             <p class="danger" v-if="!account.is_approved">Your account is not approved yet. Some of the functionality are
                 turned off. <br>You will have all the functionality available once you will approved by the admin. You can
@@ -154,7 +199,8 @@ const account = ref<ConsultantAccount>({
         </div>
     </div>
 
-    <DialogDelete></DialogDelete>
+    <DialogClientUpdateProfile :onClose="onProfileDialogClose" :data="updatable" :is-visible="isProfileDialogVisible">
+    </DialogClientUpdateProfile>
 </template>
 <style scoped>
 p.danger {
