@@ -70,13 +70,13 @@ const isProcessing = ref(false)
                         </div>
                         <div class="input">
                             <span>Leads Count</span>
-                            <input type="number" min="2" required v-model="data.leads_count">
+                            <input type="number"  required v-model="data.leads_count">
                         </div>
                     </div>
                     <div class="col-2">
                         <div class="input">
                             <span>Commission (%)</span>
-                            <input type="number" min="1" required v-model="data.commission_percentage">
+                            <input type="number"  required v-model="data.commission_percentage">
                         </div>
                     </div>
                 </div>

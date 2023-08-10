@@ -78,8 +78,8 @@ function openCommissionDialog(isCreate: boolean, selectedComm: Commission | null
         selectedCommission.value = {
             id: 0,
             name: '',
-            leads_count: 0,
-            commission_percentage: 0,
+            leads_count: NaN,
+            commission_percentage: NaN,
             created_at: 0
         }
     } else {
