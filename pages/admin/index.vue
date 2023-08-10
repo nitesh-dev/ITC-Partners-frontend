@@ -1,6 +1,39 @@
 <script setup lang='ts'>
+
+import { getToken } from '~/extra/utils';
 import { tabs } from '~/data/admin' 
 import {earningHistoryRaw, withdrawHistoryRaw, profitHistoryRaw, leadsHistoryRaw} from '~/data/adminRawData'
+import ApiAdmin from '~/api/ApiAdmin';
+
+let token: string | null = null
+
+const profile = ref({
+    image: '',
+    name: ''
+})
+
+onMounted(() => {
+    token = getToken()
+    if (!token) {
+        //redirect to login
+        navigateTo('admin/login')
+    } else {
+        getProfileDetail(token)
+    }
+})
+
+async function getProfileDetail(token: string) {
+    try {
+        const res = await ApiAdmin.get(token)
+        profile.value.image = res.profile_url
+        profile.value.name = res.first + ' ' + res.last
+    } catch (error) {
+        console.log(error)
+        navigateTo('/admin/login')
+    }
+}
+
+
 </script>
 <template>
     <div class="panel">
@@ -8,7 +41,7 @@ import {earningHistoryRaw, withdrawHistoryRaw, profitHistoryRaw, leadsHistoryRaw
 
         <!-- header -->
         <div class="header">
-            <Profile name="Nitesh kr" role="Admin" />
+            <Profile :image="profile.image" :name="profile.name" role="Admin" />
         </div>
 
         <h2>Dashboard</h2>

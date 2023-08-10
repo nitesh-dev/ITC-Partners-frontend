@@ -1,18 +1,48 @@
 <script setup lang='ts'>
+import ApiAdmin from '~/api/ApiAdmin';
 import { AdminAccount } from 'data/dataTypes';
 import { tabs } from '~/data/admin'
-import { dateTimeString } from '~/extra/utils'
+import { dateTimeString, getToken } from '~/extra/utils'
+
+
+let token: string | null = null
+
+onMounted(() => {
+    token = getToken()
+    if (!token) {
+        //redirect to login
+        navigateTo('/admin/login')
+    } else {
+        getProfileDetail(token)
+
+    }
+})
+
+async function getProfileDetail(token: string) {
+    try {
+        const res = await ApiAdmin.get(token)
+        account.value = res
+    } catch (error) {
+        console.log(error)
+        navigateTo('/admin/login')
+    }
+}
+
+
 
 const account = ref<AdminAccount>({
-    id: 'sdfsdf',
-    first: 'Nitesh',
-    last: 'Kumar',
-    phone: 56465456464,
-    address: 'jksdhfj sdjfksjd fkjksld fklsdjf',
-    pincode: '6546545',
+    id: 0,
+    first: '',
+    last: '',
+    email: '',
+    phone: 0,
+    city: '',
+    address: '',
+    pincode: 0,
     gender: 'Male',
-    datetime: 0,
-    dob: 0
+    created_at: 0,
+    dob: 0,
+    profile_url: ''
 })
 </script>
 <template>
@@ -21,7 +51,7 @@ const account = ref<AdminAccount>({
 
         <!-- header -->
         <div class="header">
-            <Profile name="Nitesh kr" role="Admin" />
+            <Profile :image="account.profile_url" :name="account.first + ' ' + account.last" role="Admin" />
         </div>
 
         <h2>Account</h2>
@@ -68,7 +98,7 @@ const account = ref<AdminAccount>({
                 </div>
                 <div class="card">
                     <span>Joined at</span>
-                    <p>{{ dateTimeString(account.datetime) }}</p>
+                    <p>{{ dateTimeString(account.created_at) }}</p>
                 </div>
             </div>
 

@@ -2,18 +2,41 @@
 import { WithdrawHistory } from '~/data/dataTypes';
 import { tabs } from '~/data/admin'
 
-import { dateTimeString } from '~/extra/utils'
-import { getToken } from '~/data/utils';
+import { dateTimeString, getToken } from '~/extra/utils'
 import ApiWithdraw from '~/api/ApiWithdraw';
+import ApiAdmin from '~/api/ApiAdmin';
 
 const withdrawHistory = ref(Array<WithdrawHistory>())
 
-let token = 'null'
-onMounted(function () {
-    token = getToken()
-    loadHistory()
+let token: string | null = null
 
+const profile = ref({
+    image: '',
+    name: ''
 })
+
+onMounted(() => {
+    token = getToken()
+    if (!token) {
+        //redirect to login
+        navigateTo('admin/login')
+    } else {
+        getProfileDetail(token)
+        loadHistory()
+    }
+})
+
+async function getProfileDetail(token: string) {
+    try {
+        const res = await ApiAdmin.get(token)
+        profile.value.image = res.profile_url
+        profile.value.name = res.first + ' ' + res.last
+    } catch (error) {
+        console.log(error)
+        navigateTo('admin/login')
+    }
+}
+
 
 
 
@@ -22,7 +45,7 @@ onMounted(function () {
 
 async function loadHistory() {
     try {
-        const res = await ApiWithdraw.getAll(token)
+        const res = await ApiWithdraw.getAll(token!!)
         withdrawHistory.value = res
 
     } catch (error) {
@@ -38,7 +61,7 @@ async function approveAndReject(id: number, status: 'Accepted' | 'Rejected') {
         const index = withdrawHistory.value.findIndex((v) => v.id == id)
 
         if (index != -1) {
-            const res = await ApiWithdraw.updateStatus(token, id, status)
+            const res = await ApiWithdraw.updateStatus(token!!, id, status)
             withdrawHistory.value[index].status = status
         }
 
@@ -143,9 +166,9 @@ function onTabChange(index: number) {
     <div class="panel">
         <Sidebar :active-tab="6" :tab-data="tabs"></Sidebar>
 
-        <!-- header -->
-        <div class="header">
-            <Profile name="Nitesh kr" role="Admin" />
+         <!-- header -->
+         <div class="header">
+            <Profile :image="profile.image" :name="profile.name" role="Admin" />
         </div>
 
         <h2>Withdraw Requests</h2>

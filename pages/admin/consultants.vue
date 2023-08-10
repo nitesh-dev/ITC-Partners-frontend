@@ -2,17 +2,42 @@
 
 import { ConsultantAccount } from 'data/dataTypes';
 import { tabs } from '~/data/admin'
-import { dateTimeString } from '~/extra/utils'
+import { dateTimeString, getToken } from '~/extra/utils'
 import ApiConsultant from '~/api/ApiConsultant'
-import { getToken } from '~/data/utils';
+import ApiAdmin from '~/api/ApiAdmin';
 
-const token = getToken()
+
 
 const consultants = ref(Array<ConsultantAccount>())
 
-onMounted(function () {
-    fetchAllConsultants()
+let token: string | null = null
+
+const profile = ref({
+    image: '',
+    name: ''
 })
+
+onMounted(() => {
+    token = getToken()
+    if (!token) {
+        //redirect to login
+        navigateTo('/admin/login')
+    } else {
+        getProfileDetail(token)
+        fetchAllConsultants()
+    }
+})
+
+async function getProfileDetail(token: string) {
+    try {
+        const res = await ApiAdmin.get(token)
+        profile.value.image = res.profile_url
+        profile.value.name = res.first + ' ' + res.last
+    } catch (error) {
+        console.log(error)
+        navigateTo('/admin/login')
+    }
+}
 
 
 
@@ -23,7 +48,7 @@ onMounted(function () {
 // -------------------- requests --------------------
 async function fetchAllConsultants() {
     try {
-        const res = await ApiConsultant.getAll(token)
+        const res = await ApiConsultant.getAll(token!!)
         consultants.value = res
 
     } catch (error) {
@@ -39,7 +64,7 @@ async function approve(consultantId: number) {
 
         if (index != -1) {
 
-            const res = await ApiConsultant.updateStatus(token, consultantId, true)
+            const res = await ApiConsultant.updateStatus(token!!, consultantId, true)
             consultants.value[index].is_approved = true
 
         }
@@ -58,7 +83,7 @@ async function deleteConsultant(consultantId: number) {
         const index = consultants.value.findIndex((v) => v.id == consultantId)
 
         if (index != -1) {
-            const res = await ApiConsultant.deleteAccount(token, consultantId)
+            const res = await ApiConsultant.deleteAccount(token!!, consultantId)
             consultants.value.splice(index, 1)
         }
 
@@ -151,9 +176,9 @@ function onTabChange(index: number) {
 
         <Sidebar :active-tab="1" :tab-data="tabs"></Sidebar>
 
-        <!-- header -->
-        <div class="header">
-            <Profile name="Nitesh kr" role="Admin" />
+         <!-- header -->
+         <div class="header">
+            <Profile :image="profile.image" :name="profile.name" role="Admin" />
         </div>
 
         <h2>Consultants</h2>

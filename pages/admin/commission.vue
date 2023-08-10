@@ -1,19 +1,44 @@
 <script setup lang='ts'>
 import { Commission } from 'data/dataTypes';
-import { getToken } from '~/data/utils';
 import { tabs } from '~/data/admin'
 
-import { dateTimeString } from '~/extra/utils'
+import { dateTimeString, getToken } from '~/extra/utils'
 import ApiCommission from '~/api/ApiCommission';
+import ApiAdmin from '~/api/ApiAdmin';
 
 const commissions = ref(Array<Commission>())
 
-let token = 'null'
-onMounted(function () {
-    token = getToken()
-    loadCommission()
+let token: string | null = null
 
+const profile = ref({
+    image: '',
+    name: ''
 })
+
+onMounted(() => {
+    token = getToken()
+    if (!token) {
+        //redirect to login
+        navigateTo('/admin/login')
+    } else {
+        getProfileDetail(token)
+        loadCommission()
+    }
+})
+
+async function getProfileDetail(token: string) {
+    try {
+        const res = await ApiAdmin.get(token)
+        profile.value.image = res.profile_url
+        profile.value.name = res.first + ' ' + res.last
+    } catch (error) {
+        console.log(error)
+        navigateTo('/admin/login')
+    }
+}
+
+
+
 
 
 
@@ -22,7 +47,7 @@ onMounted(function () {
 
 async function loadCommission() {
     try {
-        const res = await ApiCommission.getAll(token)
+        const res = await ApiCommission.getAll(token!!)
         commissions.value = res
 
     } catch (error) {
@@ -102,7 +127,7 @@ async function onCommissionDelete(isDelete: boolean) {
 
         isProcessing.value = true
         try {
-            const res = ApiCommission.deletePlan(token, selectedCommissionToDelete.id)
+            const res = ApiCommission.deletePlan(token!!, selectedCommissionToDelete.id)
 
             // remove the item from list
             commissions.value.splice(index, 1)
@@ -123,7 +148,7 @@ async function onCommissionDelete(isDelete: boolean) {
 
         <!-- header -->
         <div class="header">
-            <Profile name="Nitesh kr" role="Admin" />
+            <Profile :image="profile.image" :name="profile.name" role="Admin" />
         </div>
 
         <h2>Commissions</h2>

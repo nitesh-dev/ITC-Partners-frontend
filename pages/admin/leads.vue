@@ -1,19 +1,43 @@
 <script setup lang='ts'>
-import { Lead, LeadStatus } from '~/data/dataTypes';
+import { Lead } from '~/data/dataTypes';
 import { tabs } from '~/data/admin'
-import { dateTimeString } from '~/extra/utils'
+import { dateTimeString, getToken } from '~/extra/utils'
 
-import { getToken } from '~/data/utils';
 import ApiLead from '~/api/ApiLead';
+import ApiAdmin from '~/api/ApiAdmin';
 
-let token = 'null'
 
 const leads = ref(Array<Lead>())
 
-onMounted(function () {
-    token = getToken()
-    fetchAllLeads()
+let token: string | null = null
+
+const profile = ref({
+    image: '',
+    name: ''
 })
+
+onMounted(() => {
+    token = getToken()
+    if (!token) {
+        //redirect to login
+        navigateTo('/admin/login')
+    } else {
+        getProfileDetail(token)
+        fetchAllLeads()
+    }
+})
+
+async function getProfileDetail(token: string) {
+    try {
+        const res = await ApiAdmin.get(token)
+        profile.value.image = res.profile_url
+        profile.value.name = res.first + ' ' + res.last
+    } catch (error) {
+        console.log(error)
+        navigateTo('/admin/login')
+    }
+}
+
 
 
 
@@ -22,7 +46,7 @@ onMounted(function () {
 // -------------------- requests --------------------
 async function fetchAllLeads() {
     try {
-        const res = await ApiLead.getAll(token)
+        const res = await ApiLead.getAll(token!!)
         leads.value = res
     } catch (error) {
         console.log(error)
@@ -38,7 +62,7 @@ async function updateStatus(leadId: number, status: 'Pending' | 'Progress' | 'Ap
 
         if (index != -1) {
 
-            const res = await ApiLead.updateStatus(token, leadId, status)
+            const res = await ApiLead.updateStatus(token!!, leadId, status)
             leads.value[index].status = status
         } else {
             throw 'Unable to do processing'
@@ -186,7 +210,7 @@ function onTabChange(index: number) {
 
         <!-- header -->
         <div class="header">
-            <Profile name="Nitesh kr" role="Admin" />
+            <Profile :image="profile.image" :name="profile.name" role="Admin" />
         </div>
 
         <h2>Leads</h2>

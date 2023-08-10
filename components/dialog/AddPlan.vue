@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import { getToken } from '~/data/utils';
+import { getToken } from '~/extra/utils';
 import ApiPlan from '~/api/ApiPlan';
 
 
@@ -19,7 +19,7 @@ const description = ref('')
 async function submitPlan() {
     isProcessing.value = true
     try {
-        const res = await ApiPlan.createPlan(getToken(), prop.categoryId, name.value, description.value)
+        const res = await ApiPlan.createPlan(getToken()!!, prop.categoryId, name.value, description.value)
         emit('close', true)
     } catch (error) {
         console.log(error)

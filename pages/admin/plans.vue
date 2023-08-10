@@ -1,20 +1,44 @@
 <script setup lang='ts'>
 import ApiCategory from '~/api/ApiCategory';
 import { LoanCategory, LoanSubCategory } from 'data/dataTypes';
-import { getToken } from '~/data/utils';
 import { tabs } from '~/data/admin'
 import ApiPlan from '~/api/ApiPlan';
+import { getToken } from '~/extra/utils';
+import ApiAdmin from '~/api/ApiAdmin';
 
 
 
 const categories = ref(Array<LoanCategory>())
 const allPlans = ref(Array<LoanSubCategory>())
 
-let token = 'null'
-onMounted(function () {
-    token = getToken()
-    loadData()
+let token: string | null = null
+
+const profile = ref({
+    image: '',
+    name: ''
 })
+
+onMounted(() => {
+    token = getToken()
+    if (!token) {
+        //redirect to login
+        navigateTo('/admin/login')
+    } else {
+        getProfileDetail(token)
+        loadData()
+    }
+})
+
+async function getProfileDetail(token: string) {
+    try {
+        const res = await ApiAdmin.get(token)
+        profile.value.image = res.profile_url
+        profile.value.name = res.first + ' ' + res.last
+    } catch (error) {
+        console.log(error)
+        navigateTo('/admin/login')
+    }
+}
 
 
 
@@ -27,7 +51,7 @@ async function loadData() {
 
 async function loadCategory() {
     try {
-        const res = await ApiCategory.getAll(token)
+        const res = await ApiCategory.getAll(token!!)
         categories.value = res
         return true
     } catch (error) {
@@ -40,7 +64,7 @@ async function loadPlans() {
     try {
 
         // loading plans
-        const res = await ApiPlan.getAll(token)
+        const res = await ApiPlan.getAll(token!!)
         allPlans.value = res
 
     } catch (error) {
@@ -93,14 +117,14 @@ function openPlanDeleteDialog(planId: number) {
 
 async function onPlanDelete(isDelete: boolean) {
     isDeleteDialogVisible.value = false
-    
+
     if (isDelete && selectedPlanToDelete) {
         const index = allPlans.value.findIndex((item) => item.id == selectedPlanToDelete!!.id)
-        if(index == -1) return
+        if (index == -1) return
 
         isProcessing.value = true
         try {
-            const res = ApiPlan.deletePlan(token, selectedPlanToDelete.id)
+            const res = ApiPlan.deletePlan(token!!, selectedPlanToDelete.id)
 
             // remove the plan from list
             allPlans.value.splice(index, 1)
@@ -115,12 +139,12 @@ async function onPlanDelete(isDelete: boolean) {
 
 // add plan dialog
 
-function openAddPlanDialog(){
+function openAddPlanDialog() {
     isAddPlanDialogVisible.value = true
 }
 
-function onAddPlanDialogClose(isSuccess: boolean){
-    if(isSuccess) loadPlans()
+function onAddPlanDialogClose(isSuccess: boolean) {
+    if (isSuccess) loadPlans()
     isAddPlanDialogVisible.value = false
 }
 
@@ -143,7 +167,7 @@ function onTabChange(index: number) {
 
         <!-- header -->
         <div class="header">
-            <Profile name="Nitesh kr" role="Admin" />
+            <Profile :image="profile.image" :name="profile.name" role="Admin" />
         </div>
 
         <h2>Plans</h2>
@@ -168,7 +192,8 @@ function onTabChange(index: number) {
     </div>
 
     <DialogAddCategory :is-visible="isAddCategoryDialogVisible" :onClose="onAddCategoryClose"></DialogAddCategory>
-    <DialogAddPlan v-if="categories[activeTabIndex] != undefined"  :onClose="onAddPlanDialogClose" :is-visible="isAddPlanDialogVisible" :category-id="categories[activeTabIndex].id"></DialogAddPlan>
+    <DialogAddPlan v-if="categories[activeTabIndex] != undefined" :onClose="onAddPlanDialogClose"
+        :is-visible="isAddPlanDialogVisible" :category-id="categories[activeTabIndex].id"></DialogAddPlan>
 
     <DialogProcess :is-visible="isProcessing" message="processing"></DialogProcess>
 

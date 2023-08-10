@@ -1,7 +1,7 @@
 <script setup lang='ts'>
 import ApiCommission from '~/api/ApiCommission';
-import { Commission } from 'data/dataTypes';
-import { getToken } from '~/data/utils';
+import { Commission } from '~/data/dataTypes';
+import { getToken } from '~/extra/utils';
 
 const prop = defineProps<{
     data: Commission,
@@ -19,7 +19,7 @@ const emit = defineEmits<{
 async function addCommission() {
     isProcessing.value = true
     try {
-        const res = await ApiCommission.createCommission(getToken(), prop.data.name, prop.data.leads_count, prop.data.commission_percentage)
+        const res = await ApiCommission.createCommission(getToken()!!, prop.data.name, prop.data.leads_count, prop.data.commission_percentage)
         emit('close', true)
     } catch (error) {
         alert(error)
@@ -31,7 +31,7 @@ async function addCommission() {
 async function updateCommission() {
     isProcessing.value = true
     try {
-        const res = await ApiCommission.updateCommission(getToken(), prop.data.id, prop.data.name, prop.data.leads_count, prop.data.commission_percentage)
+        const res = await ApiCommission.updateCommission(getToken()!!, prop.data.id, prop.data.name, prop.data.leads_count, prop.data.commission_percentage)
         emit('close', true)
     } catch (error) {
         alert(error)

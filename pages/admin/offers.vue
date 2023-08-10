@@ -1,9 +1,40 @@
 <script setup lang='ts'>
+import ApiAdmin from '~/api/ApiAdmin';
 import { Offer } from 'data/dataTypes';
 import { tabs } from '~/data/admin'
-import { dateTimeString } from '~/extra/utils'
+import { dateTimeString, getToken } from '~/extra/utils'
 
 const offers = ref(Array<Offer>())
+
+let token: string | null = null
+
+const profile = ref({
+    image: '',
+    name: ''
+})
+
+onMounted(() => {
+    token = getToken()
+    if (!token) {
+        //redirect to login
+        navigateTo('/admin/login')
+    } else {
+        getProfileDetail(token)
+
+    }
+})
+
+async function getProfileDetail(token: string) {
+    try {
+        const res = await ApiAdmin.get(token)
+        profile.value.image = res.profile_url
+        profile.value.name = res.first + ' ' + res.last
+    } catch (error) {
+        console.log(error)
+        navigateTo('/admin/login')
+    }
+}
+
 
 
 const activeTabIndex = ref(0)
@@ -20,7 +51,7 @@ function onTabChange(index: number) {
 
         <!-- header -->
         <div class="header">
-            <Profile name="Nitesh kr" role="Admin" />
+            <Profile :image="profile.image" :name="profile.name" role="Admin" />
         </div>
 
         <h2>Offers</h2>
@@ -64,7 +95,7 @@ function onTabChange(index: number) {
                                 <button class="primary">Edit</button>
                             </td>
                             <td>
-                               <button class="danger">Delete</button>
+                                <button class="danger">Delete</button>
                             </td>
                         </tr>
                     </template>

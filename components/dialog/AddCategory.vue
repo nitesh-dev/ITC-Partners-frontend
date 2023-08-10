@@ -1,6 +1,6 @@
 <script setup lang='ts'>
+import { getToken } from '~/extra/utils';
 import ApiCategory from '~/api/ApiCategory';
-import { getToken } from '~/data/utils';
 
 defineProps({
     isVisible: Boolean
@@ -18,7 +18,7 @@ const name = ref('')
 async function onSubmit(){
     isProcessing.value = true
     try {
-        const res = await ApiCategory.createCategory(getToken(), name.value)
+        const res = await ApiCategory.createCategory(getToken()!!, name.value)
         emit('close', true)
         
     } catch (error) {
