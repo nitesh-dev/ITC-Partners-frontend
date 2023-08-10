@@ -109,3 +109,15 @@ export interface WithdrawHistory{
     created_at: number
 }
 
+
+export interface Referral{
+    id: number,
+    name: string,
+    city: string,
+    pincode: number,
+    profile_url: string,
+    earning: number,
+    created_at: number
+}
+
+

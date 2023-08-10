@@ -1,4 +1,4 @@
-import { ConsultantAccount } from "data/dataTypes";
+import { ConsultantAccount, Referral } from "data/dataTypes";
 import Api from "./Api";
 
 
@@ -58,6 +58,12 @@ namespace ApiConsultant {
         myHeaders.append("x-access-token", token);
 
         return Api.deleteRequest(`consultants/${id}`, myHeaders)
+    }
+
+    export function getReferrals(token: string) {
+        var myHeaders = new Headers();
+        myHeaders.append("x-access-token", token);
+        return Api.get<Referral[]>('consultants/referrals', '', myHeaders)
     }
 
 
