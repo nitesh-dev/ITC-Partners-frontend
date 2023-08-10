@@ -29,6 +29,14 @@ namespace ApiLead {
         return Api.put<any>(`leads/${id}`, '', updateData)
     }
 
+    export function completeLead(token: string, id: number, amount: number) {
+        let updateData = {
+            token: token,
+            data: { loan_amount: amount }
+        }
+        return Api.put<any>(`leads/${id}/complete`, '', updateData)
+    }
+
     export function deleteAccount(token: string, id: number) {
         var myHeaders = new Headers();
         myHeaders.append("x-access-token", token);

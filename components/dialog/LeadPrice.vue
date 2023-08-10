@@ -1,4 +1,6 @@
 <script setup lang='ts'>
+import { getToken } from '~/extra/utils';
+import ApiLead from '~/api/ApiLead';
 import { Lead} from '~/data/dataTypes';
 const prop = defineProps<{
     data: Lead,
@@ -6,48 +8,29 @@ const prop = defineProps<{
 }>()
 
 
-const data = ref(prop.data)
-
-
 
 const emit = defineEmits<{
     (event: 'submit', isSuccess: boolean): void
 }>()
 
-
-function onClose(isSuccess: boolean) {
-    emit('submit', isSuccess)
-}
-
-
-
-
-// async function updateStatus(leadId: number, status: 'Pending' | 'Progress' | 'Approved' | 'Rejected') {
-//     isProcessing.value = true
-//     try {
-//         const index = leads.value.findIndex((v) => v.id == leadId)
-
-//         if (index != -1) {
-
-//             const res = await ApiLead.updateStatus(token, leadId, status)
-//             leads.value[index].status = status
-//         } else {
-//             throw 'Unable to do processing'
-//         }
-
-//     } catch (error) {
-//         console.log(error)
-//     }
-
-//     isProcessing.value = false
-// }
-
-function onSubmit(){
-    // onClose(true)
-    alert('Todo work left to submit')
-}
-
 const isProcessing = ref(false)
+const loan = ref(0)
+
+async function onSubmit(){
+    isProcessing.value = true
+    try {
+        const res = await ApiLead.completeLead(getToken()!!, prop.data.id, loan.value)
+        
+        prop.data.loan_amount = loan.value
+        loan.value = 0
+        emit('submit', true)
+
+    } catch (error) {
+        console.log(error)
+        alert('Unable to process your request!')
+    }
+    isProcessing.value = false
+}
 
 
 </script>
@@ -67,23 +50,23 @@ const isProcessing = ref(false)
                         </div>
                         <div class="input">
                             <span>Commission (%)</span>
-                            <input type="text" :value="data.consultant_commission_percentage" readonly>
+                            <input type="number" :value="data.consultant_commission_percentage" readonly>
                         </div>
                         <div class="input">
                             <span>Plan</span>
-                            <input type="text" readonly>
+                            <input type="text" :value="data.loan_name" readonly>
                         </div>
                     </div>
                     <div class="input">
                         <span>Enter plan amount (₹)</span>
-                        <input type="number" min="10" v-model="data.loan_amount" required>
+                        <input type="number" min="10" v-model="loan" required>
                     </div>
                 </div>
 
                 <p class="note">Note: after form submit commission of this lead will be transferred to the consultant and
                     its referral.</p>
                 <div class="buttons-holder">
-                    <button class="primary outline" @click="onClose(false)" type="button">Cancel</button>
+                    <button class="primary outline" @click="emit('submit', false)" type="button">Cancel</button>
                     <button class="success" type="submit">Complete</button>
                 </div>
             </div>

@@ -303,11 +303,11 @@ function onTabChange(index: number) {
                     <tr>
                         <th>Name</th>
                         <th>Phone</th>
-                        <th>Address</th>
                         <th>City</th>
                         <th>Pincode</th>
                         <th>Gender</th>
                         <th>Loan type</th>
+                        <th>Commission (%)</th>
                         <th>Submitted At</th>
                         <th>View</th>
                         <th>Pay & Approve</th>
@@ -323,11 +323,11 @@ function onTabChange(index: number) {
                         <tr v-if="item.status == 'Progress'">
                             <td>{{ item.first }} {{ item.last }}</td>
                             <td>{{ item.phone }}</td>
-                            <td>{{ item.address }}</td>
                             <td>{{ item.city }}</td>
                             <td>{{ item.pincode }}</td>
                             <td>{{ item.gender }}</td>
-                            <td>{{ item.loan_name }}</td>
+                            <td><span class="chip pink">{{ item.loan_name }}</span></td>
+                            <td>{{ item.consultant_commission_percentage }}</td>
                             <td>{{ dateTimeString(item.created_at) }}</td>
                             <td @click="openLeadViewDialog(item)">
                                 <svg class="normal" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
