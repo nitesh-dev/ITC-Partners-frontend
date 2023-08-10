@@ -11,8 +11,7 @@ namespace ApiPlan {
             
         }
 
-        console.log(image)
-        return Api.post('profile', '', data)
+        return Api.post('plan', '', data)
     }
 
     

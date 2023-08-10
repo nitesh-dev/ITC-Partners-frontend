@@ -36,6 +36,14 @@ namespace ApiAdmin {
         return Api.get<AdminAccount>('admins/me', '', myHeaders)
     }
 
+    export function update(token: string, data: any) {
+        let updateData = {
+            token: token,
+            data: data
+        }
+        return Api.put<any>(`admins/me`, '', updateData)
+    }
+
 }
 
 export default ApiAdmin

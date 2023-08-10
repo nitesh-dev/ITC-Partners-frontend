@@ -44,6 +44,50 @@ const account = ref<AdminAccount>({
     dob: 0,
     profile_url: ''
 })
+
+
+const updatable = ref({
+    first: '',
+    last: '',
+    phone: 0,
+    address: '',
+    dob: 0,
+    pincode: 0,
+    gender: 'Male'
+})
+
+
+
+
+
+
+
+// add plan dialog
+const isProfileDialogVisible = ref(false)
+
+function openProfileDialog() {
+    isProfileDialogVisible.value = true
+    updatable.value = {
+        first: account.value.first,
+        last: account.value.last,
+        phone: account.value.phone,
+        address: account.value.address,
+        dob: account.value.dob,
+        pincode: account.value.pincode,
+        gender: account.value.gender
+    }
+}
+
+function onProfileDialogClose(isSuccess: boolean) {
+    if (isSuccess) getProfileDetail(token!!)
+    isProfileDialogVisible.value = false
+}
+
+
+
+
+
+
 </script>
 <template>
     <div class="panel">
@@ -55,7 +99,7 @@ const account = ref<AdminAccount>({
         </div>
 
         <h2>Account</h2>
-        <button class="primary">Edit Profile</button>
+        <button @click="openProfileDialog()" class="primary">Edit Profile</button>
         <div class="profile">
 
             <div class="equal-row">
@@ -105,7 +149,8 @@ const account = ref<AdminAccount>({
         </div>
     </div>
 
-    <DialogDelete></DialogDelete>
+    <DialogAdminUpdateProfile :onClose="onProfileDialogClose" :data="updatable" :is-visible="isProfileDialogVisible">
+    </DialogAdminUpdateProfile>
 </template>
 <style scoped>
 .panel>.profile {

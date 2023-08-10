@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import ApiConsultant from '~/api/ApiConsultant';
+import ApiAdmin from '~/api/ApiAdmin';
 import { dateTimeToInputFormat, getToken } from '~/extra/utils'
 
 
@@ -11,7 +11,6 @@ let prop = defineProps<{
         phone: number,
         address: string,
         dob: number,
-        city: string,
         pincode: number,
         gender: string
     }
@@ -25,7 +24,7 @@ const emit = defineEmits<{
 async function onSubmit() {
 
     try {
-        const res = await ApiConsultant.update(getToken()!!, {...prop.data, dob: new Date(dob.value!!.value).getTime()})
+        const res = await ApiAdmin.update(getToken()!!, {...prop.data, dob: new Date(dob.value!!.value).getTime()})
         emit('close', true)
     } catch (error) {
         console.log(error)
@@ -69,17 +68,9 @@ const dob = ref<HTMLInputElement>()
 
                     <div class="col-2">
                         <div class="input">
-                            <span>City*</span>
-                            <input type="text" v-model="data.city" required>
-                        </div>
-
-                        <div class="input">
                             <span>Pincode*</span>
                             <input type="number" v-model="data.pincode" required>
                         </div>
-                    </div>
-
-                    <div class="col-2">
                         <div class="input">
                             <span>Gender*</span>
                             <select v-model="data.gender" required>

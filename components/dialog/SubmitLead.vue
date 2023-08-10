@@ -3,7 +3,7 @@ import { getToken } from '~/extra/utils';
 import ApiLead from '~/api/ApiLead';
 import { Lead } from '~/data/dataTypes';
 
-defineProps<{
+const prop = defineProps<{
     isVisible: boolean,
     planName: string
 
@@ -13,17 +13,17 @@ const lead = ref<Lead>({
     id: 0,
     first: '',
     last: '',
-    phone: '',
+    phone: NaN,
     address: '',
-    dob: 0,
+    dob: NaN,
     city: '',
-    pincode: '',
+    pincode: NaN,
     gender: 'Male',
     loan_amount: 0,
     loan_name: '',
     purpose_of_loan: '',
     employer_status: '',
-    monthly_income: 0,
+    monthly_income: NaN,
     consultant_commission_percentage: 0,
     consultant_id: 0,
     status: 'Pending',
@@ -44,25 +44,25 @@ async function onSubmit() {
     const dobNumber = new Date(dob.value)
     isProcessing.value = true
     try {
-        lead.value.dob = dobNumber.getTime()
-        const res = await ApiLead.createLead(getToken()!!, lead.value)
+
+        const res = await ApiLead.createLead(getToken()!!, {...lead.value, dob: dobNumber.getTime(), loan_name: prop.planName})
         alert('Lead successfully submitted')
 
         lead.value = {
             id: 0,
             first: '',
             last: '',
-            phone: '',
+            phone: NaN,
             address: '',
-            dob: 0,
+            dob: NaN,
             city: '',
-            pincode: '',
+            pincode: NaN,
             gender: 'Male',
-            loan_amount: 0,
+            loan_amount: NaN,
             loan_name: '',
             purpose_of_loan: '',
             employer_status: '',
-            monthly_income: 0,
+            monthly_income: NaN,
             consultant_commission_percentage: 0,
             consultant_id: 0,
             status: 'Pending',
@@ -72,7 +72,7 @@ async function onSubmit() {
 
         emit('close', true)
     } catch (error) {
-        alert('Something went wrong')
+        alert('Failed to submit lead')
     }
 
     isProcessing.value = false
@@ -149,7 +149,7 @@ async function onSubmit() {
 
                     <div class="input">
                         <span>Purpose*</span>
-                        <textarea rows="4" placeholder="Describe why you are taking this plan." required></textarea>
+                        <textarea rows="4" v-model="lead.purpose_of_loan" placeholder="Describe why you are taking this plan." required></textarea>
                     </div>
                 </div>
                 <div class="buttons-holder">
