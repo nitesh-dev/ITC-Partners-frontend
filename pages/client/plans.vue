@@ -8,7 +8,7 @@ import ApiConsultant from '~/api/ApiConsultant';
 
 const categories = ref(Array<LoanCategory>())
 const allPlans = ref(Array<LoanSubCategory>())
-
+const isApproved = ref(false)
 
 let token: string | null = null
 
@@ -31,6 +31,7 @@ onMounted(() => {
 async function getProfileDetail(token: string) {
     try {
         const res = await ApiConsultant.get(token)
+        isApproved.value = res.is_approved
         profile.value.image = res.profile_url
         profile.value.name = res.first + ' ' + res.last
     } catch (error) {
@@ -80,6 +81,12 @@ const isLeadSubmitVisible = ref(false)
 const selectedPlanName = ref('')
 
 function onApply(planName: string) {
+
+    if(isApproved.value == false){
+        alert('You are not approved yet!. Please wait for admin to approve you.')
+        return
+    }
+    
     selectedPlanName.value = planName
     isLeadSubmitVisible.value = true
 }
@@ -112,6 +119,12 @@ function onTabChange(index: number) {
         </div>
 
         <h2>Offers & Plans</h2>
+
+        <p class="danger" v-if="!isApproved">Your account is not approved yet. Some of the functionality are
+            turned off. <br>You will have all the functionality available once you will approved by the admin. You can
+            also contact them using phone number.</p>
+        <p class="success" v-else>Your account is successfully approved by admin.</p>
+
         <WidgetsTab :active-tab="activeTabIndex" :names="categories.map((item) => item.name)"
             :onChange="event => onTabChange(event)">
         </WidgetsTab>
@@ -131,6 +144,14 @@ function onTabChange(index: number) {
     <DialogSubmitLead :onClose="onClose" :is-visible="isLeadSubmitVisible" :plan-name="selectedPlanName"></DialogSubmitLead>
 </template>
 <style scoped>
+
+p.danger {
+    color: var(--color-error);
+}
+
+p.success {
+    color: var(--color-primary);
+}
 .tab-container {
     display: flex;
     flex-wrap: wrap;

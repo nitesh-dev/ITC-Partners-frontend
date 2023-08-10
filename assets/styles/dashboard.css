@@ -45,6 +45,10 @@
     color: var(--color-on-surface-dark);
 }
 
+.panel p.message{
+    color: var(--color-on-surface-dark);
+}
+
 
 
 /* ------------------- reports -------------------*/

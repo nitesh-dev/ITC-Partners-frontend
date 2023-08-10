@@ -130,6 +130,9 @@ function onTabChange(index: number) {
         </div>
 
         <h2>Leads</h2>
+
+        <p class="message">You can see the all leads that are submitted by you and it's status e.g progress, approved, rejected and pending.</p>
+
         <div class="reports">
             <div class="card">
                 <p>Approved</p>

@@ -59,6 +59,13 @@ async function getReferrals(token: string) {
         </div>
 
         <h2>Referrals</h2>
+
+        <p class="message">Share your <b>referral code</b> with friends and relative, earn <b>0.5%</b> of there each earning.</p>
+        <p class="message">The below list will shows your all referrals that are joined with your <b>referral code</b>.</p>
+
+        <br>
+        <br>
+        <br>
         <div class="tab-container">
 
             <table>
