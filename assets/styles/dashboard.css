@@ -116,7 +116,7 @@ table {
     color: var(--color-on-surface-dark);
 }
 
-table button{
+table button {
     height: 36px;
 }
 
@@ -135,11 +135,11 @@ table td {
 }
 
 
-table tbody tr:hover{
+table tbody tr:hover {
     background-color: #e0e0e0;
 }
 
-table tr.active.primary{
+table tr.active.primary {
     background-color: var(--color-primary);
     color: rgb(255, 237, 237);
 }
@@ -148,7 +148,7 @@ table tr.spacer {
     background-color: transparent;
 }
 
-table tr.spacer td{
+table tr.spacer td {
     height: 12px;
 }
 
@@ -231,7 +231,7 @@ table .chip.danger {
 
 /* --------------------------- dialogs ---------------------------- */
 
-.dialog-holder{
+.dialog-holder {
     position: fixed;
     z-index: 5;
     background-color: rgba(0, 0, 0, 0.2);
@@ -245,39 +245,39 @@ table .chip.danger {
 
 }
 
-.dialog-holder .dialog{
+.dialog-holder .dialog {
     background-color: white;
     width: 600px;
-    padding: 1.5rem; 
+    padding: 1.5rem;
     overflow: auto;
     max-height: 700px;
 }
 
-.dialog-holder .content{
+.dialog-holder .content {
     min-height: 100px;
     margin: 1rem 0;
     margin-top: 2rem;
 }
 
-.dialog-holder .content p{
+.dialog-holder .content p {
     color: var(--color-on-surface-dark);
     opacity: 0.8;
 }
 
 
-.dialog-holder .dialog.small{
+.dialog-holder .dialog.small {
     width: 300px !important;
 }
 
-.dialog-holder .dialog.medium{
+.dialog-holder .dialog.medium {
     width: 800px;
 }
 
-.dialog-holder h4{
+.dialog-holder h4 {
     margin: 0;
 }
 
-.dialog-holder .buttons-holder{
+.dialog-holder .buttons-holder {
     display: flex;
     justify-content: flex-end;
     gap: 0.5rem;
@@ -285,25 +285,27 @@ table .chip.danger {
     margin-top: auto;
 }
 
-.dialog .input{
+.dialog .input {
     margin-bottom: 1rem;
 }
 
-.dialog .col-2{
+.dialog .col-2 {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 0.5rem;
     align-items: center;
 }
 
-.dialog .col-3{
+.dialog .col-3 {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 0.5rem;
     align-items: center;
 }
 
-.dialog .input input, .dialog .input textarea, .dialog .input select{
+.dialog .input input,
+.dialog .input textarea,
+.dialog .input select {
     border: none;
     outline: none;
     background-color: var(--color-surface-variant);
@@ -313,15 +315,15 @@ table .chip.danger {
     display: block;
 }
 
-.dialog textarea{
+.dialog textarea {
     resize: vertical;
 }
 
-.dialog .input select{
+.dialog .input select {
     padding: 0.65em 1em;
 }
 
-.dialog .input span{
+.dialog .input span {
     display: block;
     font-size: var(--small-font);
     color: var(--color-on-surface-dark);
@@ -336,7 +338,7 @@ table .chip.danger {
 
 /* ------------------- login ----------------- */
 
-.login{
+.login {
     width: 100%;
     height: 100vh;
     background-image: linear-gradient(#42c2aa, #1a1b56);
@@ -346,11 +348,11 @@ table .chip.danger {
     flex-direction: column;
 }
 
-.login-dialog{
+.login-dialog {
     margin: auto;
     display: flex;
     flex-direction: column;
-    max-width: 400px;
+    max-width: 600px;
     width: 100%;
     align-items: center;
     background-color: white;
@@ -360,13 +362,20 @@ table .chip.danger {
     padding: 1rem;
 }
 
-.login hr{
+.login-dialog p.end {
+    color: var(--color-on-surface-dark);
+    margin: 2rem 0;
+    margin-top: 4rem;
+    text-align: center;
+}
+
+.login hr {
     width: 100%;
     border: none;
     border-bottom: 1px solid var(--color-surface-variant);
 }
 
-.login h1{
+.login h1 {
     color: white;
     margin-bottom: 4rem;
 }

@@ -106,7 +106,10 @@ const account = ref<AdminAccount>({
         <h2>Sign Up or Log In</h2>
         <hr>
         <div id="buttonDiv"></div>
+        <p class="end">Your privacy and security are our top priorities. By logging in with Google, you agree to our Terms of Service and Privacy Policy.</p>
       </div>
+
+
 
       <div v-if="isSignupVisible" class="dialog-holder">
         <form @submit.prevent="onSubmit()">
