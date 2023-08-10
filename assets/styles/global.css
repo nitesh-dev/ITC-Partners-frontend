@@ -111,38 +111,39 @@ button {
     transition: all 200ms;
 }
 
-button:hover{
+button:hover {
     scale: 1.05;
 }
 
 
-button.primary{
+button.primary {
     background: var(--color-primary);
     border: 1px solid var(--color-primary);
     fill: white;
     color: white;
 }
 
-button.secondary{
+button.secondary {
     background: var(--color-secondary);
     border: 1px solid var(--color-secondary);
     fill: white;
     color: white;
 }
 
-button.danger{
+button.danger {
     background: var(--color-error);
     border: 1px solid var(--color-error);
     fill: white;
     color: white;
 }
 
-button.success{
+button.success {
     background: var(--color-green);
     border: 1px solid var(--color-green);
     fill: white;
     color: white;
 }
+
 button svg {
     fill: inherit;
 }
@@ -219,12 +220,12 @@ button.primary.outline {
 }
 
 
-.loader.primary{
+.loader.primary {
     border: 2px solid var(--color-primary);
     border-left-color: transparent;
 }
 
-.loader.danger{
+.loader.danger {
     border: 2px solid var(--color-error);
     border-left-color: transparent;
 }
@@ -239,3 +240,65 @@ button.primary.outline {
     }
 }
 
+
+
+
+
+
+
+/* ------------------- shimmer ---------------- */
+
+.shimmer{
+    margin-top: 4rem;
+}
+
+.shimmer .shine {
+    background: #ffffff;
+    background-image: linear-gradient(to right, #f6f7f8 0%, var(--color-surface-variant) 20%, #ffffff 40%, #ffffff 100%);
+    background-repeat: no-repeat;
+    background-size: 800px 104px;
+    display: inline-block;
+    position: relative;
+
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeholderShimmer;
+    animation-timing-function: linear;
+}
+
+.shimmer box {
+    height: 104px;
+    width: 100px;
+}
+
+.shimmer div {
+    display: inline-flex;
+    flex-direction: column;
+    margin-left: 25px;
+    margin-top: 15px;
+    vertical-align: top;
+}
+
+.shimmer lines {
+    height: 10px;
+    margin-top: 10px;
+    width: 300px;
+}
+
+.shimmer photo {
+    display: block !important;
+    width: 600px;
+    height: 100px;
+    margin-top: 15px;
+}
+
+@keyframes placeholderShimmer {
+    0% {
+        background-position: -468px 0;
+    }
+
+    100% {
+        background-position: 468px 0;
+    }
+}
