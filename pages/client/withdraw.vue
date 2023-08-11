@@ -155,10 +155,14 @@ function isInProgress() {
     if (withdrawData.value == undefined) return true
 
     withdrawData.value.withdrawHistory.forEach(element => {
-        if (element.status == 'Progress') {
+       
+    });
+
+    for (const e of withdrawData.value.withdrawHistory) {
+        if (e.status == 'Progress') {
             return true
         }
-    });
+    }
 
     return false
 }

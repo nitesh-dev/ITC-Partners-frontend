@@ -2,6 +2,8 @@
 import ApiWithdraw from '~/api/ApiWithdraw';
 import { getToken } from '~/extra/utils';
 
+const isProcessing = ref(false)
+
 const prop = defineProps<{
     balance: number,
     isVisible: boolean
@@ -16,6 +18,7 @@ const amount = ref<number>(NaN)
 
 
 async function sendRequest() {
+    isProcessing.value = true
     try {
         if (amount.value > prop.balance) {
             alert('Requested amount will be smaller than your balance')
@@ -30,6 +33,8 @@ async function sendRequest() {
         console.log(error)
         alert('failed to send your request!')
     }
+
+    isProcessing.value = false
 }
 
 
@@ -55,6 +60,7 @@ async function sendRequest() {
                 </div>
             </div>
         </form>
+        <DialogProcess :is-visible="isProcessing" message="processing"></DialogProcess>
     </div>
 </template>
 <style scoped>
