@@ -6,6 +6,7 @@ import { dateTimeString, getToken } from '~/extra/utils'
 import ApiWithdraw from '~/api/ApiWithdraw';
 import ApiAdmin from '~/api/ApiAdmin';
 
+const isLoaded = ref(false)
 const withdrawHistory = ref(Array<WithdrawHistory>())
 
 let token: string | null = null
@@ -47,6 +48,7 @@ async function loadHistory() {
     try {
         const res = await ApiWithdraw.getAll(token!!)
         withdrawHistory.value = res
+        isLoaded.value = true
 
     } catch (error) {
         alert(error)
@@ -165,133 +167,136 @@ function onTabChange(index: number) {
 <template>
     <div class="panel">
         <Sidebar :active-tab="5" :tab-data="tabs"></Sidebar>
-
-         <!-- header -->
-         <div class="header">
-            <Profile :image="profile.image" :name="profile.name" role="Admin" />
-        </div>
-
-        <h2>Withdraw Requests</h2>
-
-        <div class="reports">
-            <div class="card">
-                <p>Progress</p>
-                <span>{{ calculateWithdrawCount('Progress') }}</span>
-                <div class="progress" :style="{ 'width': calculateWithdrawCountPercentage('Progress') + '%' }"></div>
+        <template v-if="isLoaded">
+            <!-- header -->
+            <div class="header">
+                <Profile :image="profile.image" :name="profile.name" role="Admin" />
             </div>
 
-            <div class="card">
-                <p>Approved</p>
-                <span>{{ calculateWithdrawCount('Accepted') }}</span>
-                <div class="progress success" :style="{ 'width': calculateWithdrawCountPercentage('Accepted') + '%' }"></div>
+            <h2>Withdraw Requests</h2>
+
+            <div class="reports">
+                <div class="card">
+                    <p>Progress</p>
+                    <span>{{ calculateWithdrawCount('Progress') }}</span>
+                    <div class="progress" :style="{ 'width': calculateWithdrawCountPercentage('Progress') + '%' }"></div>
+                </div>
+
+                <div class="card">
+                    <p>Approved</p>
+                    <span>{{ calculateWithdrawCount('Accepted') }}</span>
+                    <div class="progress success" :style="{ 'width': calculateWithdrawCountPercentage('Accepted') + '%' }">
+                    </div>
+                </div>
+
+                <div class="card">
+                    <p>Rejects</p>
+                    <span>{{ calculateWithdrawCount('Rejected') }}</span>
+                    <div class="progress danger" :style="{ 'width': calculateWithdrawCountPercentage('Rejected') + '%' }">
+                    </div>
+                </div>
             </div>
 
-            <div class="card">
-                <p>Rejects</p>
-                <span>{{ calculateWithdrawCount('Rejected') }}</span>
-                <div class="progress danger" :style="{ 'width': calculateWithdrawCountPercentage('Rejected') + '%' }"></div>
+            <WidgetsTab :active-tab="activeTabIndex" :names="['Progress', 'Accepted', 'Rejected']"
+                :onChange="event => onTabChange(event)">
+            </WidgetsTab>
+
+            <!-- Progress -->
+            <div v-if="activeTabIndex == 0" class="tab-container">
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Withdraw Amount (₹)</th>
+                            <th>Phone</th>
+                            <th>Requested at</th>
+                            <th>Accept</th>
+                            <th>Reject</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="spacer">
+                            <td></td>
+                        </tr>
+                        <template v-for="item, index in withdrawHistory">
+
+                            <!-- TODO add condition to check offer expiry -->
+                            <tr v-if="item.status == 'Progress'">
+                                <td>{{ item.first }} {{ item.last }}</td>
+                                <td>₹{{ item.amount }}</td>
+                                <td>{{ item.phone }}</td>
+                                <td>{{ dateTimeString(item.created_at) }}</td>
+                                <td><button @click="openAcceptDialog(item)" class="success">Pay & Accept</button></td>
+                                <td><button @click="openRejectDialog(item)" class="danger">Reject</button></td>
+                            </tr>
+                        </template>
+
+                    </tbody>
+                </table>
             </div>
-        </div>
 
-        <WidgetsTab :active-tab="activeTabIndex" :names="['Progress', 'Accepted', 'Rejected']"
-            :onChange="event => onTabChange(event)">
-        </WidgetsTab>
+            <!-- Accepted -->
+            <div v-if="activeTabIndex == 1" class="tab-container">
 
-        <!-- Progress -->
-        <div v-if="activeTabIndex == 0" class="tab-container">
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Withdraw Amount (₹)</th>
-                        <th>Phone</th>
-                        <th>Requested at</th>
-                        <th>Accept</th>
-                        <th>Reject</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="spacer">
-                        <td></td>
-                    </tr>
-                    <template v-for="item, index in withdrawHistory">
-
-                        <!-- TODO add condition to check offer expiry -->
-                        <tr v-if="item.status == 'Progress'">
-                            <td>{{ item.first }} {{ item.last }}</td>
-                            <td>₹{{ item.amount }}</td>
-                            <td>{{ item.phone }}</td>
-                            <td>{{ dateTimeString(item.created_at) }}</td>
-                            <td><button @click="openAcceptDialog(item)" class="success">Pay & Accept</button></td>
-                            <td><button @click="openRejectDialog(item)" class="danger">Reject</button></td>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Withdraw Amount (₹)</th>
+                            <th>Phone</th>
+                            <th>Requested at</th>
                         </tr>
-                    </template>
-
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Accepted -->
-        <div v-if="activeTabIndex == 1" class="tab-container">
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Withdraw Amount (₹)</th>
-                        <th>Phone</th>
-                        <th>Requested at</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="spacer">
-                        <td></td>
-                    </tr>
-                    <template v-for="item, index in withdrawHistory">
-
-                        <!-- TODO add condition to check offer expiry -->
-                        <tr v-if="item.status == 'Accepted'">
-                            <td>{{ item.first }} {{ item.last }}</td>
-                            <td>₹{{ item.amount }}</td>
-                            <td>{{ item.phone }}</td>
-                            <td>{{ dateTimeString(item.created_at) }}</td>
+                    </thead>
+                    <tbody>
+                        <tr class="spacer">
+                            <td></td>
                         </tr>
-                    </template>
+                        <template v-for="item, index in withdrawHistory">
 
-                </tbody>
-            </table>
-        </div>
+                            <!-- TODO add condition to check offer expiry -->
+                            <tr v-if="item.status == 'Accepted'">
+                                <td>{{ item.first }} {{ item.last }}</td>
+                                <td>₹{{ item.amount }}</td>
+                                <td>{{ item.phone }}</td>
+                                <td>{{ dateTimeString(item.created_at) }}</td>
+                            </tr>
+                        </template>
 
-        <!-- Rejected -->
-        <div v-if="activeTabIndex == 2" class="tab-container">
+                    </tbody>
+                </table>
+            </div>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Withdraw Amount (₹)</th>
-                        <th>Phone</th>
-                        <th>Requested at</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="spacer">
-                        <td></td>
-                    </tr>
-                    <template v-for="item, index in withdrawHistory">
+            <!-- Rejected -->
+            <div v-if="activeTabIndex == 2" class="tab-container">
 
-                        <tr v-if="item.status == 'Rejected'">
-                            <td>{{ item.first }} {{ item.last }}</td>
-                            <td>₹{{ item.amount }}</td>
-                            <td>{{ item.phone }}</td>
-                            <td>{{ dateTimeString(item.created_at) }}</td>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Withdraw Amount (₹)</th>
+                            <th>Phone</th>
+                            <th>Requested at</th>
                         </tr>
-                    </template>
+                    </thead>
+                    <tbody>
+                        <tr class="spacer">
+                            <td></td>
+                        </tr>
+                        <template v-for="item, index in withdrawHistory">
 
-                </tbody>
-            </table>
-        </div>
+                            <tr v-if="item.status == 'Rejected'">
+                                <td>{{ item.first }} {{ item.last }}</td>
+                                <td>₹{{ item.amount }}</td>
+                                <td>{{ item.phone }}</td>
+                                <td>{{ dateTimeString(item.created_at) }}</td>
+                            </tr>
+                        </template>
+
+                    </tbody>
+                </table>
+            </div>
+        </template>
 
     </div>
 

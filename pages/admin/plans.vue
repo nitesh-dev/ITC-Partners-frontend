@@ -7,7 +7,7 @@ import { getToken } from '~/extra/utils';
 import ApiAdmin from '~/api/ApiAdmin';
 
 
-
+const isLoaded = ref(false)
 const categories = ref(Array<LoanCategory>())
 const allPlans = ref(Array<LoanSubCategory>())
 
@@ -46,6 +46,7 @@ async function getProfileDetail(token: string) {
 // -------------------- request ---------------------
 async function loadData() {
     const res = await loadCategory()
+    isLoaded.value = true
     if (res) loadPlans()
 }
 
@@ -166,29 +167,31 @@ function onTabChange(index: number) {
     <div class="panel">
         <Sidebar :active-tab="3" :tab-data="tabs"></Sidebar>
 
-        <!-- header -->
-        <div class="header">
-            <Profile :image="profile.image" :name="profile.name" role="Admin" />
-        </div>
-
-        <h2>Plans</h2>
-        <button class="primary" @click="openAddCategoryDialog()">Add Category</button>
-        <button class="secondary" @click="openAddPlanDialog()">Add Plan</button>
-        <WidgetsTab :active-tab="activeTabIndex" :names="categories.map((item) => item.name)"
-            :onChange="event => onTabChange(event)">
-        </WidgetsTab>
-
-        <template v-for="category, index in categories">
-            <div v-if="activeTabIndex == index" class="tab-container plan">
-
-                <template v-for="plan, index in allPlans">
-                    <PlanCard v-if="plan.category_id == category.id" :plan="plan" :is-admin="true"
-                        :onDelete="openPlanDeleteDialog">
-                    </PlanCard>
-                </template>
+        <template v-if="isLoaded">
+            <!-- header -->
+            <div class="header">
+                <Profile :image="profile.image" :name="profile.name" role="Admin" />
             </div>
-        </template>
 
+            <h2>Plans</h2>
+            <button class="primary" @click="openAddCategoryDialog()">Add Category</button>
+            <button class="secondary" @click="openAddPlanDialog()">Add Plan</button>
+            <WidgetsTab :active-tab="activeTabIndex" :names="categories.map((item) => item.name)"
+                :onChange="event => onTabChange(event)">
+            </WidgetsTab>
+
+            <template v-for="category, index in categories">
+                <div v-if="activeTabIndex == index" class="tab-container plan">
+
+                    <template v-for="plan, index in allPlans">
+                        <PlanCard v-if="plan.category_id == category.id" :plan="plan" :is-admin="true"
+                            :onDelete="openPlanDeleteDialog">
+                        </PlanCard>
+                    </template>
+                </div>
+            </template>
+
+        </template>
 
     </div>
 

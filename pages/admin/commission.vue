@@ -6,6 +6,7 @@ import { dateTimeString, getToken } from '~/extra/utils'
 import ApiCommission from '~/api/ApiCommission';
 import ApiAdmin from '~/api/ApiAdmin';
 
+const isLoaded = ref(false)
 const commissions = ref(Array<Commission>())
 
 let token: string | null = null
@@ -49,6 +50,7 @@ async function loadCommission() {
     try {
         const res = await ApiCommission.getAll(token!!)
         commissions.value = res
+        isLoaded.value = true
 
     } catch (error) {
         console.log(error)
@@ -146,46 +148,48 @@ async function onCommissionDelete(isDelete: boolean) {
     <div class="panel">
         <Sidebar :active-tab="4" :tab-data="tabs"></Sidebar>
 
-        <!-- header -->
-        <div class="header">
-            <Profile :image="profile.image" :name="profile.name" role="Admin" />
-        </div>
+        <template v-if="isLoaded">
+            <!-- header -->
+            <div class="header">
+                <Profile :image="profile.image" :name="profile.name" role="Admin" />
+            </div>
 
-        <h2>Commissions</h2>
-        <button class="primary" @click="openCommissionDialog(true)">Add Commission</button>
-        <div class="tab-container">
+            <h2>Commissions</h2>
+            <button class="primary" @click="openCommissionDialog(true)">Add Commission</button>
+            <div class="tab-container">
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Leads Count</th>
-                        <th>Commission (%)</th>
-                        <th>Edit</th>
-                        <th>Delete</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="spacer">
-                        <td></td>
-                    </tr>
-                    <template v-for="item, index in commissions">
-
+                <table>
+                    <thead>
                         <tr>
-                            <td><span class="chip pink">{{ item.name }}</span></td>
-                            <td>{{ item.leads_count }}</td>
-                            <td>{{ item.commission_percentage }}%</td>
-                            <td>
-                                <button class="primary" @click="openCommissionDialog(false, item)">Edit</button>
-                            </td>
-                            <td>
-                                <button @click="openCommissionDeleteDialog(item.id)" class="danger">Delete</button>
-                            </td>
+                            <th>Name</th>
+                            <th>Leads Count</th>
+                            <th>Commission (%)</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
                         </tr>
-                    </template>
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    <tbody>
+                        <tr class="spacer">
+                            <td></td>
+                        </tr>
+                        <template v-for="item, index in commissions">
+
+                            <tr>
+                                <td><span class="chip pink">{{ item.name }}</span></td>
+                                <td>{{ item.leads_count }}</td>
+                                <td>{{ item.commission_percentage }}%</td>
+                                <td>
+                                    <button class="primary" @click="openCommissionDialog(false, item)">Edit</button>
+                                </td>
+                                <td>
+                                    <button @click="openCommissionDeleteDialog(item.id)" class="danger">Delete</button>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+        </template>
     </div>
 
     <DialogAddCommission :onClose="onCommissionDialogClose" :is-visible="isCommissionDialogVisible"

@@ -8,7 +8,7 @@ import { AdminDashboard, DoughnutChartDataProps, LineChartDataProps } from 'data
 import ApiOther from '~/api/ApiOther';
 
 let token: string | null = null
-
+const isLoaded = ref(false)
 const profile = ref({
     image: '',
     name: ''
@@ -61,7 +61,7 @@ async function getDashboardData(token: string) {
     try {
         const res = await ApiOther.getAdminDashboard(token)
         dashboard.value = res
-
+        isLoaded.value = true
         earningChartData()
         withdrawChartData()
         leadsChartData()
@@ -290,83 +290,85 @@ function netProfitChartData() {
     <div class="panel">
         <Sidebar :active-tab="0" :tab-data="tabs"></Sidebar>
 
-        <!-- header -->
-        <div class="header">
-            <Profile :image="profile.image" :name="profile.name" role="Admin" />
-        </div>
-
-        <h2>Dashboard</h2>
-        <div class="reports">
-            <div class="card">
-                <p>Total Earning</p>
-                <span>₹{{ dashboard.earning }}</span>
-                <div class="progress secondary"></div>
-            </div>
-            <div class="card">
-                <p>Total Withdraw</p>
-                <span>₹{{ dashboard.withdraw }}</span>
-                <div class="progress neutral"></div>
-            </div>
-            <div class="card">
-                <p>Total Profits</p>
-                <span>₹{{ dashboard.earning - dashboard.commission }}</span>
-                <div class="progress success"></div>
-            </div>
-            <div class="card">
-                <p>Total Commission</p>
-                <span>₹{{ dashboard.commission }}</span>
-            </div>
-            <div class="card">
-                <p>Total Consultants</p>
-                <span>{{ dashboard.consultants }}</span>
-            </div>
-            <div class="card">
-                <p>Total Leads</p>
-                <span>{{ dashboard.leadsCount }}</span>
-            </div>
-        </div>
-
-
-        <!-- statistics -->
-        <h3>Statistics</h3>
-        <div class="statistics">
-            <!-- 1 -->
-            <div class="card">
-                <p class="title">Earning history</p>
-                <hr>
-                <LineChart v-if="earningHistoryData" :myChartData="earningHistoryData" />
+        <template v-if="isLoaded">
+            <!-- header -->
+            <div class="header">
+                <Profile :image="profile.image" :name="profile.name" role="Admin" />
             </div>
 
-            <!-- 2 -->
-            <div class="card">
-                <p class="title">Withdraw accepted history</p>
-                <hr>
-                <LineChart v-if="withdrawHistoryData" :myChartData="withdrawHistoryData" />
+            <h2>Dashboard</h2>
+            <div class="reports">
+                <div class="card">
+                    <p>Total Earning</p>
+                    <span>₹{{ dashboard.earning }}</span>
+                    <div class="progress secondary"></div>
+                </div>
+                <div class="card">
+                    <p>Total Withdraw</p>
+                    <span>₹{{ dashboard.withdraw }}</span>
+                    <div class="progress neutral"></div>
+                </div>
+                <div class="card">
+                    <p>Total Profits</p>
+                    <span>₹{{ dashboard.earning - dashboard.commission }}</span>
+                    <div class="progress success"></div>
+                </div>
+                <div class="card">
+                    <p>Total Commission</p>
+                    <span>₹{{ dashboard.commission }}</span>
+                </div>
+                <div class="card">
+                    <p>Total Consultants</p>
+                    <span>{{ dashboard.consultants }}</span>
+                </div>
+                <div class="card">
+                    <p>Total Leads</p>
+                    <span>{{ dashboard.leadsCount }}</span>
+                </div>
             </div>
 
-            <!-- 3 -->
-            <div class="card">
-                <p class="title">Net profit history</p>
-                <hr>
-                <DoughnutChart v-if="netProfitHistoryData" :myChartData="netProfitHistoryData" />
+
+            <!-- statistics -->
+            <h3>Statistics</h3>
+            <div class="statistics">
+                <!-- 1 -->
+                <div class="card">
+                    <p class="title">Earning history</p>
+                    <hr>
+                    <LineChart v-if="earningHistoryData" :myChartData="earningHistoryData" />
+                </div>
+
+                <!-- 2 -->
+                <div class="card">
+                    <p class="title">Withdraw accepted history</p>
+                    <hr>
+                    <LineChart v-if="withdrawHistoryData" :myChartData="withdrawHistoryData" />
+                </div>
+
+                <!-- 3 -->
+                <div class="card">
+                    <p class="title">Net profit history</p>
+                    <hr>
+                    <DoughnutChart v-if="netProfitHistoryData" :myChartData="netProfitHistoryData" />
+                </div>
+
+                <!-- 4 -->
+                <div class="card">
+                    <p class="title">Leads submit history</p>
+                    <hr>
+                    <LineChart v-if="leadsHistoryData" :myChartData="leadsHistoryData" />
+                </div>
+
+                <!-- 5 -->
+                <div class="card">
+                    <p class="title">Consultants join history</p>
+                    <hr>
+                    <LineChart v-if="consultantHistoryData" :myChartData="consultantHistoryData" />
+                </div>
+
             </div>
 
-            <!-- 4 -->
-            <div class="card">
-                <p class="title">Leads submit history</p>
-                <hr>
-                <LineChart v-if="leadsHistoryData" :myChartData="leadsHistoryData" />
-            </div>
-
-            <!-- 5 -->
-            <div class="card">
-                <p class="title">Consultants join history</p>
-                <hr>
-                <LineChart v-if="consultantHistoryData" :myChartData="consultantHistoryData" />
-            </div>
-
-        </div>
-
+        </template>
 
 
     </div>

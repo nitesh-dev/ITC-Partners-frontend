@@ -4,7 +4,7 @@ import { AdminAccount } from 'data/dataTypes';
 import { tabs } from '~/data/admin'
 import { dateTimeString, getToken } from '~/extra/utils'
 
-
+const isLoaded = ref(false)
 let token: string | null = null
 
 onMounted(() => {
@@ -22,6 +22,7 @@ async function getProfileDetail(token: string) {
     try {
         const res = await ApiAdmin.get(token)
         account.value = res
+        isLoaded.value = true
     } catch (error) {
         console.log(error)
         navigateTo('/admin/login')
@@ -93,60 +94,62 @@ function onProfileDialogClose(isSuccess: boolean) {
     <div class="panel">
         <Sidebar :active-tab="6" :tab-data="tabs"></Sidebar>
 
-        <!-- header -->
-        <div class="header">
-            <Profile :image="account.profile_url" :name="account.first + ' ' + account.last" role="Admin" />
-        </div>
-
-        <h2>Account</h2>
-        <button @click="openProfileDialog()" class="primary">Edit Profile</button>
-        <div class="profile">
-
-            <div class="equal-row">
-                <div class="card">
-                    <span>Id</span>
-                    <p>{{ account.id }}</p>
-                </div>
-                <div class="card">
-                    <span>Name</span>
-                    <p>{{ account.first }} {{ account.last }}</p>
-                </div>
+        <template v-if="isLoaded">
+            <!-- header -->
+            <div class="header">
+                <Profile :image="account.profile_url" :name="account.first + ' ' + account.last" role="Admin" />
             </div>
 
-            <div class="equal-row">
-                <div class="card">
-                    <span>Phone</span>
-                    <p>{{ account.phone }}</p>
-                </div>
-                <div class="card">
-                    <span>Address</span>
-                    <p>{{ account.address }}</p>
-                </div>
-            </div>
+            <h2>Account</h2>
+            <button @click="openProfileDialog()" class="primary">Edit Profile</button>
+            <div class="profile">
 
-            <div class="equal-row">
-                <div class="card">
-                    <span>Pincode</span>
-                    <p>{{ account.pincode }}</p>
+                <div class="equal-row">
+                    <div class="card">
+                        <span>Id</span>
+                        <p>{{ account.id }}</p>
+                    </div>
+                    <div class="card">
+                        <span>Name</span>
+                        <p>{{ account.first }} {{ account.last }}</p>
+                    </div>
                 </div>
-                <div class="card">
-                    <span>Gender</span>
-                    <p>{{ account.gender }}</p>
-                </div>
-            </div>
 
-            <div class="equal-row">
-                <div class="card">
-                    <span>Date of birth</span>
-                    <p>{{ dateTimeString(account.dob) }}</p>
+                <div class="equal-row">
+                    <div class="card">
+                        <span>Phone</span>
+                        <p>{{ account.phone }}</p>
+                    </div>
+                    <div class="card">
+                        <span>Address</span>
+                        <p>{{ account.address }}</p>
+                    </div>
                 </div>
-                <div class="card">
-                    <span>Joined at</span>
-                    <p>{{ dateTimeString(account.created_at) }}</p>
-                </div>
-            </div>
 
-        </div>
+                <div class="equal-row">
+                    <div class="card">
+                        <span>Pincode</span>
+                        <p>{{ account.pincode }}</p>
+                    </div>
+                    <div class="card">
+                        <span>Gender</span>
+                        <p>{{ account.gender }}</p>
+                    </div>
+                </div>
+
+                <div class="equal-row">
+                    <div class="card">
+                        <span>Date of birth</span>
+                        <p>{{ dateTimeString(account.dob) }}</p>
+                    </div>
+                    <div class="card">
+                        <span>Joined at</span>
+                        <p>{{ dateTimeString(account.created_at) }}</p>
+                    </div>
+                </div>
+
+            </div>
+        </template>
     </div>
 
     <DialogAdminUpdateProfile :onClose="onProfileDialogClose" :data="updatable" :is-visible="isProfileDialogVisible">
