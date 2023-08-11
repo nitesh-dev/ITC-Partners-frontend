@@ -26,6 +26,7 @@ const chartOptions = {
     maintainAspectRatio: false,
     scales: {
         x: {
+            display: false,
             grid: {
                 display: false,
             }

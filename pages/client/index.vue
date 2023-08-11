@@ -48,13 +48,17 @@ const dashboard = ref<ConsultantDashboard>({
 
 
 const earningHistoryData = ref<LineChartDataProps>()
+const withdrawHistoryData = ref<LineChartDataProps>()
+const leadsHistoryData = ref<LineChartDataProps>()
 
 async function getDashboardData(token: string) {
     try {
         const res = await ApiOther.getConsultantDashboard(token)
         dashboard.value = res
 
-        updateChartData()
+        earningChartData()
+        withdrawChartData()
+        leadsChartData()
 
     } catch (error) {
         console.log(error)
@@ -64,7 +68,7 @@ async function getDashboardData(token: string) {
 
 
 
-function updateChartData() {
+function earningChartData() {
 
     // Convert UNIX timestamp to JavaScript Date
     const data = dashboard.value.earningHistory.map(item => ({
@@ -94,7 +98,7 @@ function updateChartData() {
     }
 
     const prop = [{
-        label: 'Earning',
+        label: 'Earning (₹) ',
         data: values,
         borderColor: "#1665D8",
         backgroundColor: "#EAEEF5",
@@ -105,6 +109,101 @@ function updateChartData() {
     }]
 
     earningHistoryData.value = {
+        datasets: prop,
+        labels: labels
+    }
+
+}
+
+function withdrawChartData() {
+
+    // Convert UNIX timestamp to JavaScript Date
+    const data = dashboard.value.withdrawHistory.map(item => ({
+        ...item,
+        created_at: new Date(item.created_at).setHours(0, 0, 0, 0)
+    }));
+
+    // Calculate start time for the last 14 days
+    const lastFourteenDays = 14 * 24 * 60 * 60 * 1000; // milliseconds
+    const startTime = new Date(Date.now() - lastFourteenDays).setHours(0, 0, 0, 0)
+    const now = new Date().setHours(0, 0, 0, 0)
+
+    const values = Array<number>()
+    const labels = Array<string>()
+
+    for (let i = startTime; i <= now; i += 24 * 60 * 60 * 1000) {
+        let amount = 0
+        data.forEach(element => {
+            if (element.created_at == i) {
+                amount += element.amount
+            }
+        });
+
+        labels.push(new Date(i).toDateString())
+        values.push(amount)
+
+    }
+
+    const prop = [{
+        label: 'Withdraw (₹) ',
+        data: values,
+        borderColor: "#d33396",
+        backgroundColor: "#f5e6ef",
+        borderWidth: 3,
+        cubicInterpolationMode: 'monotone',
+        fill: true,
+        pointRadius: 0
+    }]
+
+    withdrawHistoryData.value = {
+        datasets: prop,
+        labels: labels
+    }
+
+}
+
+
+function leadsChartData() {
+
+    // Convert UNIX timestamp to JavaScript Date
+    const data = dashboard.value.leadsHistory.map(item => ({
+        ...item,
+        created_at: new Date(item.created_at).setHours(0, 0, 0, 0)
+    }));
+
+    // Calculate start time for the last 14 days
+    const lastFourteenDays = 14 * 24 * 60 * 60 * 1000; // milliseconds
+    const startTime = new Date(Date.now() - lastFourteenDays).setHours(0, 0, 0, 0)
+    const now = new Date().setHours(0, 0, 0, 0)
+
+    const values = Array<number>()
+    const labels = Array<string>()
+
+    for (let i = startTime; i <= now; i += 24 * 60 * 60 * 1000) {
+        let amount = 0
+        data.forEach(element => {
+            if (element.created_at == i) {
+                amount += 1
+            }
+        });
+
+        labels.push(new Date(i).toDateString())
+        values.push(amount)
+
+    }
+
+    const prop = [{
+        label: 'Leads Submitted ',
+        data: values,
+        borderColor: "#2BC48A",
+        backgroundColor: "#EFFAF1",
+        borderWidth: 3,
+        cubicInterpolationMode: 'monotone',
+        fill: true,
+        pointRadius: 0
+    }]
+
+    leadsHistoryData.value = {
         datasets: prop,
         labels: labels
     }
@@ -156,22 +255,22 @@ function calculateWithdrawPercentage() {
             <div class="card">
                 <p class="title">Earning history</p>
                 <hr>
-                <LineChart v-if="earningHistoryData" borderColor="#1665D8" backgroundColor="#EAEEF5" :myChartData="earningHistoryData" />
+                <LineChart v-if="earningHistoryData" :myChartData="earningHistoryData" />
             </div>
 
             <!-- 2 -->
-            <!-- <div class="card">
+            <div class="card">
                 <p class="title">Withdraw history</p>
                 <hr>
-                <LineChart borderColor="#d33396" backgroundColor="#f5e6ef" :myChartData="withdrawHistoryRaw" />
-            </div> -->
+                <LineChart v-if="withdrawHistoryData" :myChartData="withdrawHistoryData" />
+            </div>
 
             <!-- 3 -->
-            <!-- <div class="card">
+            <div class="card">
                 <p class="title">Leads history</p>
                 <hr>
-                <LineChart borderColor="#2BC48A" backgroundColor="#EFFAF1" :myChartData="leadsHistoryRaw" />
-            </div> -->
+                <LineChart v-if="leadsHistoryData" :myChartData="leadsHistoryData" />
+            </div>
 
         </div>
 
