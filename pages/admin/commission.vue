@@ -144,7 +144,7 @@ async function onCommissionDelete(isDelete: boolean) {
 </script>
 <template>
     <div class="panel">
-        <Sidebar :active-tab="5" :tab-data="tabs"></Sidebar>
+        <Sidebar :active-tab="4" :tab-data="tabs"></Sidebar>
 
         <!-- header -->
         <div class="header">

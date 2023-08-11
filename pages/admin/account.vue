@@ -91,7 +91,7 @@ function onProfileDialogClose(isSuccess: boolean) {
 </script>
 <template>
     <div class="panel">
-        <Sidebar :active-tab="7" :tab-data="tabs"></Sidebar>
+        <Sidebar :active-tab="6" :tab-data="tabs"></Sidebar>
 
         <!-- header -->
         <div class="header">
