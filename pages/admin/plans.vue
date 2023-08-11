@@ -66,6 +66,7 @@ async function loadPlans() {
         // loading plans
         const res = await ApiPlan.getAll(token!!)
         allPlans.value = res
+        console.log(allPlans)
 
     } catch (error) {
         console.log(error)

@@ -1,22 +1,26 @@
 <script setup lang='ts'>
 import { LoanSubCategory } from 'data/dataTypes';
-
+const serverUrl = import.meta.env.VITE_SERVER_URL
 defineProps<{
     plan: LoanSubCategory,
     isAdmin: boolean
 }>()
+
 
 const emit = defineEmits<{
   (event: 'delete', id: number): void
   (event: 'apply', planName: string): void
 }>()
 
+function imageToUrl(name: string){
+    return serverUrl + '/public/' + name
+}
 
 </script>
 <template>
     <div class="plan card">
         <!-- <p class="banner">Mega offer 30% off</p> -->
-        <img src="../public/images/finance_loan.jpg">
+        <img :src="imageToUrl(plan.image_url)">
 
         <div class="content">
             <h2>{{ plan.name }}</h2>
