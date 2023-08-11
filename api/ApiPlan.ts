@@ -3,23 +3,22 @@ import Api from "./Api";
 
 namespace ApiPlan {
 
-    export function createPlan(token: string, categoryId: number, name: string, description: string, image: File){
-        let data = {
-            token: token,
-            data: {category_id: categoryId, name: name, description: description},
-            image: image
-            
-        }
+    export function createPlan(token: string, categoryId: number, name: string, description: string, image: File) {
+       
+        const data= { category_id: categoryId, name: name, description: description }
+        const formData = new FormData();
+        formData.append('file', image)
+        formData.append('data', JSON.stringify(data))
 
-        return Api.post('plan', '', data)
+        return Api.postWithImage('plan', formData, token)
     }
 
-    
 
-    export function updatePlan(token: string, id: number, name: string, description: string){
+
+    export function updatePlan(token: string, id: number, name: string, description: string) {
         let data = {
             token: token,
-            data: {name: name, description: description}
+            data: { name: name, description: description }
         }
         return Api.put(`plan/${id}`, '', data)
     }

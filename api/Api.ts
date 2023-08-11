@@ -37,6 +37,27 @@ namespace Api {
 
     }
 
+    export async function postWithImage<T>(path: string, formData: FormData, token: string) {
+
+        const requestOptions: RequestInit = {
+            headers: {
+                "x-access-token": token
+            },
+            method: "POST",
+            redirect: "follow",
+            body: formData,
+        };
+
+        const res = await fetch(`${apiURL}/${path}`, requestOptions);
+        const jsonData = await res.json();
+        if (res.ok) {
+            return jsonData as T
+        } else {
+            throw new Error(jsonData)
+        }
+
+    }
+
     export async function put<T>(path: string, query: string, body: any) {
         const requestOptions: RequestInit = {
             headers: {

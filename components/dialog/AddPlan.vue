@@ -21,8 +21,6 @@ async function submitPlan() {
     isProcessing.value = true
     try {
         const image = file.value!!.files!![0]
-        console.log(image)
-
         const res = await ApiPlan.createPlan(getToken()!!, prop.categoryId, name.value, description.value, image)
         emit('close', true)
     } catch (error) {
