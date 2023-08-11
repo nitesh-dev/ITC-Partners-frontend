@@ -140,3 +140,25 @@ export interface WithdrawPage {
     commissionHistory: Array<CommissionHistory>
 }
 
+
+export interface ConsultantDashboard{
+    earning: number,
+    withdraw: number,
+    leadsCount: number,
+    referrals: number,
+    earningHistory: Array<{ amount: number, source: string, created_at: number }>,
+    withdrawHistory: Array<{amount: number, created_at: number}>,
+    leadsHistory: Array<{created_at: number}>
+}
+
+
+
+
+// ----------------- cart data 
+
+
+export interface LineChartDataProps{
+    labels: Array<string>,
+    datasets: Array<any>
+}
+

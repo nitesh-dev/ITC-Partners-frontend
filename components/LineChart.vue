@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import { MyChartData } from '~/data/dataTypes'
+import { LineChartDataProps, MyChartData } from '~/data/dataTypes'
 import {
     Chart as ChartJS,
     Title,
@@ -17,13 +17,10 @@ import {
 import { Bar, Line } from 'vue-chartjs'
 ChartJS.register(CategoryScale, LinearScale, BarElement, LineController, LineElement, PointElement, Filler, Title, Tooltip, Legend)
 
-ChartJS.defaults.color = '#red';
-const props = defineProps<{
-    myChartData: MyChartData,
-    borderColor: string,
-    backgroundColor: string
+defineProps<{
+    myChartData: LineChartDataProps
 }>()
-
+ 
 const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,
@@ -37,7 +34,6 @@ const chartOptions = {
             grid: {
                 display: false,
             }
-
         }
     },
     plugins: {
@@ -54,25 +50,11 @@ const chartOptions = {
 }
 
 
-const chartData = {
-    labels: props.myChartData.datasets.labels,
-    datasets: [{
-        label: props.myChartData.labelV,
-        data: props.myChartData.datasets.data,
-        borderColor: props.borderColor,
-        backgroundColor: props.backgroundColor,
-        borderWidth: 3,
-        cubicInterpolationMode: 'monotone',
-        fill:true,
-        pointRadius: 0
-    }]
-}
-
 
 </script>
 <template>
     <div class="graph">
-        <Line :options="chartOptions" :data="chartData" />
+        <Line :options="chartOptions" :data="myChartData" />
     </div>
 </template>
 <style scoped>

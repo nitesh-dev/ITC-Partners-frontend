@@ -3,6 +3,8 @@ import { tabs } from '~/data/client'
 import { earningHistoryRaw, withdrawHistoryRaw, profitHistoryRaw, leadsHistoryRaw } from '~/data/adminRawData'
 import ApiConsultant from '~/api/ApiConsultant';
 import { getToken } from '~/extra/utils';
+import ApiOther from '~/api/ApiOther';
+import { ConsultantDashboard, LineChartDataProps, MyChartData } from 'data/dataTypes';
 
 
 const profile = ref({
@@ -17,6 +19,8 @@ onMounted(() => {
         navigateTo('/')
     } else {
         getProfileDetail(token)
+        getDashboardData(token)
+
     }
 })
 
@@ -29,6 +33,88 @@ async function getProfileDetail(token: string) {
         console.log(error)
         navigateTo('/')
     }
+}
+
+
+const dashboard = ref<ConsultantDashboard>({
+    earning: 0,
+    withdraw: 0,
+    leadsCount: 0,
+    referrals: 0,
+    earningHistory: [],
+    withdrawHistory: [],
+    leadsHistory: []
+})
+
+
+const earningHistoryData = ref<LineChartDataProps>()
+
+async function getDashboardData(token: string) {
+    try {
+        const res = await ApiOther.getConsultantDashboard(token)
+        dashboard.value = res
+
+        updateChartData()
+
+    } catch (error) {
+        console.log(error)
+        navigateTo('/')
+    }
+}
+
+
+
+function updateChartData() {
+
+    // Convert UNIX timestamp to JavaScript Date
+    const data = dashboard.value.earningHistory.map(item => ({
+        ...item,
+        created_at: new Date(item.created_at).setHours(0, 0, 0, 0)
+    }));
+
+    // Calculate start time for the last 14 days
+    const lastFourteenDays = 14 * 24 * 60 * 60 * 1000; // milliseconds
+    const startTime = new Date(Date.now() - lastFourteenDays).setHours(0, 0, 0, 0)
+    const now = new Date().setHours(0, 0, 0, 0)
+
+    const values = Array<number>()
+    const labels = Array<string>()
+
+    for (let i = startTime; i <= now; i += 24 * 60 * 60 * 1000) {
+        let amount = 0
+        data.forEach(element => {
+            if (element.created_at == i) {
+                amount += element.amount
+            }
+        });
+
+        labels.push(new Date(i).toDateString())
+        values.push(amount)
+
+    }
+
+    const prop = [{
+        label: 'Earning',
+        data: values,
+        borderColor: "#1665D8",
+        backgroundColor: "#EAEEF5",
+        borderWidth: 3,
+        cubicInterpolationMode: 'monotone',
+        fill: true,
+        pointRadius: 0
+    }]
+
+    earningHistoryData.value = {
+        datasets: prop,
+        labels: labels
+    }
+
+}
+
+function calculateWithdrawPercentage() {
+
+    // calculate percentage
+    return Math.round(dashboard.value.withdraw / dashboard.value.earning * 100)
 }
 
 
@@ -46,23 +132,22 @@ async function getProfileDetail(token: string) {
         <div class="reports">
             <div class="card">
                 <p>Total Earning</p>
-                <span>₹100,500</span>
+                <span>₹{{ dashboard.earning.toLocaleString() }}</span>
             </div>
             <div class="card">
                 <p>Total Withdraw</p>
-                <span>₹100,500</span>
-                <div class="progress secondary"></div>
+                <span>₹{{ dashboard.withdraw.toLocaleString() }}</span>
+                <div class="progress secondary" :style="{ 'width': calculateWithdrawPercentage() + '%' }"></div>
             </div>
             <div class="card">
                 <p>Total Referrals</p>
-                <span>10</span>
+                <span>{{ dashboard.referrals }}</span>
             </div>
             <div class="card">
                 <p>Total Leads Submitted</p>
-                <span>49</span>
+                <span>{{ dashboard.leadsCount }}</span>
             </div>
         </div>
-
 
         <!-- statistics -->
         <h3>Statistics</h3>
@@ -71,22 +156,22 @@ async function getProfileDetail(token: string) {
             <div class="card">
                 <p class="title">Earning history</p>
                 <hr>
-                <LineChart borderColor="#1665D8" backgroundColor="#EAEEF5" :myChartData="earningHistoryRaw" />
+                <LineChart v-if="earningHistoryData" borderColor="#1665D8" backgroundColor="#EAEEF5" :myChartData="earningHistoryData" />
             </div>
 
             <!-- 2 -->
-            <div class="card">
+            <!-- <div class="card">
                 <p class="title">Withdraw history</p>
                 <hr>
                 <LineChart borderColor="#d33396" backgroundColor="#f5e6ef" :myChartData="withdrawHistoryRaw" />
-            </div>
+            </div> -->
 
             <!-- 3 -->
-            <div class="card">
+            <!-- <div class="card">
                 <p class="title">Leads history</p>
                 <hr>
                 <LineChart borderColor="#2BC48A" backgroundColor="#EFFAF1" :myChartData="leadsHistoryRaw" />
-            </div>
+            </div> -->
 
         </div>
 

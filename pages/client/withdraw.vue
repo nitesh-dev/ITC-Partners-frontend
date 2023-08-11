@@ -203,7 +203,7 @@ function onTabChange(index: number) {
         </div>
 
         <WidgetsTab :active-tab="activeTabIndex" :names="['Progress', 'Accepted', 'Rejected']"
-            :onChange="event => onTabChange(event)">
+            :onChange="onTabChange">
         </WidgetsTab>
 
         <!-- Progress -->
