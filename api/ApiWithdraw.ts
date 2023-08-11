@@ -34,6 +34,8 @@ namespace ApiWithdraw {
                 status: status
             }
         }
+
+        console.log(updateData)
         return Api.put<any>(`withdrawHistory/${id}`, '', updateData)
     }
 }

@@ -182,13 +182,13 @@ function onTabChange(index: number) {
         </div>
 
         <h2>Consultants</h2>
-        <div class="search card">
+        <!-- <div class="search card">
             <svg width="24" height="24" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path
                     d="M10 2.5a7.5 7.5 0 0 1 5.964 12.048l4.743 4.745a1 1 0 0 1-1.32 1.497l-.094-.083-4.745-4.743A7.5 7.5 0 1 1 10 2.5Zm0 2a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11Z" />
             </svg>
             <input type="text" placeholder="Search here">
-        </div>
+        </div> -->
 
         <WidgetsTab :active-tab="activeTabIndex" :names="['Consultants', 'New consultants']"
             :onChange="event => onTabChange(event)" />
@@ -206,7 +206,6 @@ function onTabChange(index: number) {
                         <th>Gender</th>
                         <th>DOB</th>
                         <th>Joined At</th>
-                        <th>Delete</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -223,9 +222,6 @@ function onTabChange(index: number) {
                             <td>{{ item.gender }}</td>
                             <td>{{ dateTimeString(item.dob) }}</td>
                             <td>{{ dateTimeString(item.created_at) }}</td>
-                            <td>
-                                <button @click="openDeleteAccountDialog(item)" class="danger">Remove</button>
-                            </td>
                         </tr>
                     </template>
 

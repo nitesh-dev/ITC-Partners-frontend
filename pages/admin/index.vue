@@ -72,32 +72,32 @@ async function getProfileDetail(token: string) {
         <h3>Statistics</h3>
         <div class="statistics">
             <!-- 1 -->
-            <div class="card">
+            <!-- <div class="card">
                 <p class="title">Earning history</p>
                 <hr>
                 <LineChart borderColor="#1665D8" backgroundColor="#EAEEF5" :myChartData="earningHistoryRaw"/>
-            </div>
+            </div> -->
 
             <!-- 2 -->
-            <div class="card">
+            <!-- <div class="card">
                 <p class="title">Withdraw history</p>
                 <hr>
                 <LineChart borderColor="#d33396" backgroundColor="#f5e6ef" :myChartData="withdrawHistoryRaw"/>
-            </div>
+            </div> -->
 
             <!-- 3 -->
-            <div class="card">
+            <!-- <div class="card">
                 <p class="title">Net profit history</p>
                 <hr>
                 <DoughnutChart  :backgroundColors="['#1665D8','#d33396', '#F6AB2F']" :myChartData="profitHistoryRaw"/>
-            </div>
+            </div> -->
 
             <!-- 4 -->
-            <div class="card">
+            <!-- <div class="card">
                 <p class="title">Leads history</p>
                 <hr>
                 <LineChart borderColor="#2BC48A" backgroundColor="#EFFAF1" :myChartData="leadsHistoryRaw"/>
-            </div>
+            </div> -->
 
         </div>
 
