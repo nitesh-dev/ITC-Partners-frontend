@@ -18,10 +18,10 @@ tabs.push({
     name: 'Plans',
     url: '/admin/plans'
 }) 
-tabs.push({
-    name: 'Offers',
-    url: '/admin/offers'
-}) 
+// tabs.push({
+//     name: 'Offers',
+//     url: '/admin/offers'
+// }) 
 tabs.push({
     name: 'Commission',
     url: '/admin/commission'
