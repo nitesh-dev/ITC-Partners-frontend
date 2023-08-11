@@ -152,6 +152,20 @@ export interface ConsultantDashboard{
 }
 
 
+export interface AdminDashboard {
+    earning: number,
+    withdraw: number,
+    leadsCount: number,
+    commission: number,
+    consultants: number,
+    earningHistory: Array<{ amount: number, created_at: number }>,
+    withdrawHistory: Array<{ amount: number, created_at: number }>,
+    leadsHistory: Array<{ created_at: number }>,
+    consultantsHistory: Array<{ created_at: number }>,
+}
+
+
+
 
 
 // ----------------- cart data 
@@ -161,4 +175,10 @@ export interface LineChartDataProps{
     labels: Array<string>,
     datasets: Array<any>
 }
+
+export interface DoughnutChartDataProps{
+    labels: Array<string>,
+    datasets: Array<any>
+}
+
 

@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import { MyChartData } from '~/data/dataTypes'
+import { DoughnutChartDataProps } from '~/data/dataTypes'
 import {
     Chart as ChartJS,
     Title,
@@ -12,9 +12,8 @@ import {
 import { Doughnut } from 'vue-chartjs'
 ChartJS.register(ArcElement, Title, Tooltip, Legend)
 
-const props = defineProps<{
-    myChartData: MyChartData,
-    backgroundColors: string[]
+defineProps<{
+    myChartData: DoughnutChartDataProps
 }>()
 
 const chartOptions = {
@@ -49,19 +48,10 @@ const chartOptions = {
 }
 
 
-const chartData = {
-    labels: props.myChartData.datasets.labels,
-    datasets: [{
-        data: props.myChartData.datasets.data,
-        backgroundColor: props.backgroundColors,
-    }]
-}
-
-
 </script>
 <template>
     <div class="graph">
-        <Doughnut :options="chartOptions" :data="chartData" />
+        <Doughnut :options="chartOptions" :data="myChartData" />
     </div>
 </template>
 <style scoped>
