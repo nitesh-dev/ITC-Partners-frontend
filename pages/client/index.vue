@@ -1,12 +1,11 @@
 <script setup lang='ts'>
 import { tabs } from '~/data/client'
-import { earningHistoryRaw, withdrawHistoryRaw, profitHistoryRaw, leadsHistoryRaw } from '~/data/adminRawData'
 import ApiConsultant from '~/api/ApiConsultant';
 import { getToken } from '~/extra/utils';
 import ApiOther from '~/api/ApiOther';
 import { ConsultantDashboard, LineChartDataProps, MyChartData } from 'data/dataTypes';
 
-
+const isLoaded = ref(false)
 const profile = ref({
     image: '',
     name: ''
@@ -55,6 +54,7 @@ async function getDashboardData(token: string) {
     try {
         const res = await ApiOther.getConsultantDashboard(token)
         dashboard.value = res
+        isLoaded.value = true
 
         earningChartData()
         withdrawChartData()
@@ -222,59 +222,59 @@ function calculateWithdrawPercentage() {
     <div class="panel">
         <Sidebar :active-tab="0" :tab-data="tabs"></Sidebar>
 
-        <!-- header -->
-        <div class="header">
-            <Profile :image="profile.image" :name="profile.name" role="Consultant" />
-        </div>
-
-        <h2>Dashboard</h2>
-        <div class="reports">
-            <div class="card">
-                <p>Total Earning</p>
-                <span>₹{{ dashboard.earning.toLocaleString() }}</span>
-            </div>
-            <div class="card">
-                <p>Total Withdraw</p>
-                <span>₹{{ dashboard.withdraw.toLocaleString() }}</span>
-                <div class="progress secondary" :style="{ 'width': calculateWithdrawPercentage() + '%' }"></div>
-            </div>
-            <div class="card">
-                <p>Total Referrals</p>
-                <span>{{ dashboard.referrals }}</span>
-            </div>
-            <div class="card">
-                <p>Total Leads Submitted</p>
-                <span>{{ dashboard.leadsCount }}</span>
-            </div>
-        </div>
-
-        <!-- statistics -->
-        <h3>Statistics</h3>
-        <div class="statistics">
-            <!-- 1 -->
-            <div class="card">
-                <p class="title">Earning history</p>
-                <hr>
-                <LineChart v-if="earningHistoryData" :myChartData="earningHistoryData" />
+        <template v-if="isLoaded">
+            <!-- header -->
+            <div class="header">
+                <Profile :image="profile.image" :name="profile.name" role="Consultant" />
             </div>
 
-            <!-- 2 -->
-            <div class="card">
-                <p class="title">Withdraw history</p>
-                <hr>
-                <LineChart v-if="withdrawHistoryData" :myChartData="withdrawHistoryData" />
+            <h2>Dashboard</h2>
+            <div class="reports">
+                <div class="card">
+                    <p>Total Earning</p>
+                    <span>₹{{ dashboard.earning.toLocaleString() }}</span>
+                </div>
+                <div class="card">
+                    <p>Total Withdraw</p>
+                    <span>₹{{ dashboard.withdraw.toLocaleString() }}</span>
+                    <div class="progress secondary" :style="{ 'width': calculateWithdrawPercentage() + '%' }"></div>
+                </div>
+                <div class="card">
+                    <p>Total Referrals</p>
+                    <span>{{ dashboard.referrals }}</span>
+                </div>
+                <div class="card">
+                    <p>Total Leads Submitted</p>
+                    <span>{{ dashboard.leadsCount }}</span>
+                </div>
             </div>
 
-            <!-- 3 -->
-            <div class="card">
-                <p class="title">Leads history</p>
-                <hr>
-                <LineChart v-if="leadsHistoryData" :myChartData="leadsHistoryData" />
+            <!-- statistics -->
+            <h3>Statistics</h3>
+            <div class="statistics">
+                <!-- 1 -->
+                <div class="card">
+                    <p class="title">Earning history</p>
+                    <hr>
+                    <LineChart v-if="earningHistoryData" :myChartData="earningHistoryData" />
+                </div>
+
+                <!-- 2 -->
+                <div class="card">
+                    <p class="title">Withdraw history</p>
+                    <hr>
+                    <LineChart v-if="withdrawHistoryData" :myChartData="withdrawHistoryData" />
+                </div>
+
+                <!-- 3 -->
+                <div class="card">
+                    <p class="title">Leads history</p>
+                    <hr>
+                    <LineChart v-if="leadsHistoryData" :myChartData="leadsHistoryData" />
+                </div>
+
             </div>
-
-        </div>
-
-
+        </template>
 
     </div>
 </template>

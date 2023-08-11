@@ -6,6 +6,7 @@ import ApiPlan from '~/api/ApiPlan';
 import { getToken } from '~/extra/utils';
 import ApiConsultant from '~/api/ApiConsultant';
 
+const isLoaded = ref(false)
 const categories = ref(Array<LoanCategory>())
 const allPlans = ref(Array<LoanSubCategory>())
 const isApproved = ref(false)
@@ -46,6 +47,7 @@ async function getProfileDetail(token: string) {
 // -------------------- request ---------------------
 async function loadData() {
     const res = await loadCategory()
+    isLoaded.value = true
     if (res) loadPlans()
 }
 
@@ -82,11 +84,11 @@ const selectedPlanName = ref('')
 
 function onApply(planName: string) {
 
-    if(isApproved.value == false){
+    if (isApproved.value == false) {
         alert('You are not approved yet!. Please wait for admin to approve you.')
         return
     }
-    
+
     selectedPlanName.value = planName
     isLeadSubmitVisible.value = true
 }
@@ -113,30 +115,32 @@ function onTabChange(index: number) {
     <div class="panel">
         <Sidebar :active-tab="1" :tab-data="tabs"></Sidebar>
 
-        <!-- header -->
-        <div class="header">
-            <Profile :image="profile.image" :name="profile.name" role="Consultant" />
-        </div>
-
-        <h2>Offers & Plans</h2>
-
-        <p class="danger" v-if="!isApproved">Your account is not approved yet. Some of the functionality are
-            turned off. <br>You will have all the functionality available once you will approved by the admin. You can
-            also contact them using phone number.</p>
-        <p class="success" v-else>Your account is successfully approved by admin.</p>
-
-        <WidgetsTab :active-tab="activeTabIndex" :names="categories.map((item) => item.name)"
-            :onChange="event => onTabChange(event)">
-        </WidgetsTab>
-
-        <template v-for="category, index in categories">
-            <div v-if="activeTabIndex == index" class="tab-container plan">
-
-                <template v-for="plan, index in allPlans">
-                    <PlanCard :onApply="onApply" v-if="plan.category_id == category.id" :plan="plan" :is-admin="false">
-                    </PlanCard>
-                </template>
+        <template v-if="isLoaded">
+            <!-- header -->
+            <div class="header">
+                <Profile :image="profile.image" :name="profile.name" role="Consultant" />
             </div>
+
+            <h2>Offers & Plans</h2>
+
+            <p class="danger" v-if="!isApproved">Your account is not approved yet. Some of the functionality are
+                turned off. <br>You will have all the functionality available once you will approved by the admin. You can
+                also contact them using phone number.</p>
+            <p class="success" v-else>Your account is successfully approved by admin.</p>
+
+            <WidgetsTab :active-tab="activeTabIndex" :names="categories.map((item) => item.name)"
+                :onChange="event => onTabChange(event)">
+            </WidgetsTab>
+
+            <template v-for="category, index in categories">
+                <div v-if="activeTabIndex == index" class="tab-container plan">
+
+                    <template v-for="plan, index in allPlans">
+                        <PlanCard :onApply="onApply" v-if="plan.category_id == category.id" :plan="plan" :is-admin="false">
+                        </PlanCard>
+                    </template>
+                </div>
+            </template>
         </template>
 
     </div>
@@ -144,7 +148,6 @@ function onTabChange(index: number) {
     <DialogSubmitLead :onClose="onClose" :is-visible="isLeadSubmitVisible" :plan-name="selectedPlanName"></DialogSubmitLead>
 </template>
 <style scoped>
-
 p.danger {
     color: var(--color-error);
 }
@@ -152,6 +155,7 @@ p.danger {
 p.success {
     color: var(--color-primary);
 }
+
 .tab-container {
     display: flex;
     flex-wrap: wrap;
