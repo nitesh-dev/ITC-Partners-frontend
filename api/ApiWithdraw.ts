@@ -5,11 +5,10 @@ import Api from "./Api";
 
 namespace ApiWithdraw {
 
-    export function createWithdraw(token: string, consultantId: number, amount: number) {
+    export function createWithdraw(token: string, amount: number) {
         let data = {
             token: token,
             data: {
-                consultant_id: consultantId,
                 amount: amount
             }
         }

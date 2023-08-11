@@ -105,7 +105,7 @@ export interface WithdrawHistory {
     first: string,
     last: string,
     phone: number,
-    status: 'Progress' | 'Accepted' | 'Rejected',
+    status: 'Progress' | 'Rejected' | 'Accepted',
     created_at: number
 }
 
