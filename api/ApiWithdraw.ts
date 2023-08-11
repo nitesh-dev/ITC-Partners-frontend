@@ -1,10 +1,9 @@
-import { WithdrawHistory } from "data/dataTypes";
+import { WithdrawHistory, WithdrawPage } from "data/dataTypes";
 import Api from "./Api";
 
 
 
 namespace ApiWithdraw {
-
 
     export function createWithdraw(token: string, consultantId: number, amount: number) {
         let data = {
@@ -21,6 +20,12 @@ namespace ApiWithdraw {
         var myHeaders = new Headers();
         myHeaders.append("x-access-token", token);
         return Api.get<WithdrawHistory[]>('withdrawHistory', '', myHeaders)
+    }
+
+    export function getWithdrawPage(token: string) {
+        var myHeaders = new Headers();
+        myHeaders.append("x-access-token", token);
+        return Api.get<WithdrawPage>('withdrawHistory/page', '', myHeaders)
     }
 
     export function updateStatus(token: string, id: number, status: 'Progress' | 'Accepted' | 'Rejected') {

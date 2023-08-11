@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import { WithdrawHistory } from '~/data/dataTypes';
+import { WithdrawHistory, WithdrawPage } from '~/data/dataTypes';
 import { tabs } from '~/data/client'
 
 import { dateTimeString, getToken } from '~/extra/utils'
@@ -7,7 +7,7 @@ import { dateTimeString, getToken } from '~/extra/utils'
 import ApiWithdraw from '~/api/ApiWithdraw';
 import ApiConsultant from '~/api/ApiConsultant';
 
-const withdrawHistory = ref(Array<WithdrawHistory>())
+const withdrawPage = ref<WithdrawPage>()
 
 let token: string | null = null
 
@@ -46,8 +46,9 @@ async function getProfileDetail(token: string) {
 
 async function loadHistory() {
     try {
-        const res = await ApiWithdraw.getAll(token!!)
-        withdrawHistory.value = res
+        const res = await ApiWithdraw.getWithdrawPage(token!!)
+        console.log(res)
+        withdrawPage.value = res
 
     } catch (error) {
         console.log(error)
@@ -64,7 +65,6 @@ async function loadHistory() {
 
 // ---------------------------- dialogs --------------------
 
-const isApproveDialogVisible = ref(false)
 
 
 
@@ -74,22 +74,73 @@ const isApproveDialogVisible = ref(false)
 function calculateWithdrawCountPercentage(name: string) {
 
     let count = 0
-    withdrawHistory.value.forEach(item => {
+    if (withdrawPage.value == undefined) return 0
+
+    withdrawPage.value.withdrawHistory.forEach(item => {
         if (item.status == name) count++
     });
 
     // calculate percentage
-    return Math.round(count / withdrawHistory.value.length * 100)
+    return Math.round(count / withdrawPage.value.withdrawHistory.length * 100)
 }
 
 function calculateWithdrawCount(name: string) {
+    if (withdrawPage.value == undefined) return 0
 
     let count = 0
-    withdrawHistory.value.forEach(item => {
+    withdrawPage.value.withdrawHistory.forEach(item => {
         if (item.status == name) count++
     });
 
     return count
+}
+
+
+function calculateBalance() {
+
+    if (withdrawPage.value) {
+        let withdrawAmount = 0
+        withdrawPage.value.withdrawHistory.forEach(element => {
+            if (element.status = 'Accepted') {
+                withdrawAmount += element.amount
+            }
+        });
+
+        
+
+        let commissionAmount = 0
+        withdrawPage.value.commissionHistory.forEach(element => {
+            commissionAmount += element.amount
+        });
+
+        console.log(commissionAmount)
+
+        return commissionAmount - withdrawAmount
+    }
+
+    return 0
+}
+
+function calculateCommissionEarning() {
+    if (withdrawPage.value == undefined) return 0
+    let commissionAmount = 0
+    withdrawPage.value.commissionHistory.forEach(element => {
+        commissionAmount += element.amount
+    });
+
+    return commissionAmount
+}
+
+function calculateReferralEarning() {
+    if (withdrawPage.value == undefined) return 0
+    let commissionAmount = 0
+    withdrawPage.value.commissionHistory.forEach(element => {
+        if (element.source == 'Refer') {
+            commissionAmount += element.amount
+        }
+    });
+
+    return commissionAmount
 }
 
 
@@ -113,6 +164,23 @@ function onTabChange(index: number) {
         </div>
 
         <h2>Withdraw</h2>
+        <div class="reports">
+            <div class="card">
+                <p>Balance</p>
+                <span>₹{{ calculateBalance() }}</span>
+            </div>
+
+            <div class="card">
+                <p>Commission Earning</p>
+                <span>₹{{ calculateCommissionEarning() }}</span>
+            </div>
+
+            <div class="card">
+                <p>Referral Earning</p>
+                <span>₹{{ calculateReferralEarning() }}</span>
+            </div>
+        </div>
+        
         <div class="reports">
             <div class="card">
                 <p>Progress</p>
@@ -154,7 +222,7 @@ function onTabChange(index: number) {
                     <tr class="spacer">
                         <td></td>
                     </tr>
-                    <template v-for="item, index in withdrawHistory">
+                    <template v-if="withdrawPage" v-for="item, index in withdrawPage.withdrawHistory">
 
                         <!-- TODO add condition to check offer expiry -->
                         <tr v-if="item.status == 'Progress'">
@@ -185,7 +253,7 @@ function onTabChange(index: number) {
                     <tr class="spacer">
                         <td></td>
                     </tr>
-                    <template v-for="item, index in withdrawHistory">
+                    <template v-if="withdrawPage" v-for="item, index in withdrawPage.withdrawHistory">
 
                         <!-- TODO add condition to check offer expiry -->
                         <tr v-if="item.status == 'Accepted'">
@@ -216,7 +284,7 @@ function onTabChange(index: number) {
                     <tr class="spacer">
                         <td></td>
                     </tr>
-                    <template v-for="item, index in withdrawHistory">
+                    <template v-if="withdrawPage" v-for="item, index in withdrawPage.withdrawHistory">
 
                         <tr v-if="item.status == 'Rejected'">
                             <td>{{ item.first }} {{ item.last }}</td>

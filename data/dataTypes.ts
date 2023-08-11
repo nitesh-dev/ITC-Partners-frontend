@@ -7,7 +7,7 @@ export interface MyChartData {
     }
 }
 
-export interface AdminAccount{
+export interface AdminAccount {
     id: number
     first: string,
     last: string,
@@ -22,7 +22,7 @@ export interface AdminAccount{
     profile_url: string
 }
 
-export interface ConsultantAccount{
+export interface ConsultantAccount {
     id: number
     first: string,
     last: string,
@@ -40,7 +40,7 @@ export interface ConsultantAccount{
 }
 
 
-export interface Lead{
+export interface Lead {
     id: number;
     first: string;
     last: string;
@@ -49,7 +49,7 @@ export interface Lead{
     dob: number;
     city: string;
     pincode: number;
-    gender: "Male"|"Female";
+    gender: "Male" | "Female";
     loan_amount: number;
     loan_name: string;
     purpose_of_loan: string;
@@ -57,18 +57,18 @@ export interface Lead{
     monthly_income: number;
     consultant_commission_percentage: number;
     consultant_id: number;
-    status: 'Pending'| 'Progress'| 'Approved'| 'Rejected';
+    status: 'Pending' | 'Progress' | 'Approved' | 'Rejected';
     created_at: number;
 }
 
 
-export interface LoanCategory{
+export interface LoanCategory {
     id: number
     name: string,
     create_at: number
 }
 
-export interface LoanSubCategory{
+export interface LoanSubCategory {
     id: number
     category_id: number
     name: string,
@@ -77,7 +77,7 @@ export interface LoanSubCategory{
     created_at: number
 }
 
-export interface Offer{
+export interface Offer {
     id: number
     category_id: number
     name: string,
@@ -90,7 +90,7 @@ export interface Offer{
     label: string
 }
 
-export interface Commission{
+export interface Commission {
     id: number
     name: string,
     leads_count: number,
@@ -98,7 +98,7 @@ export interface Commission{
     created_at: number
 }
 
-export interface WithdrawHistory{
+export interface WithdrawHistory {
     id: number
     consultant_id: number,
     amount: number,
@@ -109,8 +109,16 @@ export interface WithdrawHistory{
     created_at: number
 }
 
+export interface CommissionHistory {
+    id: number
+    consultant_id: number,
+    source: 'Lead' | 'Refer',
+    amount: number,
+    created_at: number
+}
 
-export interface Referral{
+
+export interface Referral {
     id: number,
     name: string,
     city: string,
@@ -120,4 +128,15 @@ export interface Referral{
     created_at: number
 }
 
+
+
+
+
+// -------------------------------
+
+// consultant withdraw page data
+export interface WithdrawPage {
+    withdrawHistory: Array<WithdrawHistory>,
+    commissionHistory: Array<CommissionHistory>
+}
 
