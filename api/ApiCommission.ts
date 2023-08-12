@@ -32,6 +32,13 @@ namespace ApiCommission {
         return Api.deleteRequest(`commission/${id}`, myHeaders)
     }
 
+    export function getConsultantCommissionLevel(token: string) {
+        var myHeaders = new Headers();
+        myHeaders.append("x-access-token", token);
+        return Api.get<Commission>('commission/me', '', myHeaders)
+    }
+
+
 
 }
 

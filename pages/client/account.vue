@@ -2,7 +2,8 @@
 import ApiConsultant from '~/api/ApiConsultant';
 import { getToken, dateTimeString } from '~/extra/utils';
 import { tabs } from '~/data/client'
-import { ConsultantAccount } from 'data/dataTypes';
+import { Commission, ConsultantAccount } from 'data/dataTypes';
+import ApiCommission from '~/api/ApiCommission';
 
 
 const isLoaded = ref(false)
@@ -16,8 +17,21 @@ onMounted(() => {
         navigateTo('/')
     } else {
         getProfileDetail(token)
+        getCommissionLevel(token)
     }
 })
+
+
+async function getCommissionLevel(token: string) {
+    try {
+        const res = await ApiCommission.getConsultantCommissionLevel(token)
+        console.log(res)
+        level.value = res
+
+    } catch (error) {
+        navigateTo('/')
+    }
+}
 
 async function getProfileDetail(token: string) {
     try {
@@ -60,6 +74,15 @@ const updatable = ref({
 })
 
 
+const level = ref<Commission>({
+    id: 0,
+    name: '',
+    leads_count: 0,
+    commission_percentage: 0,
+    created_at: 0
+})
+
+
 
 
 
@@ -99,6 +122,13 @@ function onProfileDialogClose(isSuccess: boolean) {
         <template v-if="isLoaded">
             <!-- header -->
             <div class="header">
+                <div class="card level">
+                    <span>Commission Level</span>
+                    <div>
+                        <p>{{ level.name }}</p>
+                        <p>{{ level.commission_percentage }}%</p>
+                    </div>
+                </div>
                 <div class="card referral">
                     <span>Referral Code</span>
                     <p>{{ account.referral_code }}</p>
@@ -174,29 +204,6 @@ function onProfileDialogClose(isSuccess: boolean) {
 
             </div>
         </template>
-
-        <div v-else class="shimmer">
-            <box class="shine"></box>
-
-            <div>
-                <lines class="shine"></lines>
-                <lines class="shine"></lines>
-                <lines class="shine"></lines>
-            </div>
-
-            <photo class="shine"></photo>
-            <photo class="shine"></photo>
-
-            <br>
-
-            <box class="shine"></box>
-
-            <div>
-                <lines class="shine"></lines>
-                <lines class="shine"></lines>
-                <lines class="shine"></lines>
-            </div>
-        </div>
     </div>
 
     <DialogClientUpdateProfile :onClose="onProfileDialogClose" :data="updatable" :is-visible="isProfileDialogVisible">
@@ -218,10 +225,9 @@ p.success {
     grid-template-columns: 100%;
     align-items: center;
     justify-content: center;
-
 }
 
-.referral span {
+.referral span, .level span {
     color: white;
     font-size: var(--small-font);
     margin: 0;
@@ -232,6 +238,33 @@ p.success {
     color: white;
     font-weight: bold;
     margin: 0;
+}
+
+
+.level {
+    background-color: var(--color-secondary);
+    height: 68px;
+    display: grid;
+    grid-template-columns: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.level div{
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 0.4rem;
+}
+
+.level p{
+    color: var(--color-secondary);
+    margin: 0;
+    background-color: rgb(255, 255, 255);
+    border-radius: 40px;
+    text-align: center;
+    padding: 0 12px;
+    font-weight: bold;
+
 }
 
 .panel>.profile {

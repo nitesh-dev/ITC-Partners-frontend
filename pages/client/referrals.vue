@@ -79,7 +79,7 @@ async function getReferrals(token: string) {
                             <th>Name</th>
                             <th>City</th>
                             <th>Pincode</th>
-                            <th>Earning</th>
+                            <!-- <th>Earning</th> -->
                             <th>Joined at</th>
                         </tr>
                     </thead>
@@ -93,7 +93,7 @@ async function getReferrals(token: string) {
                                 <td>{{ item.name }}</td>
                                 <td>{{ item.city }}</td>
                                 <td>{{ item.pincode }}</td>
-                                <td>{{ item.earning }}</td>
+                                <!-- <td>{{ item.earning }}</td> -->
                                 <td>{{ dateTimeString(item.created_at) }}</td>
                             </tr>
                         </template>
